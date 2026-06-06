@@ -1,0 +1,296 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Sourabh Shrivastav writes practical field notes and guided Learning Loops on Kubernetes, private cloud, AI, automation, and architecture."
+    />
+    <title>Sourabh Shrivastav | Platform Fieldnotes</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="styles.css" />
+    <script src="app.js" defer></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <a class="brand" href="#basecamp" aria-label="Sourabh Shrivastav home">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <strong>Sourabh Shrivastav</strong>
+          <small>Platform Fieldnotes</small>
+        </span>
+      </a>
+      <nav aria-label="Main navigation">
+        <a class="nav-link active" href="#basecamp"><span>01</span>Basecamp</a>
+        <a class="nav-link" href="#loops"><span>02</span>Learning Loops</a>
+        <a class="nav-link" href="#notes"><span>03</span>Field Notes</a>
+        <a class="nav-link" href="#about"><span>04</span>About</a>
+      </nav>
+      <a class="button button-small button-outline" href="#notes">Read latest</a>
+    </header>
+
+    <main id="basecamp">
+      <section class="hero personal-hero">
+        <div class="hero-copy">
+          <p class="eyebrow">Architecture, explained from the field</p>
+          <h1>Complex platforms.<br /><span>Clear thinking.</span></h1>
+          <p class="hero-intro">
+            I’m Sourabh, a solutions architect exploring the systems behind
+            Kubernetes, private cloud, AI and automation. This is where I unpack
+            how they work, where they fit, and the decisions that matter.
+          </p>
+          <div class="hero-actions">
+            <a class="button" href="#loops">Enter a Learning Loop</a>
+            <a class="text-link" href="#notes">Browse Field Notes <span>→</span></a>
+          </div>
+          <div class="publishing-signal">
+            <span class="pulse"></span>
+            New field note every week
+          </div>
+        </div>
+
+        <aside class="terminal-card" aria-label="Topics explored on this website">
+          <div class="terminal-bar">
+            <span></span><span></span><span></span>
+            <small>sourabhshrivastav.com / now</small>
+          </div>
+          <div class="terminal-body">
+            <p><span class="prompt">$</span> explore --current</p>
+            <div class="topic-output">
+              <span><i>01</i> Kubernetes platforms</span>
+              <span><i>02</i> Private cloud &amp; VCF</span>
+              <span><i>03</i> Private AI</span>
+              <span><i>04</i> Infrastructure automation</span>
+              <span><i>05</i> Architecture decisions</span>
+            </div>
+            <p class="terminal-comment">
+              // Practical explanations, honest comparisons, and lessons built
+              around real design questions.
+            </p>
+            <p><span class="prompt">$</span> <span class="cursor"></span></p>
+          </div>
+        </aside>
+      </section>
+
+      <section class="topic-rail" aria-label="Topics">
+        <span>Explore by signal</span>
+        <a href="#loops">VKS</a>
+        <a href="#notes">Private AI</a>
+        <a href="#notes">VCF</a>
+        <a href="#notes">Kubernetes</a>
+        <a href="#notes">Automation</a>
+        <a href="#notes">Architecture</a>
+      </section>
+
+      <section class="section loops-section" id="loops">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Learning Loops</p>
+            <h2>Learn. Test. Apply. Repeat.</h2>
+          </div>
+          <p>
+            Structured tutorials that turn complex technology into concepts you
+            can understand, compare, test, and use in architecture decisions.
+          </p>
+        </div>
+
+        <article class="featured-loop">
+          <div class="loop-visual">
+            <div class="orbit orbit-one"></div>
+            <div class="orbit orbit-two"></div>
+            <div class="loop-core">VKS</div>
+            <span class="orbit-label label-learn">Learn</span>
+            <span class="orbit-label label-test">Test</span>
+            <span class="orbit-label label-apply">Apply</span>
+          </div>
+          <div class="loop-content">
+            <div class="loop-meta">
+              <span class="status-badge">First loop</span>
+              <span>13 modules</span>
+              <span>Beginner → Architect</span>
+            </div>
+            <p class="eyebrow">Featured Learning Loop</p>
+            <h3>VMware vSphere Kubernetes Service</h3>
+            <p>
+              VKS explained for the Kubernetes world. Start from concepts you
+              already know in upstream Kubernetes, OpenShift, or public cloud,
+              then explore how VKS implements them on VCF.
+            </p>
+            <div class="loop-actions">
+              <button class="button show-modules" type="button" aria-expanded="false">
+                Preview the curriculum
+              </button>
+              <a class="text-link" href="#knowledge-check">Try the format <span>→</span></a>
+            </div>
+          </div>
+        </article>
+
+        <div class="curriculum-drawer" hidden>
+          <div class="curriculum-heading">
+            <div>
+              <p class="eyebrow">VKS Learning Loop</p>
+              <h3>Thirteen connected modules</h3>
+            </div>
+            <span>Perspective-aware tutorials</span>
+          </div>
+          <ol class="curriculum-grid">
+            <li><span>01</span>Kubernetes Foundations for VKS</li>
+            <li><span>02</span>What Is VKS?</li>
+            <li><span>03</span>VCF and VKS Core Concepts</li>
+            <li><span>04</span>Architecture and Request Flow</li>
+            <li><span>05</span>Networking</li>
+            <li><span>06</span>Storage and Persistent Workloads</li>
+            <li><span>07</span>Lifecycle and Availability</li>
+            <li><span>08</span>Identity and Security</li>
+            <li><span>09</span>Observability and Troubleshooting</li>
+            <li><span>10</span>Registry, Packages and Services</li>
+            <li><span>11</span>Fleet and Multi-Cluster Management</li>
+            <li><span>12</span>Enterprise Workloads</li>
+            <li><span>13</span>Architecture and Adoption</li>
+          </ol>
+        </div>
+
+        <div class="future-loops">
+          <article class="future-loop">
+            <span class="loop-icon">AI</span>
+            <div><small>On the radar</small><h3>Private AI</h3><p>From infrastructure foundations to enterprise use cases.</p></div>
+          </article>
+          <article class="future-loop">
+            <span class="loop-icon">AUT</span>
+            <div><small>On the radar</small><h3>Platform Automation</h3><p>Repeatable operations, APIs, pipelines, and practical patterns.</p></div>
+          </article>
+          <article class="future-loop add-loop">
+            <span class="plus">+</span>
+            <div><small>Designed to grow</small><h3>Next Learning Loop</h3><p>A flexible home for the next subject worth unpacking.</p></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section notes-section" id="notes">
+        <div class="section-heading">
+          <div>
+            <p class="eyebrow">Field Notes</p>
+            <h2>One useful idea, every week.</h2>
+          </div>
+          <p>
+            Standalone explainers, architecture observations, product updates,
+            and practical lessons that do not need a full Learning Loop.
+          </p>
+        </div>
+
+        <div class="notes-grid">
+          <article class="note-card note-featured">
+            <div class="note-topline">
+              <span class="topic-tag">VKS</span>
+              <span>Issue 001 · Coming first</span>
+            </div>
+            <h3>What Is VKS, and Where Does It Fit in the Kubernetes Landscape?</h3>
+            <p>
+              A platform-neutral introduction to VKS, its responsibilities, and
+              the architecture choices that distinguish it.
+            </p>
+            <div class="note-footer">
+              <span>8 min read</span>
+              <span class="arrow-button">→</span>
+            </div>
+          </article>
+          <article class="note-card">
+            <div class="note-topline">
+              <span class="topic-tag tag-purple">Private AI</span>
+              <span>Planned</span>
+            </div>
+            <h3>Private AI Is an Architecture Decision, Not Just a Location</h3>
+            <p>A practical framing of privacy, control, data gravity, and operational trade-offs.</p>
+            <div class="note-footer"><span>Field note</span><span class="arrow-button">→</span></div>
+          </article>
+          <article class="note-card">
+            <div class="note-topline">
+              <span class="topic-tag tag-green">Automation</span>
+              <span>Planned</span>
+            </div>
+            <h3>Automate the Decision Before You Automate the Task</h3>
+            <p>Why reliable platform automation begins with policy and intent.</p>
+            <div class="note-footer"><span>Field note</span><span class="arrow-button">→</span></div>
+          </article>
+        </div>
+      </section>
+
+      <section class="section quiz-section" id="knowledge-check">
+        <div class="quiz-intro">
+          <p class="eyebrow">Inside every Learning Loop</p>
+          <h2>Reading is only the first pass.</h2>
+          <p>
+            Each tutorial closes the loop with a knowledge check and an applied
+            architecture question. Here is a small preview from the VKS loop.
+          </p>
+        </div>
+        <div class="quiz-card">
+          <div class="quiz-meta"><span>Sample check</span><span>VKS foundations</span></div>
+          <h3>
+            A platform team already operates upstream Kubernetes. Which is the
+            most useful way to explain VKS?
+          </h3>
+          <form id="sample-quiz">
+            <label class="answer">
+              <input type="radio" name="answer" value="a" />
+              <span>It replaces Kubernetes with a VMware-specific orchestration API.</span>
+            </label>
+            <label class="answer">
+              <input type="radio" name="answer" value="b" />
+              <span>It delivers conformant Kubernetes while integrating lifecycle and infrastructure policy with VCF.</span>
+            </label>
+            <label class="answer">
+              <input type="radio" name="answer" value="c" />
+              <span>It is primarily a graphical interface for creating virtual machines.</span>
+            </label>
+            <button class="button quiz-submit" type="submit">Check reasoning</button>
+          </form>
+          <div class="quiz-result" id="quiz-result" aria-live="polite" hidden></div>
+        </div>
+      </section>
+
+      <section class="section about-section" id="about">
+        <div class="about-monogram">SS</div>
+        <div class="about-copy">
+          <p class="eyebrow">About the author</p>
+          <h2>Architecture from both sides of the whiteboard.</h2>
+          <p>
+            I’m Sourabh Shrivastav, a solutions architect based in Singapore. I
+            write for practitioners and decision-makers who want to understand
+            not only how technology works, but why one design fits better than
+            another.
+          </p>
+          <p class="disclosure">
+            I work for Broadcom in the VMware Cloud Foundation division. Content
+            here reflects my personal views and is not official Broadcom guidance.
+          </p>
+        </div>
+      </section>
+
+      <section class="cta-section">
+        <p class="eyebrow">Built in public, one week at a time</p>
+        <h2>Follow the next useful question.</h2>
+        <p>
+          The site will grow deliberately: one researched field note each week,
+          with deeper Learning Loops developed alongside them.
+        </p>
+        <a class="button button-light" href="#loops">Start with the VKS Loop</a>
+      </section>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="#basecamp">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy"><strong>Sourabh Shrivastav</strong><small>Platform Fieldnotes</small></span>
+      </a>
+      <p>Independent educational content. Views expressed are personal.</p>
+      <span>Singapore · sourabhshrivastav.com</span>
+    </footer>
+  </body>
+</html>
