@@ -1,7 +1,7 @@
-# Sourabh Shrivastav — Platform Fieldnotes
+# Sourabh Shrivastav - Platform Fieldnotes
 
-A zero-dependency prototype for a personal technical publication covering
-Kubernetes, private cloud, AI, automation, and architecture.
+My personal technical publication featuring Learning Loops and weekly Field
+Notes about Kubernetes, private cloud, AI, automation, and architecture.
 
 The site uses two primary content formats:
 
@@ -28,7 +28,6 @@ Publish one complete lesson titled **What Is VKS?**, containing:
 
 ## Before publishing
 
-- Replace the placeholder contact email.
 - Review employer policy, trademarks, screenshots, and disclosure requirements.
 - Validate every product-specific claim against current official documentation.
 - Add a privacy notice before collecting email addresses or analytics.
