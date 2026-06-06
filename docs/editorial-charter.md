@@ -139,24 +139,45 @@ Sources reviewed:
 - <source 2>
 
 Version-validation date: <date>
+Last-reviewed date: <date>
 ```
 
-## Required Topic Coverage
+## VKS Learning Loop Curriculum
 
-The VKS Learning Loop should progressively cover:
+The VKS Learning Loop is a progressive curriculum, not a collection of independent articles. Each module should build on previous concepts while keeping explanations accessible to infrastructure and platform practitioners.
 
-### Kubernetes Foundations for Infrastructure and Platform Practitioners
+### Module 1 — What Is VKS?
 
-- Relevant Kubernetes foundations without assuming VMware knowledge
-- Translation guides for upstream Kubernetes, OpenShift, EKS, AKS, GKE, and vSphere users
-
-### What Is VKS?
+Learning objectives:
 
 - VKS positioning and use cases
-- Differences from upstream and managed Kubernetes
+- Differences from upstream Kubernetes
+- Differences from managed Kubernetes
 - Shared-responsibility model
 
-### VCF and VKS Core Concepts
+Outcome:
+
+Readers understand where VKS fits in the Kubernetes landscape.
+
+### Module 2 — Kubernetes Foundations for Infrastructure and Platform Practitioners
+
+Learning objectives:
+
+- Relevant foundations without assuming VMware knowledge
+- Translation guides for upstream Kubernetes users
+- Translation guides for OpenShift users
+- Translation guides for EKS users
+- Translation guides for AKS users
+- Translation guides for GKE users
+- Translation guides for vSphere users
+
+Outcome:
+
+Readers build the Kubernetes foundation required for VKS.
+
+### Module 3 — VCF and VKS Core Concepts
+
+Learning objectives:
 
 - Supervisor
 - VCF namespaces
@@ -164,78 +185,205 @@ The VKS Learning Loop should progressively cover:
 - Kubernetes releases and VKr
 - Mapping to equivalent concepts on other platforms
 
-### VKS Architecture and Request Flow
+Outcome:
+
+Readers understand the core VKS building blocks.
+
+### Module 4 — VKS Architecture and Request Flow
+
+Learning objectives:
 
 - Management and workload components
 - Cluster provisioning flow
-- Control-plane and infrastructure responsibilities
+- Control-plane responsibilities
+- Infrastructure responsibilities
 
-### Networking
+Outcome:
+
+Readers understand how VKS works internally.
+
+### Module 5 — Networking
+
+Learning objectives:
 
 - VDS and NSX
-- Pod, node, and service networking
-- Load balancing and ingress
+- Pod networking
+- Node networking
+- Service networking
+- Load balancing
+- Ingress
 - Multi-network
-- Comparisons with OpenShift SDN/OVN and cloud CNI models
+- OpenShift SDN/OVN comparison
+- Cloud CNI comparison
 
-### Storage and Persistent Workloads
+Outcome:
 
-- CSI and storage policies
+Readers understand end-to-end networking architecture.
+
+### Module 6 — Storage and Persistent Workloads
+
+Learning objectives:
+
+- CSI
+- Storage policies
 - Persistent volumes
 - Stateful applications
-- Comparison with other Kubernetes storage models
+- Comparison with alternative Kubernetes storage models
 
-### Cluster Lifecycle and Availability
+Outcome:
 
-- Provisioning, scaling, and deletion
+Readers understand stateful workload design.
+
+### Module 7 — Cluster Lifecycle and Availability
+
+Learning objectives:
+
+- Provisioning
+- Scaling
+- Deletion
 - Upgrade strategies
 - High availability
-- VKr lifecycle and compatibility
+- VKr lifecycle
+- Compatibility
 
-### Identity and Security
+Outcome:
 
-- Authentication and authorization
+Readers understand lifecycle operations.
+
+### Module 8 — Identity and Security
+
+Learning objectives:
+
+- Authentication
+- Authorization
 - Kubernetes RBAC
 - VCF namespace permissions
-- Secrets, policies, and workload security
-- Comparison with OpenShift and public-cloud IAM
+- Secrets
+- Policies
+- Workload security
+- OpenShift IAM comparison
+- Public-cloud IAM comparison
 
-### Observability and Troubleshooting
+Outcome:
 
-- Logs, metrics, and events
+Readers understand platform security architecture.
+
+### Module 9 — Observability and Troubleshooting
+
+Learning objectives:
+
+- Logs
+- Metrics
+- Events
 - Infrastructure-to-application troubleshooting
 - Common failure scenarios
 - Troubleshooting decision trees
 
-### Registry, Packages, and Platform Services
+Outcome:
+
+Readers can systematically troubleshoot VKS.
+
+### Module 10 — Registry, Packages and Platform Services
+
+Learning objectives:
 
 - Harbor
 - Package management
 - Service mesh
 - Application platform capabilities
-- Comparison with Helm, Operators, and cloud add-ons
+- Helm comparison
+- Operator comparison
+- Cloud add-on comparison
 
-### Fleet and Multi-Cluster Management
+Outcome:
+
+Readers understand platform services beyond Kubernetes.
+
+### Module 11 — Fleet and Multi-Cluster Management
+
+Learning objectives:
 
 - Cluster consistency
-- Policy and governance
+- Governance
+- Policy management
 - Multi-cluster operations
-- Comparison with ACM, Rancher, and cloud fleet tooling
+- ACM comparison
+- Rancher comparison
+- Cloud fleet tooling comparison
 
-### Enterprise Workloads
+Outcome:
 
-- AI and GPU workloads
-- Databases and stateful applications
+Readers understand operations at scale.
+
+### Module 12 — Enterprise Workloads
+
+Learning objectives:
+
+- AI workloads
+- GPU workloads
+- Databases
+- Stateful applications
 - Developer platforms
-- Regulated and disconnected environments
+- Regulated environments
+- Disconnected environments
 
-### Architecture and Adoption
+Outcome:
+
+Readers understand enterprise production use cases.
+
+### Module 13 — Architecture and Adoption
+
+Learning objectives:
 
 - Design patterns
-- Sizing and availability
+- Sizing
+- Availability
 - Platform operating models
-- Migration from OpenShift, upstream Kubernetes, and public cloud
-- When VKS is and is not the right platform
+- Migration from OpenShift
+- Migration from upstream Kubernetes
+- Migration from public cloud
+- When VKS is the right platform
+- When VKS is not the right platform
+
+Outcome:
+
+Readers can design adoption strategies and make platform decisions.
+
+## Curriculum Rule
+
+Every advanced module must reference prerequisite modules and concepts.
+
+Examples:
+
+Networking references:
+
+- Kubernetes Services
+- Pods
+- Workload Clusters
+
+Storage references:
+
+- CSI foundations
+- Persistent Volumes
+- Workload Clusters
+
+Fleet Management references:
+
+- Supervisor
+- VCF Namespaces
+- Workload Clusters
+
+The VKS Learning Loop should guide readers from initial positioning to production architecture and adoption decisions.
+
+## Content Lifecycle Rule
+
+Every article must contain:
+
+- Sources reviewed
+- Version-validation date
+- Last-reviewed date
+
+Articles older than six months should be revalidated against current VKS, VCF, Kubernetes, and VKr releases.
 
 ## Comparison Framework
 
@@ -279,5 +427,6 @@ Before publishing, verify that the article includes:
 - Five-question knowledge check with explanations
 - Architecture challenge
 - Key takeaways
-- Sources
+- Sources reviewed
 - Version-validation date
+- Last-reviewed date
