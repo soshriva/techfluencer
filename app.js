@@ -1,48 +1,54 @@
 const showModulesButton = document.querySelector(".show-modules");
 const additionalModules = document.querySelector(".curriculum-drawer");
 
-showModulesButton.addEventListener("click", () => {
-  const isExpanded = showModulesButton.getAttribute("aria-expanded") === "true";
+if (showModulesButton && additionalModules) {
+  showModulesButton.addEventListener("click", () => {
+    const isExpanded =
+      showModulesButton.getAttribute("aria-expanded") === "true";
 
-  showModulesButton.setAttribute("aria-expanded", String(!isExpanded));
-  additionalModules.hidden = isExpanded;
-  showModulesButton.textContent = isExpanded
-    ? "Preview the curriculum"
-    : "Close curriculum";
-});
+    showModulesButton.setAttribute("aria-expanded", String(!isExpanded));
+    additionalModules.hidden = isExpanded;
+    showModulesButton.textContent = isExpanded
+      ? "Preview the curriculum"
+      : "Close curriculum";
+  });
+}
 
 const quiz = document.querySelector("#sample-quiz");
 const quizResult = document.querySelector("#quiz-result");
 
-quiz.addEventListener("submit", (event) => {
-  event.preventDefault();
-  const answer = new FormData(quiz).get("answer");
+if (quiz && quizResult) {
+  quiz.addEventListener("submit", (event) => {
+    event.preventDefault();
+    const answer = new FormData(quiz).get("answer");
 
-  quizResult.hidden = false;
-  quizResult.classList.remove("correct", "incorrect");
+    quizResult.hidden = false;
+    quizResult.classList.remove("correct", "incorrect");
 
-  if (!answer) {
+    if (!answer) {
+      quizResult.classList.add("incorrect");
+      quizResult.textContent =
+        "Choose an answer before checking your reasoning.";
+      return;
+    }
+
+    if (answer === "b") {
+      quizResult.classList.add("correct");
+      quizResult.innerHTML =
+        "<strong>Correct.</strong> VKS preserves the Kubernetes API and workload model while integrating lifecycle, policy, networking, and infrastructure services with VCF.";
+      localStorage.setItem("vks-field-guide-sample-quiz", "complete");
+      return;
+    }
+
     quizResult.classList.add("incorrect");
-    quizResult.textContent = "Choose an answer before checking your reasoning.";
-    return;
-  }
-
-  if (answer === "b") {
-    quizResult.classList.add("correct");
     quizResult.innerHTML =
-      "<strong>Correct.</strong> VKS preserves the Kubernetes API and workload model while integrating lifecycle, policy, networking, and infrastructure services with VCF.";
-    localStorage.setItem("vks-field-guide-sample-quiz", "complete");
-    return;
+      "<strong>Not quite.</strong> Start from what remains familiar: Kubernetes APIs and workloads. Then explain the lifecycle and infrastructure responsibilities integrated through VCF.";
+  });
+
+  if (localStorage.getItem("vks-field-guide-sample-quiz") === "complete") {
+    quizResult.hidden = false;
+    quizResult.classList.add("correct");
+    quizResult.textContent =
+      "You previously completed this knowledge check. Your progress is stored only in this browser.";
   }
-
-  quizResult.classList.add("incorrect");
-  quizResult.innerHTML =
-    "<strong>Not quite.</strong> Start from what remains familiar: Kubernetes APIs and workloads. Then explain the lifecycle and infrastructure responsibilities integrated through VCF.";
-});
-
-if (localStorage.getItem("vks-field-guide-sample-quiz") === "complete") {
-  quizResult.hidden = false;
-  quizResult.classList.add("correct");
-  quizResult.textContent =
-    "You previously completed this knowledge check. Your progress is stored only in this browser.";
 }

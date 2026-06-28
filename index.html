@@ -29,10 +29,10 @@
       <nav aria-label="Main navigation">
         <a class="nav-link active" href="#basecamp"><span>01</span>Basecamp</a>
         <a class="nav-link" href="#loops"><span>02</span>Learning Loops</a>
-        <a class="nav-link" href="#notes"><span>03</span>Field Notes</a>
-        <a class="nav-link" href="#about"><span>04</span>About</a>
+        <a class="nav-link" href="#about"><span>03</span>About</a>
+        <a class="nav-link" href="#notes"><span>04</span>Field Notes</a>
       </nav>
-      <a class="button button-small button-outline" href="#notes">Read latest</a>
+      <a class="button button-small button-outline" href="#loops">Start learning</a>
     </header>
 
     <main id="basecamp">
@@ -47,7 +47,7 @@
           </p>
           <div class="hero-actions">
             <a class="button" href="#loops">Enter a Learning Loop</a>
-            <a class="text-link" href="#notes">Browse Field Notes <span>→</span></a>
+            <a class="text-link" href="#about">Meet Sourabh <span>→</span></a>
           </div>
           <div class="publishing-signal">
             <span class="pulse"></span>
@@ -79,13 +79,13 @@
       </section>
 
       <section class="topic-rail" aria-label="Topics">
-        <span>Explore by signal</span>
+        <span>Topics on the roadmap</span>
         <a href="#loops">VKS</a>
-        <a href="#notes">Private AI</a>
-        <a href="#notes">VCF</a>
-        <a href="#notes">Kubernetes</a>
-        <a href="#notes">Automation</a>
-        <a href="#notes">Architecture</a>
+        <span class="topic-pill">Private AI</span>
+        <span class="topic-pill">VCF</span>
+        <span class="topic-pill">Kubernetes</span>
+        <span class="topic-pill">Automation</span>
+        <span class="topic-pill">Architecture</span>
       </section>
 
       <section class="section loops-section" id="loops">
@@ -116,7 +116,7 @@
               <span>Beginner → Architect</span>
             </div>
             <p class="eyebrow">Featured Learning Loop</p>
-            <h3>VMware vSphere Kubernetes Service</h3>
+            <h3>VMware Kubernetes Service (VKS)</h3>
             <p>
               VKS explained for the Kubernetes world. Start from concepts you
               already know in upstream Kubernetes, OpenShift, or public cloud,
@@ -173,51 +173,24 @@
       </section>
 
       <section class="section notes-section" id="notes">
-        <div class="section-heading">
-          <div>
+        <div class="coming-soon-panel">
+          <div class="coming-soon-copy">
+            <div class="coming-soon-label">
+              <span class="pulse"></span>
+              Issue 001 published
+            </div>
             <p class="eyebrow">Field Notes</p>
             <h2>One useful idea, every week.</h2>
-          </div>
-          <p>
-            Standalone explainers, architecture observations, product updates,
-            and practical lessons that do not need a full Learning Loop.
-          </p>
-        </div>
-
-        <div class="notes-grid">
-          <article class="note-card note-featured">
-            <div class="note-topline">
-              <span class="topic-tag">VKS</span>
-              <span>Issue 001 · Coming first</span>
-            </div>
-            <h3>What Is VKS, and Where Does It Fit in the Kubernetes Landscape?</h3>
             <p>
-              A platform-neutral introduction to VKS, its responsibilities, and
-              the architecture choices that distinguish it.
+              Short, standalone perspectives on Kubernetes, private AI, VCF,
+              automation, and architecture. The first issue is now ready.
             </p>
-            <div class="note-footer">
-              <span>8 min read</span>
-              <span class="arrow-button">→</span>
-            </div>
-          </article>
-          <article class="note-card">
-            <div class="note-topline">
-              <span class="topic-tag tag-purple">Private AI</span>
-              <span>Planned</span>
-            </div>
-            <h3>Private AI Is an Architecture Decision, Not Just a Location</h3>
-            <p>A practical framing of privacy, control, data gravity, and operational trade-offs.</p>
-            <div class="note-footer"><span>Field note</span><span class="arrow-button">→</span></div>
-          </article>
-          <article class="note-card">
-            <div class="note-topline">
-              <span class="topic-tag tag-green">Automation</span>
-              <span>Planned</span>
-            </div>
-            <h3>Automate the Decision Before You Automate the Task</h3>
-            <p>Why reliable platform automation begins with policy and intent.</p>
-            <div class="note-footer"><span>Field note</span><span class="arrow-button">→</span></div>
-          </article>
+          </div>
+          <a class="featured-note-link" href="blogs/001-what-is-vks.html">
+            <span class="featured-note-meta">Issue 001 · VKS · 12 min</span>
+            <strong>What Is VMware Kubernetes Service (VKS), and Where Does It Fit?</strong>
+            <span class="featured-note-action">Read the field note <i>→</i></span>
+          </a>
         </div>
       </section>
 

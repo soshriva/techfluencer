@@ -1,0 +1,653 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A vendor-neutral introduction to VMware Kubernetes Service (VKS), its architecture, responsibility model, and place in the Kubernetes landscape."
+    />
+    <title>What Is VMware Kubernetes Service (VKS)? | Sourabh Shrivastav</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="article.css" />
+    <script src="../app.js" defer></script>
+    <script src="article.js" defer></script>
+  </head>
+  <body class="article-page">
+    <header class="site-header article-header">
+      <a class="brand" href="../index.html" aria-label="Sourabh Shrivastav home">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <strong>Sourabh Shrivastav</strong>
+          <small>Platform Fieldnotes</small>
+        </span>
+      </a>
+      <nav aria-label="Article navigation">
+        <a class="nav-link" href="../index.html">Basecamp</a>
+        <a class="nav-link active" href="../index.html#loops">Learning Loops</a>
+        <a class="nav-link" href="../index.html#about">About</a>
+      </nav>
+      <a class="button button-small button-outline" href="#knowledge">Knowledge check</a>
+    </header>
+
+    <main>
+      <article>
+        <header class="article-hero">
+          <div class="article-hero-copy">
+            <a class="back-link" href="../index.html#notes">← Field Notes</a>
+            <div class="article-kicker">
+              <span>VKS Learning Loop</span>
+              <span>Module 01</span>
+            </div>
+            <h1>What Is VMware Kubernetes Service (VKS), and Where Does It Fit?</h1>
+            <p class="article-deck">
+              Kubernetes defines a portable application platform. VMware
+              Kubernetes Service (VKS) connects that platform to enterprise
+              infrastructure, policy, and lifecycle operations in your datacenter.
+            </p>
+            <div class="article-meta">
+              <span><strong>Author</strong> Sourabh Shrivastav</span>
+              <span><strong>12 min</strong> read</span>
+              <span><strong>Audience</strong> Platform and infrastructure practitioners</span>
+              <span><strong>Validated</strong> June 6, 2026</span>
+            </div>
+          </div>
+
+          <figure class="hero-bridge-infographic" aria-labelledby="hero-bridge-title">
+            <div class="before-after-heading">
+              <span>Platform positioning</span>
+              <strong id="hero-bridge-title">Before <i>→</i> Gap <i>→</i> After</strong>
+            </div>
+
+            <div class="before-after-flow">
+              <section class="state-card before-state">
+                <div class="state-title">
+                  <span>Before</span>
+                  <h2>Kubernetes Primitives</h2>
+                  <p>The portable workload contract</p>
+                </div>
+                <div class="state-icon kubernetes-icon" aria-hidden="true">K8s</div>
+                <ul class="state-list primitives-list">
+                  <li>Pods</li>
+                  <li>Services</li>
+                  <li>Deployments</li>
+                  <li>Ingress</li>
+                  <li>ConfigMaps</li>
+                  <li>Secrets</li>
+                </ul>
+                <div class="state-divider"></div>
+                <p class="state-note">
+                  Kubernetes intentionally leaves many infrastructure and
+                  operating-model decisions to the platform around it.
+                </p>
+              </section>
+
+              <div class="state-arrow arrow-to-gap" aria-hidden="true"><span>→</span></div>
+
+              <section class="state-card gap-state">
+                <div class="state-title">
+                  <span>The Gap</span>
+                  <h2>Enterprise Operating Needs</h2>
+                  <p>Responsibilities around the cluster</p>
+                </div>
+                <div class="gap-landscape" aria-hidden="true">
+                  <svg viewBox="0 0 400 170">
+                    <defs>
+                      <linearGradient id="canyon-left" x1="0" y1="0" x2="1" y2="1">
+                        <stop offset="0" stop-color="#65718a" />
+                        <stop offset="1" stop-color="#29344b" />
+                      </linearGradient>
+                      <linearGradient id="canyon-right" x1="1" y1="0" x2="0" y2="1">
+                        <stop offset="0" stop-color="#65718a" />
+                        <stop offset="1" stop-color="#29344b" />
+                      </linearGradient>
+                    </defs>
+                    <path class="ghost-bridge" d="M88 42 V95 M312 42 V95 M88 42 Q200 132 312 42 M48 95 H352" />
+                    <path fill="url(#canyon-left)" d="M0 71 L46 52 L74 70 L108 62 L137 89 L148 170 H0 Z" />
+                    <path fill="url(#canyon-right)" d="M400 71 L354 52 L326 70 L292 62 L263 89 L252 170 H400 Z" />
+                  </svg>
+                </div>
+                <ul class="state-list gap-needs-list">
+                  <li>Lifecycle Management</li>
+                  <li>Governance &amp; Policy</li>
+                  <li>Security &amp; Compliance</li>
+                  <li>Storage Integration</li>
+                  <li>Network Integration</li>
+                  <li>Multi-Tenancy</li>
+                  <li>Platform Operations</li>
+                </ul>
+              </section>
+
+              <div class="state-arrow arrow-to-after" aria-hidden="true"><span>→</span></div>
+
+              <section class="state-card after-state">
+                <div class="state-title">
+                  <span>After</span>
+                  <h2>With VKS on VCF</h2>
+                  <p>Kubernetes plus an enterprise operating model</p>
+                </div>
+                <div class="state-icon vks-icon" aria-hidden="true">VKS</div>
+                <ul class="state-list retained-list">
+                  <li>Pods</li>
+                  <li>Services</li>
+                  <li>Deployments</li>
+                  <li>Ingress</li>
+                  <li>ConfigMaps</li>
+                  <li>Secrets</li>
+                </ul>
+                <div class="state-divider"></div>
+                <ul class="state-list added-list">
+                  <li>Lifecycle Management</li>
+                  <li>Governance &amp; Security</li>
+                  <li>Integrated Storage</li>
+                  <li>Integrated Networking</li>
+                  <li>Platform Operations</li>
+                  <li>Multi-Tenancy</li>
+                </ul>
+              </section>
+            </div>
+
+            <figcaption>
+              Kubernetes gives teams the workload primitives. VKS helps platform
+              teams close the enterprise operating gap with lifecycle,
+              governance, infrastructure integration and operational consistency.
+            </figcaption>
+          </figure>
+        </header>
+
+        <div class="article-shell">
+          <aside class="article-toc">
+            <span>In this field note</span>
+            <a href="#problem">The enterprise gap</a>
+            <a href="#context">Kubernetes context</a>
+            <a href="#building-blocks">VKS architecture</a>
+            <a href="#responsibility">Responsibilities</a>
+            <a href="#translation">Platform translation</a>
+            <a href="#fit">Why VCF matters</a>
+            <a href="#knowledge">Knowledge check</a>
+          </aside>
+
+          <div class="article-content">
+            <section class="article-section lead-section" id="problem">
+              <p class="section-number">01 · The starting point</p>
+              <h2>The first cluster works. Then the enterprise questions begin.</h2>
+              <p class="section-lead">
+                Imagine a platform team that has proved Kubernetes with one
+                application. The developers can submit a Deployment, Kubernetes
+                schedules the Pods, and a Service makes them reachable. The
+                demonstration is successful. Now eight more teams want clusters.
+                The platform team must decide who can create them, while
+                the operations team asks who will patch, monitor, back up, and
+                support them.
+              </p>
+              <p>
+                Kubernetes still does its job. The new questions sit around it:
+                how does a datacenter repeatedly deliver Kubernetes as a
+                governed, supported service?
+              </p>
+
+              <div class="callout">
+                <strong>The story so far</strong>
+                <p>
+                  Kubernetes answers, “How should this application run?” VKS and
+                  VCF answer, “How will our datacenter deliver and operate the
+                  Kubernetes environments that applications need?”
+                </p>
+              </div>
+            </section>
+
+            <section class="article-section" id="context">
+              <p class="section-number">02 · Vendor-neutral context</p>
+              <h2>Start with the portable Kubernetes contract.</h2>
+              <p>
+                A Kubernetes cluster has a control plane and worker nodes. The
+                control plane exposes the API and reconciles desired state;
+                worker nodes run Pods. Namespaces scope many resources inside a
+                cluster, while Services provide stable network access to
+                changing sets of Pods.
+              </p>
+              <p>
+                These concepts remain relevant whether the cluster was assembled
+                with upstream tools, supplied by OpenShift, delivered by a cloud
+                provider, or created by VKS. Applications still interact with
+                Kubernetes objects rather than vSphere objects.
+              </p>
+              <p>
+                This is the stable center of the story: VKS does not ask
+                developers to abandon Kubernetes. It gives the platform team a
+                repeatable way to supply the clusters behind that familiar API.
+              </p>
+              <p>
+                VMware Kubernetes Service (VKS), formerly known as the TKG
+                Service, runs as a service on Supervisor. It provisions and
+                lifecycle-manages Kubernetes workload clusters using the
+                compute, networking, storage, identity, and policy capabilities
+                supplied by VCF.
+              </p>
+
+              <div class="concept-strip">
+                <div><span>01</span><strong>Declare</strong><small>Submit intent to the Kubernetes API.</small></div>
+                <div><span>02</span><strong>Reconcile</strong><small>Controllers move actual state toward desired state.</small></div>
+                <div><span>03</span><strong>Schedule</strong><small>Pods are placed on suitable worker nodes.</small></div>
+                <div><span>04</span><strong>Expose</strong><small>Services decouple clients from ephemeral Pods.</small></div>
+              </div>
+
+              <div class="portable-example">
+                <div>
+                  <span class="diagram-tag">Portable application intent</span>
+                  <h3>The workload definition does not describe ESXi hosts.</h3>
+                  <p>
+                    Infrastructure details are handled below the application API.
+                    That separation is central to understanding VKS.
+                  </p>
+                </div>
+                <pre><code>apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: storefront
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: storefront</code></pre>
+              </div>
+            </section>
+
+            <section class="article-section dark-section" id="building-blocks">
+              <p class="section-number">03 · From foundation to application</p>
+              <h2>Five layers connect VCF infrastructure to Kubernetes applications.</h2>
+              <p class="dark-intro">
+                Read the stack from the foundation upward. VKS belongs on
+                Supervisor: it turns a cluster request in a governed VCF
+                Namespace into a workload cluster that application teams can use.
+              </p>
+              <div class="architecture-stack">
+                <div class="architecture-tier application-tier">
+                  <div class="tier-heading">
+                    <span>05</span>
+                    <div><strong>Applications</strong><small>Portable Kubernetes objects owned by application teams</small></div>
+                  </div>
+                  <div class="tier-objects">
+                    <span>Namespaces</span><span>Deployments</span><span>Services</span><span>Config &amp; secrets</span>
+                  </div>
+                </div>
+                <div class="tier-flow"><i>↑</i><span>teams deploy through the Kubernetes API</span><i>↓</i></div>
+                <div class="architecture-tier cluster-tier">
+                  <div class="tier-heading">
+                    <span>04</span>
+                    <div><strong>VKS workload cluster</strong><small>The Kubernetes environment consumed by a team</small></div>
+                  </div>
+                  <div class="tier-objects">
+                    <span>Control plane</span><span>Worker nodes</span><span>VKr</span><span>Cluster lifecycle</span>
+                  </div>
+                </div>
+                <div class="tier-flow"><i>↑</i><span>cluster consumes delegated resources and policy</span><i>↓</i></div>
+                <div class="architecture-tier namespace-tier">
+                  <div class="tier-heading">
+                    <span>03</span>
+                    <div><strong>VCF Namespace</strong><small>The infrastructure consumption and governance boundary</small></div>
+                  </div>
+                  <div class="tier-objects">
+                    <span>Permissions</span><span>Capacity</span><span>Storage policy</span><span>Network access</span>
+                  </div>
+                </div>
+                <div class="tier-flow"><i>↑</i><span>VKS reconciles cluster requests within the namespace</span><i>↓</i></div>
+                <div class="architecture-tier vks-tier">
+                  <div class="tier-heading">
+                    <span>02</span>
+                    <div><strong>vSphere Supervisor</strong><small>The platform control plane where the VKS service runs</small></div>
+                  </div>
+                  <div class="tier-objects">
+                    <span>VKS service</span><span>Cluster API</span><span>Controllers</span><span>Service integration</span>
+                  </div>
+                </div>
+                <div class="tier-flow"><i>↑</i><span>Supervisor exposes VCF infrastructure as services</span><i>↓</i></div>
+                <div class="architecture-tier foundation-tier">
+                  <div class="tier-heading">
+                    <span>01</span>
+                    <div><strong>VMware Cloud Foundation</strong><small>The strategic private-cloud foundation in the datacenter</small></div>
+                  </div>
+                  <div class="tier-objects">
+                    <span>Compute</span><span>Networking</span><span>Storage</span><span>Identity &amp; operations</span>
+                  </div>
+                </div>
+              </div>
+              <p class="section-note">
+                The naming can be deceptive: a VCF Namespace governs
+                infrastructure consumption on Supervisor, while a Kubernetes
+                namespace scopes application resources inside a workload
+                cluster. They are different objects in different control planes.
+              </p>
+              <div class="ecosystem-orbit">
+                <div class="ecosystem-core">
+                  <strong>VKS</strong>
+                  <small>Cluster lifecycle and VCF integration</small>
+                </div>
+                <div class="ecosystem-tool"><span>Argo CD</span><small>GitOps</small></div>
+                <div class="ecosystem-tool"><span>Istio</span><small>Service mesh</small></div>
+                <div class="ecosystem-tool"><span>Calico</span><small>Network &amp; policy</small></div>
+                <div class="ecosystem-tool"><span>CI/CD</span><small>Software delivery</small></div>
+                <div class="ecosystem-tool"><span>Harbor</span><small>Registry</small></div>
+              </div>
+              <p class="ecosystem-note">
+                These ecosystem tools complement the cluster service; they are
+                not architectural layers inside VKS. Availability and support
+                depend on the selected VKS, Kubernetes, networking, and add-on
+                versions.
+              </p>
+            </section>
+
+            <section class="article-section" id="responsibility">
+              <p class="section-number">04 · Shared responsibility</p>
+              <h2>VKS changes who does the work; it does not remove the work.</h2>
+              <p>
+                Exact ownership varies by organization, but a useful operating
+                model separates infrastructure, platform, and application
+                concerns. The interfaces between these teams deserve as much
+                design attention as the technology.
+              </p>
+
+              <div class="responsibility-model">
+                <div class="responsibility-lane infra-lane">
+                  <span class="lane-owner">Infrastructure team</span>
+                  <strong>Supply the foundation</strong>
+                  <ul>
+                    <li>VCF and vSphere lifecycle</li>
+                    <li>Supervisor availability</li>
+                    <li>Compute capacity</li>
+                    <li>Network and storage services</li>
+                    <li>Namespace-level policy</li>
+                  </ul>
+                </div>
+                <div class="responsibility-lane platform-lane">
+                  <span class="lane-owner">Platform team</span>
+                  <strong>Deliver the Kubernetes product</strong>
+                  <ul>
+                    <li>Cluster classes and versions</li>
+                    <li>VKS cluster lifecycle</li>
+                    <li>Baseline add-ons and controls</li>
+                    <li>Observability and support</li>
+                    <li>Developer experience</li>
+                  </ul>
+                </div>
+                <div class="responsibility-lane app-lane">
+                  <span class="lane-owner">Application team</span>
+                  <strong>Operate the workload</strong>
+                  <ul>
+                    <li>Deployments and Services</li>
+                    <li>Application namespaces and RBAC</li>
+                    <li>Configuration and secrets</li>
+                    <li>Application reliability</li>
+                    <li>Workload security posture</li>
+                  </ul>
+                </div>
+              </div>
+              <div class="boundary-line">
+                <span>VCF infrastructure</span>
+                <i></i>
+                <span>Kubernetes platform</span>
+                <i></i>
+                <span>Application product</span>
+              </div>
+
+            </section>
+
+            <section class="article-section wide-section" id="translation">
+              <p class="section-number">05 · Platform translation</p>
+              <h2>Bring the mental model you already have.</h2>
+              <p>
+                These are conceptual translations, not claims of exact feature
+                equivalence. Their purpose is to show where familiar
+                responsibilities move when teams adopt VKS.
+              </p>
+
+              <div class="matrix-wrap">
+                <table class="translation-matrix">
+                  <thead>
+                    <tr>
+                      <th>Question</th>
+                      <th>Upstream</th>
+                      <th>OpenShift</th>
+                      <th>EKS / AKS / GKE</th>
+                      <th>vSphere background</th>
+                      <th class="vks-column">VKS</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr>
+                      <th>Who supplies clusters?</th>
+                      <td>Your selected tooling and team</td>
+                      <td>OpenShift installer and operators</td>
+                      <td>Cloud-provider service API</td>
+                      <td>Usually manual VM provisioning</td>
+                      <td class="vks-column">VKS controllers on Supervisor</td>
+                    </tr>
+                    <tr>
+                      <th>Primary tenancy boundary</th>
+                      <td>Cluster and Kubernetes namespace</td>
+                      <td>Cluster, Project, and policy</td>
+                      <td>Cloud account plus cluster and namespace</td>
+                      <td>vCenter, cluster, resource pool, folder</td>
+                      <td class="vks-column">VCF Namespace plus workload cluster and namespace</td>
+                    </tr>
+                    <tr>
+                      <th>Infrastructure integration</th>
+                      <td>Assembled from chosen providers</td>
+                      <td>Integrated platform stack</td>
+                      <td>Native cloud services</td>
+                      <td>vSphere compute, network, and storage</td>
+                      <td class="vks-column">VCF and vSphere services exposed through policy</td>
+                    </tr>
+                    <tr>
+                      <th>Control-plane operations</th>
+                      <td>Your responsibility</td>
+                      <td>Platform administrators</td>
+                      <td>Mostly cloud provider</td>
+                      <td>Not normally a Kubernetes concern</td>
+                      <td class="vks-column">Customer-operated through VKS lifecycle management</td>
+                    </tr>
+                    <tr>
+                      <th>Developer API</th>
+                      <td>Kubernetes API</td>
+                      <td>Kubernetes and OpenShift APIs</td>
+                      <td>Kubernetes API plus cloud APIs</td>
+                      <td>vSphere and automation APIs</td>
+                      <td class="vks-column">Kubernetes API plus VCF consumption interfaces</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </section>
+
+            <section class="article-section" id="fit">
+              <p class="section-number">06 · The strategic foundation</p>
+              <h2>VKS is not a standalone island. Its advantage comes from VCF.</h2>
+              <p>
+                At this point in the story, the cluster is only one outcome.
+                The larger objective is a private-cloud platform that can deliver
+                virtual machines, Kubernetes clusters, data services, and modern
+                applications from a consistent operational foundation.
+              </p>
+              <div class="vcf-value-chain">
+                <div class="value-foundation">
+                  <span>Strategic foundation</span>
+                  <strong>VMware Cloud Foundation</strong>
+                  <p>Common infrastructure, lifecycle, security, operations, and governance for the datacenter.</p>
+                </div>
+                <div class="value-arrow">enables</div>
+                <div class="value-capabilities">
+                  <div><span>VM services</span><small>Traditional and modern virtualized workloads</small></div>
+                  <div class="value-highlight"><span>VKS</span><small>On-demand Kubernetes clusters</small></div>
+                  <div><span>Private AI</span><small>Data-sensitive AI infrastructure and services</small></div>
+                  <div><span>Automation</span><small>Consistent policy-driven consumption</small></div>
+                </div>
+              </div>
+              <div class="strategy-points">
+                <div><span>01</span><strong>One operational foundation</strong><p>Use common compute, networking, storage, identity, lifecycle, and observability capabilities instead of building a separate infrastructure island for Kubernetes.</p></div>
+                <div><span>02</span><strong>Infrastructure becomes a service</strong><p>VCF Namespaces and VKS translate infrastructure capacity into governed, delegated Kubernetes consumption.</p></div>
+                <div><span>03</span><strong>Modernization without a forced split</strong><p>Platform teams can support VMs and Kubernetes while evolving operating practices toward automation and application-centric services.</p></div>
+                <div><span>04</span><strong>Strategic control in the datacenter</strong><p>Organizations retain control over data location, infrastructure policy, security boundaries, and lifecycle decisions.</p></div>
+              </div>
+            </section>
+
+            <section class="article-section knowledge-section" id="knowledge">
+              <p class="section-number">07 · Knowledge reinforcement</p>
+              <h2>Check the reasoning, not the score.</h2>
+              <p>
+                Choose an answer in each card. The review explains the correct
+                answer and why every alternative falls short. Nothing is scored
+                or stored.
+              </p>
+
+              <div class="knowledge-list">
+                <details class="knowledge-card" data-question="q1">
+                  <summary>
+                    <span>Question 01</span>
+                    <strong>Which statement best separates Kubernetes from a Kubernetes platform?</strong>
+                    <i>+</i>
+                  </summary>
+                  <div class="knowledge-body">
+                    <div class="knowledge-options">
+                      <button type="button" data-answer="a">A. Kubernetes includes every enterprise integration required for production.</button>
+                      <button type="button" data-answer="b">B. Kubernetes provides orchestration APIs; a platform supplies the integrated operating model around them.</button>
+                      <button type="button" data-answer="c">C. A Kubernetes platform replaces Kubernetes with a proprietary workload API.</button>
+                    </div>
+                    <div class="answer-review" hidden>
+                      <p class="review-heading"><span>Correct answer: B</span> Kubernetes defines the portable workload and reconciliation model. A platform adds supported lifecycle, infrastructure, security, governance, and experience choices.</p>
+                      <ul>
+                        <li><strong>A:</strong> Kubernetes is extensible precisely because many production capabilities are supplied by integrations and platform choices.</li>
+                        <li class="correct-reason"><strong>B:</strong> This preserves the boundary between the Kubernetes contract and the surrounding platform.</li>
+                        <li><strong>C:</strong> Platforms can extend Kubernetes, but applications still commonly use Kubernetes APIs.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+
+                <details class="knowledge-card" data-question="q2">
+                  <summary>
+                    <span>Question 02</span>
+                    <strong>What is the primary role of VKS?</strong>
+                    <i>+</i>
+                  </summary>
+                  <div class="knowledge-body">
+                    <div class="knowledge-options">
+                      <button type="button" data-answer="a">A. Provision and lifecycle-manage Kubernetes workload clusters on vSphere.</button>
+                      <button type="button" data-answer="b">B. Replace Deployments, Services, and Pods with virtual-machine objects.</button>
+                      <button type="button" data-answer="c">C. Operate application code on behalf of every development team.</button>
+                    </div>
+                    <div class="answer-review" hidden>
+                      <p class="review-heading"><span>Correct answer: A</span> VKS is a Supervisor Service providing APIs and controllers for Kubernetes workload-cluster lifecycle on vSphere.</p>
+                      <ul>
+                        <li class="correct-reason"><strong>A:</strong> This describes the core service boundary accurately.</li>
+                        <li><strong>B:</strong> Workloads continue to use Kubernetes objects; infrastructure integration sits below that API.</li>
+                        <li><strong>C:</strong> Application teams retain responsibility for their workloads and application-level reliability.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+
+                <details class="knowledge-card" data-question="q3">
+                  <summary>
+                    <span>Question 03</span>
+                    <strong>Why is a VCF Namespace not the same as an application namespace?</strong>
+                    <i>+</i>
+                  </summary>
+                  <div class="knowledge-body">
+                    <div class="knowledge-options">
+                      <button type="button" data-answer="a">A. A VCF Namespace is only a DNS suffix.</button>
+                      <button type="button" data-answer="b">B. They are identical objects shown in two interfaces.</button>
+                      <button type="button" data-answer="c">C. The VCF Namespace governs infrastructure consumption on Supervisor; application namespaces scope resources inside a workload cluster.</button>
+                    </div>
+                    <div class="answer-review" hidden>
+                      <p class="review-heading"><span>Correct answer: C</span> The similarly named constructs live at different layers and establish different boundaries.</p>
+                      <ul>
+                        <li><strong>A:</strong> It carries access, capacity, storage, networking, and policy implications beyond naming.</li>
+                        <li><strong>B:</strong> They exist in different Kubernetes control planes and are not interchangeable.</li>
+                        <li class="correct-reason"><strong>C:</strong> This correctly distinguishes the infrastructure-policy boundary from workload resource scoping.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+
+                <details class="knowledge-card" data-question="q4">
+                  <summary>
+                    <span>Question 04</span>
+                    <strong>Who remains responsible for application Services, configuration, and workload reliability?</strong>
+                    <i>+</i>
+                  </summary>
+                  <div class="knowledge-body">
+                    <div class="knowledge-options">
+                      <button type="button" data-answer="a">A. Broadcom, because VKS supplies the cluster.</button>
+                      <button type="button" data-answer="b">B. The application team, within the organization’s platform guardrails.</button>
+                      <button type="button" data-answer="c">C. The physical infrastructure team exclusively.</button>
+                    </div>
+                    <div class="answer-review" hidden>
+                      <p class="review-heading"><span>Correct answer: B</span> A managed cluster lifecycle does not transfer ownership of application behavior.</p>
+                      <ul>
+                        <li><strong>A:</strong> Product support does not make the vendor the operator of customer workloads.</li>
+                        <li class="correct-reason"><strong>B:</strong> Application concerns stay with the product team, supported by platform standards.</li>
+                        <li><strong>C:</strong> Infrastructure teams supply foundational services rather than application configuration and SLOs.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+
+                <details class="knowledge-card" data-question="q5">
+                  <summary>
+                    <span>Question 05</span>
+                    <strong>Why is VCF central to the VKS value proposition?</strong>
+                    <i>+</i>
+                  </summary>
+                  <div class="knowledge-body">
+                    <div class="knowledge-options">
+                      <button type="button" data-answer="a">A. VCF replaces the Kubernetes API with infrastructure APIs.</button>
+                      <button type="button" data-answer="b">B. VCF provides the integrated private-cloud foundation from which VKS delivers governed Kubernetes clusters.</button>
+                      <button type="button" data-answer="c">C. VCF makes platform ownership and Kubernetes operations unnecessary.</button>
+                    </div>
+                    <div class="answer-review" hidden>
+                      <p class="review-heading"><span>Correct answer: B</span> VKS draws its strategic value from VCF’s integrated infrastructure, lifecycle, policy, and operational capabilities.</p>
+                      <ul>
+                        <li><strong>A:</strong> Applications still consume the Kubernetes API; VCF supplies the platform underneath it.</li>
+                        <li class="correct-reason"><strong>B:</strong> This correctly describes VCF as the foundation and VKS as a service delivered from it.</li>
+                        <li><strong>C:</strong> Integrated lifecycle reduces toil, but teams still own platform, cluster, and application responsibilities.</li>
+                      </ul>
+                    </div>
+                  </div>
+                </details>
+              </div>
+            </section>
+
+            <section class="article-section takeaways-section">
+              <p class="section-number">08 · Key takeaways</p>
+              <h2>The short version.</h2>
+              <div class="takeaway-grid">
+                <div><span>01</span><p>Kubernetes is an orchestration foundation, not a complete enterprise platform by itself.</p></div>
+                <div><span>02</span><p>VKS provides workload-cluster provisioning and lifecycle through Supervisor.</p></div>
+                <div><span>03</span><p>Applications retain the standard Kubernetes mental model and APIs.</p></div>
+                <div><span>04</span><p>VCF Namespaces and workload-cluster namespaces are different boundaries.</p></div>
+                <div><span>05</span><p>VCF authorization and Kubernetes RBAC control different object boundaries.</p></div>
+                <div><span>06</span><p>VKS is the Kubernetes service layer of the strategic VCF private-cloud platform.</p></div>
+              </div>
+            </section>
+
+          </div>
+        </div>
+      </article>
+    </main>
+
+    <footer>
+      <a class="brand footer-brand" href="../index.html">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy"><strong>Sourabh Shrivastav</strong><small>Platform Fieldnotes</small></span>
+      </a>
+      <p>VKS Learning Loop · Module 01</p>
+      <a href="../index.html#loops">Continue exploring →</a>
+    </footer>
+  </body>
+</html>

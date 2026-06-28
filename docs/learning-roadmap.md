@@ -47,7 +47,7 @@
 
 | Module | Status | Articles Published |
 |---|---|---|
-| 1 | In Progress | 0 |
+| 1 | In Progress | 1 |
 | 2 | Planned | 0 |
 | 3 | Planned | 0 |
 | 4 | Planned | 0 |
