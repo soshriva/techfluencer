@@ -1,0 +1,541 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A simple Kubernetes foundations article for infrastructure and platform practitioners, using a shopping mall mental model to explain clusters, control plane, worker nodes, namespaces, Pods, Deployments, Services, storage, networking, requests and limits."
+    />
+    <title>Kubernetes Foundations Through a Shopping Mall Mental Model | Sourabh Shrivastav</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="article.css" />
+    <script src="../app.js" defer></script>
+    <script src="article.js" defer></script>
+    <style>
+      .visual-showcase {
+        background:
+          radial-gradient(circle at 20% 18%, rgba(48, 197, 232, .18), transparent 24%),
+          radial-gradient(circle at 82% 42%, rgba(126, 71, 238, .16), transparent 24%),
+          #070f20;
+        border: 1px solid rgba(132, 174, 225, .24);
+        border-radius: 22px;
+        box-shadow: 0 28px 65px rgba(16, 38, 74, .22);
+        color: #fff;
+        margin: 34px 0;
+        overflow: hidden;
+        padding: 16px;
+      }
+      .visual-showcase img {
+        border-radius: 16px;
+        display: block;
+        height: auto;
+        width: 100%;
+      }
+      .visual-showcase figcaption {
+        border-top: 1px solid rgba(152, 181, 220, .16);
+        color: #b8c7df;
+        font-size: .9rem;
+        line-height: 1.6;
+        margin-top: 14px;
+        padding: 14px 6px 4px;
+      }
+      .mental-map-grid {
+        display: grid;
+        gap: 12px;
+        grid-template-columns: repeat(3, minmax(0, 1fr));
+        margin: 28px 0;
+      }
+      .mental-map-card {
+        background: linear-gradient(145deg, rgba(255,255,255,.92), rgba(241,247,255,.9));
+        border: 1px solid var(--line);
+        border-radius: 16px;
+        padding: 18px;
+      }
+      .mental-map-card span {
+        color: var(--blue);
+        display: block;
+        font-size: .68rem;
+        font-weight: 800;
+        letter-spacing: .11em;
+        margin-bottom: 8px;
+        text-transform: uppercase;
+      }
+      .mental-map-card strong { color: var(--ink); display: block; font-size: 1.02rem; margin-bottom: 6px; }
+      .mental-map-card small { color: #64748b; line-height: 1.5; }
+      .story-flow {
+        background: #081225;
+        border: 1px solid rgba(132,174,225,.24);
+        border-radius: 20px;
+        color: #dbe8ff;
+        margin: 30px 0;
+        padding: 24px;
+      }
+      .story-flow ol { margin: 18px 0 0; padding-left: 1.2rem; }
+      .story-flow li { margin: 10px 0; }
+      .story-flow strong { color: #fff; }
+      .quick-map-table {
+        border-collapse: collapse;
+        margin: 26px 0;
+        width: 100%;
+      }
+      .quick-map-table th, .quick-map-table td {
+        border-bottom: 1px solid var(--line);
+        padding: 13px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .quick-map-table th { color: var(--ink); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+      .quick-map-table td { color: #536174; }
+      .quick-map-table td:first-child, .quick-map-table td:nth-child(2) { color: var(--ink); font-weight: 700; }
+      .knowledge-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 16px 35px rgba(16, 38, 74, .08);
+        margin: 20px 0;
+        padding: 22px;
+      }
+      .knowledge-card h3 { margin-top: 0; }
+      .answer-box {
+        background: #f4f8ff;
+        border-left: 4px solid var(--blue);
+        border-radius: 14px;
+        margin-top: 16px;
+        padding: 16px;
+      }
+      @media (max-width: 900px) {
+        .mental-map-grid { grid-template-columns: 1fr; }
+        .quick-map-table { font-size: .88rem; }
+      }
+    </style>
+  </head>
+  <body class="article-page">
+    <header class="site-header article-header">
+      <a class="brand" href="../index.html" aria-label="Sourabh Shrivastav home">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <strong>Sourabh Shrivastav</strong>
+          <small>Platform Fieldnotes</small>
+        </span>
+      </a>
+      <nav aria-label="Article navigation">
+        <a class="nav-link" href="../index.html">Basecamp</a>
+        <a class="nav-link active" href="../index.html#loops">Learning Loops</a>
+        <a class="nav-link" href="../index.html#about">About</a>
+      </nav>
+      <a class="button button-small button-outline" href="#knowledge">Knowledge check</a>
+    </header>
+
+    <main>
+      <article>
+        <header class="article-hero">
+          <div class="article-hero-copy">
+            <a class="back-link" href="../index.html#notes">← Field Notes</a>
+            <div class="article-kicker">
+              <span>VKS Learning Loop</span>
+              <span>Module 02</span>
+            </div>
+            <h1>Kubernetes Foundations Through a Shopping Mall Mental Model</h1>
+            <p class="article-deck">
+              A beginner-friendly way to connect Kubernetes architecture, control plane, worker nodes, namespaces,
+              Pods, Deployments, Services, storage, networking, and resource limits into one memorable story.
+            </p>
+            <div class="article-meta">
+              <span><strong>Author</strong> Sourabh Shrivastav</span>
+              <span><strong>15 min</strong> read</span>
+              <span><strong>Audience</strong> Infrastructure and platform practitioners</span>
+              <span><strong>Validated</strong> June 28, 2026</span>
+            </div>
+          </div>
+
+          <figure class="hero-bridge-infographic visual-showcase" aria-labelledby="mall-hero-title">
+            <img
+              src="../assets/blogs/kubernetes-foundations/kubernetes_as_a_smart_shopping_mall.png"
+              alt="Infographic mapping Kubernetes concepts to a smart shopping mall: cluster, control plane, worker nodes, namespaces, Pods, Services, Ingress, storage, policies and health probes."
+            />
+            <figcaption id="mall-hero-title">
+              Kubernetes becomes easier to understand when you stop seeing it as isolated objects and start seeing it as a managed operating model.
+            </figcaption>
+          </figure>
+        </header>
+
+        <div class="article-shell">
+          <aside class="article-toc">
+            <span>In this field note</span>
+            <a href="#mental-model">The mental model</a>
+            <a href="#architecture">Architecture</a>
+            <a href="#node-namespace">Node vs namespace</a>
+            <a href="#workloads">Pods and Deployments</a>
+            <a href="#traffic">Services and Ingress</a>
+            <a href="#storage">Storage</a>
+            <a href="#resources">Requests and limits</a>
+            <a href="#knowledge">Knowledge check</a>
+          </aside>
+
+          <div class="article-content">
+            <section class="article-section lead-section" id="mental-model">
+              <p class="section-number">01 · Why this mental model</p>
+              <h2>There are many Kubernetes tutorials. This one is about memory.</h2>
+              <p class="section-lead">
+                There are already many excellent articles, videos and training materials on Kubernetes. This article is not trying to say something completely new.
+                Instead, it explains Kubernetes in a way that is easier to remember.
+              </p>
+              <p>
+                When I learn something complex, I like to create a mental map. A mental map helps me connect concepts together instead of memorizing them as separate definitions.
+                Kubernetes has many terms: control plane, worker node, namespace, Pod, Deployment, Service, Ingress, StorageClass, PVC, PV, NetworkPolicy, requests and limits.
+              </p>
+              <p>
+                Each term is manageable by itself. The challenge is connecting them. So for this article, let us use one simple mental model: <strong>Kubernetes is like a smart shopping mall.</strong>
+              </p>
+              <div class="callout">
+                <strong>The learning goal</strong>
+                <p>
+                  By the end, you should be able to explain Kubernetes using one connected story: the mall, the management office, the floors, the brands, the counters, the directory, the storage room, and the access rules.
+                </p>
+              </div>
+
+              <div class="mental-map-grid">
+                <div class="mental-map-card"><span>Platform</span><strong>Cluster = entire mall</strong><small>The full environment where applications run.</small></div>
+                <div class="mental-map-card"><span>Management</span><strong>Control plane = mall office</strong><small>The brain that tracks state and makes decisions.</small></div>
+                <div class="mental-map-card"><span>Capacity</span><strong>Worker node = floor or wing</strong><small>The real runtime capacity where workloads run.</small></div>
+                <div class="mental-map-card"><span>Ownership</span><strong>Namespace = brand account</strong><small>The logical boundary showing who owns the workload.</small></div>
+                <div class="mental-map-card"><span>Runtime</span><strong>Pod = outlet or counter</strong><small>The smallest deployable unit in Kubernetes.</small></div>
+                <div class="mental-map-card"><span>Application</span><strong>Container = business function</strong><small>The actual running application inside the Pod.</small></div>
+              </div>
+            </section>
+
+            <section class="article-section" id="architecture">
+              <p class="section-number">02 · Kubernetes architecture</p>
+              <h2>The cluster is the entire mall. The control plane manages it.</h2>
+              <p>
+                A Kubernetes cluster is the full environment where applications run. It includes the management system, the machines, the applications, the network, the storage, and the policies.
+                In our analogy, the Kubernetes cluster is the entire shopping mall.
+              </p>
+              <p>
+                Every mall needs a management office. The management office does not sell coffee, clothes or electronics. It manages the mall.
+                The Kubernetes control plane works in the same way. It decides what should run, where it should run, how many copies should exist, and what to do when something fails.
+              </p>
+
+              <div class="concept-strip">
+                <div><span>01</span><strong>API Server</strong><small>The management reception desk. All requests enter here.</small></div>
+                <div><span>02</span><strong>etcd</strong><small>The official mall records. It stores cluster state.</small></div>
+                <div><span>03</span><strong>Scheduler</strong><small>The leasing team. It places Pods on suitable nodes.</small></div>
+                <div><span>04</span><strong>Controller Manager</strong><small>The operations supervisor. It maintains desired state.</small></div>
+              </div>
+
+              <p>
+                The scheduler is like the leasing and space allocation team. If a brand wants a new counter, the mall checks which floor has space, power, and the right conditions.
+                Kubernetes does the same when placing a Pod on a worker node.
+              </p>
+              <p>
+                The controller manager is like the operations supervisor. If the plan says three counters should be open and only two are running, it takes action to restore the expected state.
+              </p>
+            </section>
+
+            <section class="article-section dark-section" id="node-namespace">
+              <p class="section-number">03 · The most important clarification</p>
+              <h2>Namespace is who owns it. Worker node is where it runs.</h2>
+              <p class="dark-intro">
+                This is one of the most useful distinctions for infrastructure and platform teams. A worker node and a namespace are not the same thing.
+              </p>
+
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/kubernetes-foundations/kubernetes_mall_concept_map_diagram.png"
+                  alt="Infographic explaining namespace versus worker node using a shopping mall with Payments, Risk and Reporting brands across Level 1, Level 2 and East Wing."
+                />
+                <figcaption>
+                  A namespace can span multiple worker nodes, and one worker node can host Pods from multiple namespaces. Namespace tells you ownership. Worker node tells you runtime location.
+                </figcaption>
+              </figure>
+
+              <p>
+                Imagine a business unit called <strong>Payments</strong>. Payments may need more space. It can have one counter on Level 1, one reconciliation counter on Level 2, and one Payments Gateway counter in the East Wing.
+                The brand is not the floor. The brand uses space on one or more floors.
+              </p>
+              <div class="portable-example">
+                <div>
+                  <span class="diagram-tag">Mall language</span>
+                  <h3>Payments uses multiple mall locations.</h3>
+                  <p>Brand / Tenant: Payments<br />Outlet / Counter: Payments Gateway<br />Mall Zone / Floor: East Wing</p>
+                </div>
+                <pre><code>Namespace: payments
+Pod: payment-gateway
+Worker Node: worker-node-03</code></pre>
+              </div>
+              <p>
+                The simple memory hook is: <strong>Namespace = who owns it. Worker node = where it runs. Pod = the running outlet or counter. Container = the business process inside the outlet.</strong>
+              </p>
+            </section>
+
+            <section class="article-section" id="workloads">
+              <p class="section-number">04 · Workload building blocks</p>
+              <h2>Pods are counters. Containers are the business running inside them.</h2>
+              <p>
+                A Pod is the smallest deployable unit in Kubernetes. Most of the time, one Pod runs one main container.
+                In the mall analogy, a Pod is an outlet, counter or store unit. The container is the business function running inside it.
+              </p>
+              <p>
+                A Deployment is not a single Pod. A Deployment is a plan. It tells Kubernetes how many Pods should be running and how they should be updated.
+              </p>
+              <div class="callout">
+                <strong>Deployment as a counter availability plan</strong>
+                <p>
+                  During normal hours, keep 3 Payments counters open. During a campaign, increase to 5 Payments counters. When upgrading the counter setup, replace counters gradually so service does not stop.
+                </p>
+              </div>
+              <p>
+                If a Deployment says <code>replicas: 3</code>, Kubernetes tries to keep three Pods running. If one Pod fails, Kubernetes creates another Pod.
+              </p>
+            </section>
+
+            <section class="article-section" id="traffic">
+              <p class="section-number">05 · Services and traffic</p>
+              <h2>Service gives a stable directory number. Ingress brings visitors into the mall.</h2>
+              <p>
+                Pods are temporary. They can be created, deleted, moved or replaced. Their IP addresses can change. A Service gives a stable way to reach changing Pods.
+              </p>
+              <p>
+                In a mall, a counter may change staff or move internally, but the mall directory can still show one stable contact point. In Kubernetes, the Service is that stable network identity.
+              </p>
+
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/kubernetes-foundations/traffic_flow_mall_vs_kubernetes_analogy.png"
+                  alt="Two-lane infographic comparing mall visitor flow to Kubernetes traffic flow: visitor to entrance to directory to counter to business function, mapped to user to Ingress to Service to Pod to Container."
+                />
+                <figcaption>
+                  Ingress brings traffic into the cluster. Service gives stable access. Pods run the application. Containers do the actual work.
+                </figcaption>
+              </figure>
+
+              <p>
+                Labels and selectors make this work. Labels describe Pods, and selectors find matching Pods. A Service can route traffic to all Pods with a matching label, such as <code>app: payment-api</code>.
+              </p>
+            </section>
+
+            <section class="article-section" id="storage">
+              <p class="section-number">06 · Storage fundamentals</p>
+              <h2>StorageClass is the type. PVC is the request. PV is the assigned storage.</h2>
+              <p>
+                Not every application is stateless. Some applications need data to stay even if the Pod restarts. Examples include databases, file upload services, message queues and stateful applications.
+              </p>
+              <p>
+                Pods are temporary. If data lives only inside a Pod, it may disappear when the Pod is deleted. That is why Kubernetes has persistent storage concepts.
+              </p>
+
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/kubernetes-foundations/kubernetes_storage_made_simple_infographic.png"
+                  alt="Storage infographic mapping mall storage type, storage request and actual storage room to Kubernetes StorageClass, PVC and PV."
+                />
+                <figcaption>
+                  StorageClass defines the type of storage. PVC requests storage. PV is the actual storage assigned to the workload.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="resources">
+              <p class="section-number">07 · Resource governance</p>
+              <h2>Requests help with placement. Limits protect shared capacity.</h2>
+              <p>
+                Every Pod needs CPU and memory. But a Kubernetes cluster has limited capacity. If one workload consumes too much, it can affect others.
+              </p>
+              <p>
+                A request tells Kubernetes the minimum CPU or memory the Pod needs. The scheduler uses this information to place the Pod on a suitable worker node.
+                A limit tells Kubernetes the maximum CPU or memory the Pod is allowed to use.
+              </p>
+
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/kubernetes-foundations/kubernetes_resource_requests_and_limits.png"
+                  alt="Infographic showing mall facilities booking mapped to Kubernetes resource requests and limits for a payment-api Pod."
+                />
+                <figcaption>
+                  Requests help Kubernetes place Pods. Limits protect shared capacity.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="config-health">
+              <p class="section-number">08 · Configuration and health</p>
+              <h2>ConfigMaps, Secrets and probes keep the application usable.</h2>
+              <p>
+                Applications need configuration such as environment names, API endpoints, feature flags and log levels. Kubernetes stores non-sensitive configuration in ConfigMaps.
+                Sensitive information such as passwords, tokens and certificates belongs in Secrets.
+              </p>
+              <p>
+                Health probes help Kubernetes understand whether an application is alive and ready. Liveness asks: is it alive? Readiness asks: can it serve traffic now?
+              </p>
+              <div class="story-flow">
+                <strong>The complete story</strong>
+                <ol>
+                  <li>The platform team creates the <strong>payments</strong> namespace.</li>
+                  <li>The application team creates a Deployment to run three copies of <strong>payment-api</strong>.</li>
+                  <li>The scheduler places the Pods on suitable worker nodes.</li>
+                  <li>Each Pod runs the payment-api container.</li>
+                  <li>A Service gives stable access to those Pods.</li>
+                  <li>Ingress exposes the application externally.</li>
+                  <li>PVC provides persistent storage if needed.</li>
+                  <li>NetworkPolicy controls who can talk to whom.</li>
+                  <li>Requests and limits protect shared CPU and memory.</li>
+                  <li>The control plane watches everything and maintains desired state.</li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="article-section" id="yaml">
+              <p class="section-number">09 · Hands-on example</p>
+              <h2>Read the story in YAML.</h2>
+              <p>This simple example creates a namespace, a deployment and a service.</p>
+              <pre><code>apiVersion: v1
+kind: Namespace
+metadata:
+  name: payments
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-api
+  namespace: payments
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: payment-api
+  template:
+    metadata:
+      labels:
+        app: payment-api
+    spec:
+      containers:
+      - name: payment-api
+        image: nginx:latest
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "250m"
+            memory: "256Mi"
+          limits:
+            cpu: "500m"
+            memory: "512Mi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-api-service
+  namespace: payments
+spec:
+  selector:
+    app: payment-api
+  ports:
+  - port: 80
+    targetPort: 80</code></pre>
+            </section>
+
+            <section class="article-section" id="knowledge">
+              <p class="section-number">10 · Knowledge reinforcement</p>
+              <h2>Check the mental model.</h2>
+
+              <div class="knowledge-card">
+                <h3>Question 1</h3>
+                <p>Which statement best explains the difference between a Worker Node and a Namespace?</p>
+                <p>A. A Worker Node is logical, and a Namespace is physical<br />B. A Worker Node is where workloads run, and a Namespace is who they belong to<br />C. A Namespace runs containers directly<br />D. A Worker Node is only used for storage</p>
+                <div class="answer-box"><strong>Correct answer: B.</strong><p>A Worker Node provides runtime capacity. A Namespace provides logical ownership and separation. Namespaces do not run containers; Pods run containers, and Pods run on Worker Nodes.</p></div>
+              </div>
+
+              <div class="knowledge-card">
+                <h3>Question 2</h3>
+                <p>Why do we use a Service in Kubernetes?</p>
+                <p>A. To store application data<br />B. To provide stable access to changing Pods<br />C. To replace Deployments<br />D. To create Worker Nodes</p>
+                <div class="answer-box"><strong>Correct answer: B.</strong><p>Pods can be created, deleted and replaced. A Service gives a stable network identity for those Pods.</p></div>
+              </div>
+
+              <div class="knowledge-card">
+                <h3>Question 3</h3>
+                <p>What is the difference between a PVC and a PV?</p>
+                <p>A. PVC is the actual storage, and PV is the request<br />B. PVC is a request for storage, and PV is the actual storage assigned<br />C. PVC is used for networking<br />D. PV is used to expose applications</p>
+                <div class="answer-box"><strong>Correct answer: B.</strong><p>The application asks for storage using a PVC. Kubernetes binds that request to a suitable PV.</p></div>
+              </div>
+
+              <div class="knowledge-card">
+                <h3>Question 4</h3>
+                <p>What is the main difference between resource requests and limits?</p>
+                <p>A. Requests are for storage, limits are for networking<br />B. Requests help Kubernetes place Pods, limits control maximum usage<br />C. Requests restart failed Pods, limits expose Services<br />D. Requests and limits are the same thing</p>
+                <div class="answer-box"><strong>Correct answer: B.</strong><p>The scheduler uses requests to decide where a Pod can fit. The node enforces limits so the container cannot exceed the configured maximum.</p></div>
+              </div>
+            </section>
+
+            <section class="article-section dark-section" id="challenge">
+              <p class="section-number">11 · Architecture challenge</p>
+              <h2>Design a mall for Payments, Risk and Reporting.</h2>
+              <p class="dark-intro">
+                A company has three application teams: Payments, Risk and Reporting. Each team wants to deploy applications on Kubernetes.
+              </p>
+              <div class="story-flow">
+                <strong>Design questions</strong>
+                <ol>
+                  <li>Would you create separate namespaces for Payments, Risk and Reporting?</li>
+                  <li>Which applications should use Deployments?</li>
+                  <li>Which applications need Services?</li>
+                  <li>Which workloads need PVCs?</li>
+                  <li>Where would NetworkPolicy be useful?</li>
+                  <li>What resource requests and limits would you define?</li>
+                  <li>What should the platform team manage?</li>
+                  <li>What should the application team manage?</li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="article-section" id="takeaways">
+              <p class="section-number">12 · Key takeaways</p>
+              <h2>The foundation stays the same when we move to VKS.</h2>
+              <ul>
+                <li>Kubernetes is easier to understand when concepts are connected together.</li>
+                <li>A Kubernetes cluster is like a smart shopping mall.</li>
+                <li>The control plane is the mall management office.</li>
+                <li>Worker nodes are the physical floors or zones where workloads run.</li>
+                <li>Namespaces are brand or tenant accounts, not physical locations.</li>
+                <li>Pods are outlets or counters where containers run.</li>
+                <li>Services provide stable access to changing Pods.</li>
+                <li>StorageClass, PVC and PV make storage consumable.</li>
+                <li>Requests and limits protect shared platform capacity.</li>
+                <li>Kubernetes is a desired-state system, not just a container launcher.</li>
+              </ul>
+              <div class="callout">
+                <strong>Why this matters before learning VKS</strong>
+                <p>
+                  VKS builds on Kubernetes. It does not remove these concepts. When we later discuss Supervisor, VCF Namespace, Workload Cluster, VKr, storage policy and NSX/VDS networking, we will connect them back to this foundation.
+                </p>
+              </div>
+            </section>
+
+            <section class="article-section sources-section" id="sources">
+              <p class="section-number">Sources reviewed</p>
+              <h2>Version validation</h2>
+              <ul>
+                <li>Kubernetes official documentation — Nodes</li>
+                <li>Kubernetes official documentation — Namespaces</li>
+                <li>Kubernetes official documentation — Pods</li>
+                <li>Kubernetes official documentation — Deployments</li>
+                <li>Kubernetes official documentation — Services</li>
+                <li>Kubernetes official documentation — Ingress</li>
+                <li>Kubernetes official documentation — Persistent Volumes</li>
+                <li>Kubernetes official documentation — Resource Management for Pods and Containers</li>
+              </ul>
+              <p><strong>Version-validation date:</strong> 28 June 2026<br /><strong>Last-reviewed date:</strong> 28 June 2026</p>
+            </section>
+          </div>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
