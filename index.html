@@ -15,6 +15,36 @@
       rel="stylesheet"
     />
     <link rel="stylesheet" href="styles.css" />
+    <style>
+      .published-modules li { padding: 0; }
+      .published-modules a {
+        display: grid;
+        gap: 5px;
+        height: 100%;
+        padding: 14px 16px;
+        transition: background 160ms ease, border-color 160ms ease, transform 160ms ease;
+        width: 100%;
+      }
+      .published-modules a:hover {
+        background: #eef5ff;
+        transform: translateY(-1px);
+      }
+      .published-modules a > span {
+        color: var(--blue);
+        font-size: .68rem;
+        font-weight: 800;
+      }
+      .published-modules strong {
+        color: var(--ink);
+        font-size: .9rem;
+      }
+      .published-modules small {
+        color: var(--muted);
+        font-size: .74rem;
+        font-weight: 500;
+        line-height: 1.45;
+      }
+    </style>
     <script src="app.js" defer></script>
   </head>
   <body>
