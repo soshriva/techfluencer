@@ -271,187 +271,162 @@
                 Kubernetes does the same when placing a Pod on a worker node.
               </p>
               <p>
-                The controller manager is like the operations supervisor. If the plan says three counters should be open and only two are running, it takes action to restore the expected state.
+                The controller manager is like the operations supervisor. If the desired plan says three counters should be open and only two are running, Kubernetes works to restore the expected state.
               </p>
             </section>
 
             <section class="article-section dark-section" id="node-namespace">
-              <p class="section-number">03 · The most important clarification</p>
-              <h2>Namespace is who owns it. Worker node is where it runs.</h2>
+              <p class="section-number">03 · Worker node vs namespace</p>
+              <h2>Worker node is where it runs. Namespace is who owns it.</h2>
               <p class="dark-intro">
-                This is one of the most useful distinctions for infrastructure and platform teams. A worker node and a namespace are not the same thing.
+                This is one of the most important distinctions for infrastructure and platform practitioners. A namespace is not a place where Pods run. It is a logical ownership boundary.
               </p>
-
               <figure class="visual-showcase">
                 <img
                   src="../assets/blogs/kubernetes-foundations/kubernetes_mall_concept_map_diagram.png"
-                  alt="Infographic explaining namespace versus worker node using a shopping mall with Payments, Risk and Reporting brands across Level 1, Level 2 and East Wing."
+                  alt="Mall analogy diagram explaining that namespaces are brands, worker nodes are physical floors or zones, Pods are counters and containers are business functions."
                 />
                 <figcaption>
                   A namespace can span multiple worker nodes, and one worker node can host Pods from multiple namespaces. Namespace tells you ownership. Worker node tells you runtime location.
                 </figcaption>
               </figure>
-
               <p>
-                Imagine a business unit called <strong>Payments</strong>. Payments may need more space. It can have one counter on Level 1, one reconciliation counter on Level 2, and one API counter in the East Wing.
+                Imagine a business unit called <strong>Payments</strong>. Payments may have one counter on Level 1, one reconciliation counter on Level 2, and one payment-api counter in the East Wing.
                 The brand is not the floor. The brand uses space on one or more floors.
               </p>
-              <div class="portable-example">
-                <div>
-                  <span class="diagram-tag">Mall language</span>
-                  <h3>Payments uses multiple mall locations.</h3>
-                  <p>Brand / Tenant: Payments<br />Outlet / Counter: Payments API Counter<br />Mall Zone / Floor: East Wing</p>
-                </div>
-                <pre><code>Namespace: payments
-Pod: payment-api
-Worker Node: worker-node-03</code></pre>
+              <div class="story-flow">
+                <strong>Read the mapping like this</strong>
+                <ol>
+                  <li><strong>Namespace:</strong> payments — who owns the workload.</li>
+                  <li><strong>Pod:</strong> payment-api — the running outlet or counter.</li>
+                  <li><strong>Worker node:</strong> worker-node-03 — where that Pod is running.</li>
+                  <li><strong>Container:</strong> the actual payment-api application process inside the Pod.</li>
+                </ol>
               </div>
               <p>
-                The simple memory hook is: <strong>Namespace = who owns it. Worker node = where it runs. Pod = the running outlet or counter. Container = the business process inside the outlet.</strong>
+                The same namespace can have Pods on many worker nodes. At the same time, one worker node can run Pods from many namespaces.
+                That is why the short memory hook is: <strong>namespace equals ownership; worker node equals runtime location.</strong>
               </p>
             </section>
 
             <section class="article-section" id="workloads">
-              <p class="section-number">04 · Workload building blocks</p>
-              <h2>Pods are counters. Containers are the business running inside them.</h2>
+              <p class="section-number">04 · Pods, containers and Deployments</p>
+              <h2>The counter is the Pod. The business inside it is the container.</h2>
               <p>
                 A Pod is the smallest deployable unit in Kubernetes. Most of the time, one Pod runs one main container.
-                In the mall analogy, a Pod is an outlet, counter or store unit. The container is the business function running inside it.
+                In the mall analogy, the Pod is the outlet or counter. The container is the business function running inside that counter.
               </p>
               <p>
-                A Deployment is not a single Pod. A Deployment is a plan. It tells Kubernetes how many copies should be running and how those copies should be updated.
+                A Deployment is not a single Pod. A Deployment is a plan. It creates a behind-the-scenes manager called a <strong>ReplicaSet</strong>.
+                This ReplicaSet ensures that if the Deployment says <code>replicas: 3</code>, exactly three Pods stay running.
               </p>
-              <div class="callout">
-                <strong>Deployment as a counter availability plan</strong>
-                <p>
-                  During normal hours, keep 3 Payments counters open. During a campaign, increase to 5 Payments counters. When upgrading the counter setup, replace counters gradually so service does not stop.
-                </p>
-              </div>
               <p>
-                Under the hood, a Deployment creates a behind-the-scenes manager called a <strong>ReplicaSet</strong>. The ReplicaSet keeps the requested number of Pods running.
-                So if a Deployment says <code>replicas: 3</code>, the ReplicaSet ensures that exactly three <code>payment-api</code> Pods stay available. If one Pod fails, a replacement Pod is created.
+                Think of the Payments business unit saying: during normal hours, keep three Payments counters open. During a campaign, increase to five counters. When upgrading the counter setup, replace counters gradually so service does not stop.
               </p>
               <div class="learning-note">
-                <strong>Why this matters when you run commands</strong>
-                When you run <code>kubectl get all</code>, you may see a resource like <code>replicaset.apps/payment-api-xxxxx</code>. That is expected. It is the manager created by the Deployment to maintain the Pods.
+                <strong>Why ReplicaSet matters</strong>
+                If you run <code>kubectl get all</code>, you may see a <code>replicaset.apps/payment-api-xxxxx</code> object. That is expected. The Deployment owns the ReplicaSet, and the ReplicaSet keeps the Pods running.
               </div>
             </section>
 
             <section class="article-section" id="traffic">
-              <p class="section-number">05 · Services and traffic</p>
-              <h2>Service gives a stable directory number. Ingress brings visitors into the mall.</h2>
+              <p class="section-number">05 · Services and Ingress</p>
+              <h2>Use the mall directory, not the temporary counter location.</h2>
               <p>
-                Pods are temporary. They can be created, deleted, moved or replaced. Their IP addresses can change. A Service gives a stable way to reach changing Pods.
+                Pods are temporary. They can be created, deleted, moved or replaced. Their IP addresses can change.
+                A Service gives a stable way to reach those changing Pods, just like a fixed mall directory number points visitors to the right counter even when staff or counters change.
               </p>
-              <p>
-                In a mall, a counter may change staff or move internally, but the mall directory can still show one stable contact point. In Kubernetes, the Service is that stable network identity.
-              </p>
-
               <figure class="visual-showcase">
                 <img
                   src="../assets/blogs/kubernetes-foundations/traffic_flow_mall_vs_kubernetes_analogy.png"
-                  alt="Two-lane infographic comparing mall visitor flow to Kubernetes traffic flow: visitor to entrance to directory to counter to business function, mapped to user to Ingress to Service to Pod to Container."
+                  alt="Traffic flow diagram comparing visitor to mall entrance to directory to counter with user to Ingress to Service to Pod to Container."
                 />
                 <figcaption>
                   Ingress brings traffic into the cluster. Service gives stable access. Pods run the application. Containers do the actual work.
                 </figcaption>
               </figure>
-
               <p>
-                Labels and selectors make this work. Labels describe Pods, and selectors find matching Pods. A Service can route traffic to all Pods with a matching label, such as <code>app: payment-api</code>.
+                Ingress is the main mall entrance. A user enters from outside, Ingress receives the request, the Service routes it to the right set of Pods, and the container handles the actual application logic.
               </p>
             </section>
 
             <section class="article-section" id="storage">
               <p class="section-number">06 · Storage fundamentals</p>
-              <h2>StorageClass is the blueprint. PVC is the request. PV is the assigned storage.</h2>
+              <h2>StorageClass is the blueprint. PVC is the request. PV is the room.</h2>
               <p>
-                Not every application is stateless. Some applications need data to stay even if the Pod restarts. Examples include databases, file upload services, message queues and stateful applications.
+                Not every application is stateless. Databases, file upload services, message queues and stateful applications need data to survive even if a Pod restarts.
+                Kubernetes uses StorageClass, PersistentVolumeClaim and PersistentVolume to make storage consumable.
               </p>
-              <p>
-                Pods are temporary. If data lives only inside a Pod, it may disappear when the Pod is deleted. That is why Kubernetes has persistent storage concepts.
-              </p>
-
               <figure class="visual-showcase">
                 <img
                   src="../assets/blogs/kubernetes-foundations/kubernetes_storage_made_simple_infographic.png"
                   alt="Storage infographic mapping mall storage type, storage request and actual storage room to Kubernetes StorageClass, PVC and PV."
                 />
                 <figcaption>
-                  StorageClass defines the storage blueprint. PVC requests storage. PV is the actual storage assigned to the workload.
+                  StorageClass defines the type of storage. PVC requests storage. PV is the actual storage assigned to the workload.
                 </figcaption>
               </figure>
               <p>
-                The important idea is <strong>dynamic provisioning</strong>. Without a StorageClass, the mall admin would need to manually build every storage room ahead of time. That is like static provisioning.
-                With a StorageClass, the mall has a blueprint. When a tenant submits a storage request, the platform can automatically create and assign the right storage room.
+                The important idea is <strong>dynamic provisioning</strong>. Without a StorageClass, a platform admin may need to prepare storage manually ahead of time. That is like the mall admin building every storage room before any tenant asks for it.
               </p>
               <p>
-                In Kubernetes language, a Pod uses a <strong>PersistentVolumeClaim</strong> to ask for storage. A StorageClass describes what kind of storage should be created. Kubernetes then binds that request to a <strong>PersistentVolume</strong>, either from existing storage or by dynamically provisioning new storage through the storage provider.
+                With a StorageClass, the platform has a blueprint. When a tenant submits a request through a PVC, Kubernetes can dynamically provision a suitable PersistentVolume. In mall language, the storage room is created or assigned when the tenant submits the request.
+              </p>
+            </section>
+
+            <section class="article-section" id="networking">
+              <p class="section-number">07 · Networking fundamentals</p>
+              <h2>Kubernetes networking is about reachability and control.</h2>
+              <p>
+                Kubernetes networking answers four simple questions: how Pods talk to each other, how applications find changing Pods, how outside traffic enters the cluster, and how we control who can talk to whom.
+              </p>
+              <p>
+                NetworkPolicy is like mall access control. Customers can enter public shops. Delivery staff can access loading bays. Vendors can enter approved areas. Visitors cannot enter the mall control room.
+                In Kubernetes, policies can allow frontend Pods to talk to backend Pods, while preventing frontend Pods from directly reaching the database.
               </p>
             </section>
 
             <section class="article-section" id="resources">
-              <p class="section-number">07 · Resource governance</p>
-              <h2>Requests help with placement. Limits protect shared capacity.</h2>
+              <p class="section-number">08 · Resource requests and limits</p>
+              <h2>Requests help placement. Limits protect shared capacity.</h2>
               <p>
-                Every Pod needs CPU and memory. But a Kubernetes cluster has limited capacity. If one workload consumes too much, it can affect others.
+                Every Pod needs CPU and memory. But a Kubernetes cluster has limited capacity. If one workload consumes too much, it can affect others. That is why Kubernetes uses resource requests and limits.
               </p>
-              <p>
-                A request tells Kubernetes the minimum CPU or memory the Pod needs. The scheduler uses this information to place the Pod on a suitable worker node.
-                A limit controls the maximum usage the container is allowed to reach.
-              </p>
-
               <figure class="visual-showcase">
                 <img
-                  src="../assets/blogs/kubernetes-foundations/kubernetes_resource_requests_and_limits.png"
-                  alt="Infographic showing mall facilities booking mapped to Kubernetes resource requests and limits for a payment-api Pod using 1 vCPU and 2Gi memory request and 2 vCPU and 4Gi memory limit."
+                  src="../assets/blogs/kubernetes-foundations/requests_and_limits_from_mall_to_kubernetes.png"
+                  alt="Requests and limits infographic mapping mall facility booking to Kubernetes Pod resource request and limit using 1 vCPU 2Gi request and 2 vCPU 4Gi limit."
                 />
                 <figcaption>
                   Requests help Kubernetes place Pods. Limits protect shared capacity.
                 </figcaption>
               </figure>
               <p>
-                CPU and memory behave differently when they hit limits. CPU is a compressible resource. If a container tries to use more CPU than its limit, Kubernetes throttles it, which means it slows down.
-                Memory is different. If a container tries to exceed its memory limit, it can be terminated with an <strong>OOMKilled</strong> error to protect the rest of the node.
+                A request tells Kubernetes what the Pod needs for placement. In the image, the Pod requests <strong>1 vCPU and 2Gi memory</strong>. Kubernetes uses this information to decide which worker node has enough space.
               </p>
-              <div class="learning-note">
-                <strong>Practical troubleshooting clue</strong>
-                If an application becomes slow, check CPU throttling. If a Pod restarts unexpectedly, check whether the container was OOMKilled because it crossed its memory limit.
-              </div>
+              <p>
+                A limit controls maximum usage. CPU and memory behave differently when they hit limits. If a Pod tries to use too much CPU, Kubernetes throttles it, which means it slows down. If it tries to pass its memory limit, the container is terminated with an <strong>OOMKilled</strong> error to protect the rest of the node.
+              </p>
             </section>
 
             <section class="article-section" id="config-health">
-              <p class="section-number">08 · Configuration and health</p>
-              <h2>ConfigMaps, Secrets and probes keep the application usable.</h2>
+              <p class="section-number">09 · Config, secrets and health checks</p>
+              <h2>Not everything belongs inside the application image.</h2>
               <p>
-                Applications need configuration such as environment names, API endpoints, feature flags and log levels. Kubernetes stores non-sensitive configuration in ConfigMaps.
-                Sensitive information such as passwords, tokens and certificates belongs in Secrets.
+                Applications need configuration: environment names, API endpoints, feature flags, passwords, tokens and certificates. Kubernetes separates normal configuration from sensitive configuration.
+                ConfigMaps are like mall notice boards. Secrets are like secure lockers.
               </p>
               <p>
-                Health probes help Kubernetes understand whether an application is alive and ready. Liveness asks: is it alive? Readiness asks: can it serve traffic now?
+                Kubernetes can also check whether an application is healthy. A liveness probe asks, “Is it alive?” A readiness probe asks, “Can it serve traffic now?” A counter may be open but not ready to serve customers. A Pod may be running but not ready to receive traffic.
               </p>
-              <div class="story-flow">
-                <strong>The complete story</strong>
-                <ol>
-                  <li>The platform team creates the <strong>payments</strong> namespace.</li>
-                  <li>The application team creates a Deployment to run three copies of <strong>payment-api</strong>.</li>
-                  <li>The Deployment creates a ReplicaSet, and the ReplicaSet maintains the Pods.</li>
-                  <li>The scheduler places the Pods on suitable worker nodes.</li>
-                  <li>Each Pod runs the payment-api container.</li>
-                  <li>A Service gives stable access to those Pods.</li>
-                  <li>Ingress exposes the application externally.</li>
-                  <li>PVC provides persistent storage if needed.</li>
-                  <li>NetworkPolicy controls who can talk to whom.</li>
-                  <li>Requests and limits protect shared CPU and memory.</li>
-                  <li>The control plane watches everything and maintains desired state.</li>
-                </ol>
-              </div>
             </section>
 
-            <section class="article-section" id="yaml">
-              <p class="section-number">09 · Hands-on example</p>
-              <h2>Read the story in YAML.</h2>
-              <p>This simple example creates a namespace, a Deployment and a Service. The Deployment requests 1 vCPU and 2Gi memory, with a limit of 2 vCPU and 4Gi memory.</p>
+            <section class="article-section" id="example">
+              <p class="section-number">10 · Hands-on example</p>
+              <h2>Read the YAML like a mall story.</h2>
+              <p>
+                This example creates a namespace, a Deployment and a Service. The names are intentionally consistent so the story is easy to follow.
+              </p>
               <pre><code>apiVersion: v1
 kind: Namespace
 metadata:
@@ -496,103 +471,106 @@ spec:
   ports:
   - port: 80
     targetPort: 80</code></pre>
-              <p>
-                In this YAML, the namespace is the Payments brand account. The Deployment is the counter availability plan. The ReplicaSet is the behind-the-scenes manager. The Pods are the running counters. The Service is the stable directory number.
-              </p>
+              <div class="story-flow">
+                <strong>Read it like this</strong>
+                <ol>
+                  <li><strong>Namespace payments</strong> = Payments brand or tenant account.</li>
+                  <li><strong>Deployment payment-api</strong> = counter availability plan.</li>
+                  <li><strong>replicas: 3</strong> = keep three counters running.</li>
+                  <li><strong>ReplicaSet</strong> = behind-the-scenes manager that keeps the three Pods running.</li>
+                  <li><strong>Container payment-api</strong> = business function inside each counter.</li>
+                  <li><strong>Service payment-api-service</strong> = stable directory number for the counters.</li>
+                </ol>
+              </div>
             </section>
 
             <section class="article-section" id="knowledge">
-              <p class="section-number">10 · Knowledge reinforcement</p>
-              <h2>Check the mental model.</h2>
+              <p class="section-number">11 · Knowledge reinforcement</p>
+              <h2>Test the mental model.</h2>
 
               <div class="knowledge-card">
-                <h3>Question 1</h3>
-                <p>Which statement best explains the difference between a Worker Node and a Namespace?</p>
+                <h3>1. Which statement best explains the difference between a Worker Node and a Namespace?</h3>
                 <div class="knowledge-options">
-                  <button type="button">A. A Worker Node is logical, and a Namespace is physical.</button>
-                  <button type="button">B. A Worker Node is where workloads run, and a Namespace is who they belong to.</button>
-                  <button type="button">C. A Namespace runs containers directly.</button>
-                  <button type="button">D. A Worker Node is only used for storage.</button>
+                  <button>A. A Worker Node is logical, and a Namespace is physical.</button>
+                  <button>B. A Worker Node is where workloads run, and a Namespace is who they belong to.</button>
+                  <button>C. A Namespace runs containers directly.</button>
+                  <button>D. A Worker Node is only used for storage.</button>
                 </div>
                 <div class="answer-review" hidden>
                   <strong>Correct answer: B.</strong>
                   <ul>
-                    <li><strong>Why B is correct:</strong> A Worker Node provides runtime capacity. A Namespace provides logical ownership and separation.</li>
-                    <li><strong>Why A is wrong:</strong> It reverses the idea. Worker Nodes are runtime locations; namespaces are logical boundaries.</li>
-                    <li><strong>Why C is wrong:</strong> Namespaces do not run containers. Pods run containers, and Pods run on Worker Nodes.</li>
-                    <li><strong>Why D is wrong:</strong> Worker Nodes provide compute capacity for running Pods, not just storage.</li>
+                    <li><strong>Why B is correct:</strong> Worker Node provides real runtime capacity. Namespace provides logical ownership and separation.</li>
+                    <li><strong>Why A is wrong:</strong> It reverses the meaning.</li>
+                    <li><strong>Why C is wrong:</strong> Pods run containers; namespaces do not.</li>
+                    <li><strong>Why D is wrong:</strong> Worker nodes provide compute capacity for Pods, not only storage.</li>
                   </ul>
                 </div>
               </div>
 
               <div class="knowledge-card">
-                <h3>Question 2</h3>
-                <p>What does a Deployment create behind the scenes to keep the requested number of Pods running?</p>
+                <h3>2. What does a Deployment create behind the scenes to keep Pods running?</h3>
                 <div class="knowledge-options">
-                  <button type="button">A. A Service.</button>
-                  <button type="button">B. A PersistentVolume.</button>
-                  <button type="button">C. A ReplicaSet.</button>
-                  <button type="button">D. An Ingress.</button>
-                </div>
-                <div class="answer-review" hidden>
-                  <strong>Correct answer: C.</strong>
-                  <ul>
-                    <li><strong>Why C is correct:</strong> A Deployment manages a ReplicaSet, and the ReplicaSet maintains the required number of Pods.</li>
-                    <li><strong>Why A is wrong:</strong> A Service provides stable network access; it does not maintain Pod replicas.</li>
-                    <li><strong>Why B is wrong:</strong> A PersistentVolume provides storage, not Pod replica management.</li>
-                    <li><strong>Why D is wrong:</strong> Ingress handles external HTTP/HTTPS routing into the cluster.</li>
-                  </ul>
-                </div>
-              </div>
-
-              <div class="knowledge-card">
-                <h3>Question 3</h3>
-                <p>Why do we use a Service in Kubernetes?</p>
-                <div class="knowledge-options">
-                  <button type="button">A. To store application data.</button>
-                  <button type="button">B. To provide stable access to changing Pods.</button>
-                  <button type="button">C. To replace Deployments.</button>
-                  <button type="button">D. To create Worker Nodes.</button>
+                  <button>A. A Service</button>
+                  <button>B. A ReplicaSet</button>
+                  <button>C. A StorageClass</button>
+                  <button>D. An Ingress</button>
                 </div>
                 <div class="answer-review" hidden>
                   <strong>Correct answer: B.</strong>
                   <ul>
-                    <li><strong>Why B is correct:</strong> Pods can be created, deleted and replaced. A Service gives a stable network identity for those Pods.</li>
-                    <li><strong>Why A is wrong:</strong> Storage is handled using PV, PVC and StorageClass.</li>
-                    <li><strong>Why C is wrong:</strong> Deployment and Service solve different problems. Deployment manages rollout and replicas; Service exposes Pods.</li>
-                    <li><strong>Why D is wrong:</strong> Worker Nodes are part of the cluster infrastructure. Services do not create them.</li>
+                    <li><strong>Why B is correct:</strong> A Deployment manages a ReplicaSet, and the ReplicaSet maintains the requested Pods.</li>
+                    <li><strong>Why A is wrong:</strong> A Service gives stable network access; it does not keep replicas running.</li>
+                    <li><strong>Why C is wrong:</strong> StorageClass is related to storage provisioning.</li>
+                    <li><strong>Why D is wrong:</strong> Ingress handles external HTTP/HTTPS traffic routing.</li>
                   </ul>
                 </div>
               </div>
 
               <div class="knowledge-card">
-                <h3>Question 4</h3>
-                <p>What is the main benefit of a StorageClass?</p>
+                <h3>3. Why do we use a Service in Kubernetes?</h3>
                 <div class="knowledge-options">
-                  <button type="button">A. It automatically exposes an application outside the cluster.</button>
-                  <button type="button">B. It acts as a blueprint that can dynamically provision storage for PVCs.</button>
-                  <button type="button">C. It replaces the need for Services.</button>
-                  <button type="button">D. It decides which node should run a Pod.</button>
+                  <button>A. To store application data.</button>
+                  <button>B. To provide stable access to changing Pods.</button>
+                  <button>C. To create Worker Nodes.</button>
+                  <button>D. To replace Deployments.</button>
                 </div>
                 <div class="answer-review" hidden>
                   <strong>Correct answer: B.</strong>
                   <ul>
-                    <li><strong>Why B is correct:</strong> A StorageClass defines the type of storage and can be used for dynamic provisioning when a PVC asks for storage.</li>
-                    <li><strong>Why A is wrong:</strong> External access is handled by Services and Ingress.</li>
-                    <li><strong>Why C is wrong:</strong> StorageClass and Service solve different problems.</li>
-                    <li><strong>Why D is wrong:</strong> The scheduler decides which node should run a Pod.</li>
+                    <li><strong>Why B is correct:</strong> Pods can be replaced and IPs can change. A Service gives a stable identity for reaching them.</li>
+                    <li><strong>Why A is wrong:</strong> Storage is handled by PV, PVC and StorageClass.</li>
+                    <li><strong>Why C is wrong:</strong> Services do not create worker nodes.</li>
+                    <li><strong>Why D is wrong:</strong> Deployment and Service solve different problems.</li>
                   </ul>
                 </div>
               </div>
 
               <div class="knowledge-card">
-                <h3>Question 5</h3>
-                <p>What happens when a container hits its CPU limit versus its memory limit?</p>
+                <h3>4. What is the role of a StorageClass in dynamic provisioning?</h3>
                 <div class="knowledge-options">
-                  <button type="button">A. CPU and memory are both ignored.</button>
-                  <button type="button">B. CPU is throttled; memory overuse can cause OOMKilled termination.</button>
-                  <button type="button">C. CPU overuse deletes the namespace; memory overuse creates a Service.</button>
-                  <button type="button">D. CPU and memory limits only affect storage.</button>
+                  <button>A. It is the application container image.</button>
+                  <button>B. It acts as a storage blueprint used when a PVC requests storage.</button>
+                  <button>C. It exposes the application to users.</button>
+                  <button>D. It decides which namespace owns a Pod.</button>
+                </div>
+                <div class="answer-review" hidden>
+                  <strong>Correct answer: B.</strong>
+                  <ul>
+                    <li><strong>Why B is correct:</strong> A StorageClass defines the storage type and provisioning behavior used to dynamically create or assign a PV for a PVC.</li>
+                    <li><strong>Why A is wrong:</strong> Container images are defined in Pod specs.</li>
+                    <li><strong>Why C is wrong:</strong> Services and Ingress expose applications.</li>
+                    <li><strong>Why D is wrong:</strong> Namespace ownership is separate from storage provisioning.</li>
+                  </ul>
+                </div>
+              </div>
+
+              <div class="knowledge-card">
+                <h3>5. What happens when a Pod hits CPU and Memory limits?</h3>
+                <div class="knowledge-options">
+                  <button>A. CPU and memory are both ignored.</button>
+                  <button>B. CPU can be throttled, and memory can cause the container to be OOMKilled.</button>
+                  <button>C. Kubernetes deletes the namespace.</button>
+                  <button>D. The Service automatically creates more storage.</button>
                 </div>
                 <div class="answer-review" hidden>
                   <strong>Correct answer: B.</strong>
@@ -651,22 +629,6 @@ spec:
               </div>
             </section>
 
-            <section class="article-section sources-section" id="sources">
-              <p class="section-number">Sources reviewed</p>
-              <h2>Version validation</h2>
-              <ul>
-                <li>Kubernetes official documentation — Nodes</li>
-                <li>Kubernetes official documentation — Namespaces</li>
-                <li>Kubernetes official documentation — Pods</li>
-                <li>Kubernetes official documentation — Deployments</li>
-                <li>Kubernetes official documentation — ReplicaSet</li>
-                <li>Kubernetes official documentation — Services</li>
-                <li>Kubernetes official documentation — Ingress</li>
-                <li>Kubernetes official documentation — Persistent Volumes and Dynamic Provisioning</li>
-                <li>Kubernetes official documentation — Resource Management for Pods and Containers</li>
-              </ul>
-              <p><strong>Version-validation date:</strong> 30 June 2026<br /><strong>Last-reviewed date:</strong> 30 June 2026</p>
-            </section>
           </div>
         </div>
       </article>
