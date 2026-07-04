@@ -1,0 +1,34 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1810" height="780" viewBox="0 0 1810 780" role="img">
+
+  <defs>
+    <linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#020617"/><stop offset="0.55" stop-color="#06142b"/><stop offset="1" stop-color="#05040f"/></linearGradient>
+    <linearGradient id="blue" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#22d3ee"/><stop offset="1" stop-color="#2563eb"/></linearGradient>
+    <linearGradient id="purple" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a855f7"/><stop offset="1" stop-color="#4f46e5"/></linearGradient>
+    <linearGradient id="green" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#a3e635"/><stop offset="1" stop-color="#14b8a6"/></linearGradient>
+    <linearGradient id="yellow" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#fde047"/><stop offset="1" stop-color="#f59e0b"/></linearGradient>
+    <filter id="glow"><feGaussianBlur stdDeviation="3" result="coloredBlur"/><feMerge><feMergeNode in="coloredBlur"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+    <pattern id="grid" width="32" height="32" patternUnits="userSpaceOnUse"><path d="M 32 0 L 0 0 0 32" fill="none" stroke="#38bdf8" stroke-width="0.35" opacity="0.16"/></pattern>
+    <style>
+      .title{font:800 44px Manrope,Arial,sans-serif;fill:#f8fafc;letter-spacing:-1px}.subtitle{font:500 20px DM Sans,Arial,sans-serif;fill:#a9b9d4}.label{font:700 18px DM Sans,Arial,sans-serif;fill:#f8fafc}.small{font:500 14px DM Sans,Arial,sans-serif;fill:#cbd5e1}.tiny{font:500 12px DM Sans,Arial,sans-serif;fill:#a8b4c7}.box{fill:rgba(7,18,38,.78);stroke:#2563eb;stroke-width:1.4;rx:20}.box2{fill:rgba(17,12,42,.72);stroke:#a855f7;stroke-width:1.4;rx:20}.box3{fill:rgba(6,31,28,.72);stroke:#14b8a6;stroke-width:1.4;rx:20}.box4{fill:rgba(34,26,4,.70);stroke:#eab308;stroke-width:1.4;rx:20}.chip{fill:rgba(15,23,42,.86);stroke:#3b82f6;stroke-width:1;rx:12}.arrow{stroke:#38bdf8;stroke-width:5;fill:none;marker-end:url(#arrow)}.arrowp{stroke:#a855f7;stroke-width:4;fill:none;marker-end:url(#arrowp)}.arrowg{stroke:#84cc16;stroke-width:4;fill:none;marker-end:url(#arrowg)}.num{font:800 22px Manrope,Arial,sans-serif;fill:#fff}.accent-blue{fill:#38bdf8}.accent-purple{fill:#a855f7}.accent-green{fill:#84cc16}.accent-yellow{fill:#facc15}.muted{fill:#94a3b8}
+    </style>
+    <marker id="arrow" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#38bdf8"/></marker>
+    <marker id="arrowp" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#a855f7"/></marker>
+    <marker id="arrowg" markerWidth="10" markerHeight="10" refX="8" refY="3" orient="auto"><path d="M0,0 L0,6 L9,3 z" fill="#84cc16"/></marker>
+  </defs>
+
+  <rect width="1810" height="780" fill="url(#bg)"/>
+  <rect width="1810" height="780" fill="url(#grid)" opacity=".6"/>
+  
+  <text x="330" y="76" class="title">VKS Cluster Creation Flow</text><text x="560" y="112" class="subtitle">Cluster API, ClusterClass and VKr</text>
+  <g transform="translate(45 170)"><rect class="box2" width="280" height="430"/><circle cx="48" cy="45" r="26" fill="url(#purple)"/><text x="40" y="54" class="num">1</text><text x="92" y="45" class="label">User / Team</text><text x="92" y="72" class="label">Request</text><text x="55" y="135" class="small">Request a VKS cluster</text><text x="55" y="162" class="small">through Supervisor</text><text x="55" y="295" class="small">• Cluster name</text><text x="55" y="325" class="small">• Kubernetes release</text><text x="55" y="355" class="small">• Size</text><text x="55" y="385" class="small">• Storage policy</text></g>
+  <path class="arrowp" d="M340 385 H385"/>
+  <g transform="translate(405 170)"><rect class="box" width="280" height="430"/><circle cx="48" cy="45" r="26" fill="url(#blue)"/><text x="40" y="54" class="num">2</text><text x="92" y="52" class="label">ClusterClass</text><text x="88" y="90" class="small accent-blue">Approved Blueprint</text><rect x="85" y="140" width="110" height="95" rx="12" fill="none" stroke="#38bdf8"/><path d="M110 200 h60 M140 160 v70 M110 175 h60" stroke="#38bdf8"/><text x="55" y="295" class="small">• Topology</text><text x="55" y="325" class="small">• Control plane size</text><text x="55" y="355" class="small">• Worker node size</text><text x="55" y="385" class="small">• HA / zones</text></g>
+  <path class="arrow" d="M700 385 H745"/>
+  <g transform="translate(765 170)"><rect class="box3" width="280" height="430"/><circle cx="48" cy="45" r="26" fill="url(#green)"/><text x="40" y="54" class="num">3</text><text x="110" y="45" class="label">VKr</text><text x="68" y="82" class="small accent-blue">Approved Kubernetes Release</text><circle cx="140" cy="170" r="58" stroke="#22d3ee" fill="none"/><text x="112" y="178" class="label">K8s</text><text x="55" y="295" class="small">• Supported version</text><text x="55" y="325" class="small">• Compatibility</text><text x="55" y="355" class="small">• Lifecycle policy</text></g>
+  <path class="arrowg" d="M1060 385 H1105"/>
+  <g transform="translate(1125 170)"><rect class="box3" width="280" height="430"/><circle cx="48" cy="45" r="26" fill="url(#green)"/><text x="40" y="54" class="num">4</text><text x="92" y="52" class="label">Cluster API</text><text x="78" y="90" class="small accent-green">Declarative Request</text><rect x="76" y="140" width="125" height="95" rx="14" fill="none" stroke="#84cc16"/><text x="112" y="195" class="label">API</text><text x="55" y="295" class="small">• Cluster</text><text x="55" y="325" class="small">• Machines</text><text x="55" y="355" class="small">• MachineSets</text><text x="55" y="385" class="small">• Infrastructure</text></g>
+  <path class="arrowg" d="M1420 385 H1465"/>
+  <g transform="translate(1485 170)"><rect class="box4" width="280" height="430"/><circle cx="48" cy="45" r="26" fill="url(#yellow)"/><text x="40" y="54" class="num">5</text><text x="92" y="52" class="label">VKS Cluster</text><text x="104" y="90" class="small accent-yellow">Deployed</text><rect x="86" y="145" width="105" height="95" rx="18" fill="none" stroke="#facc15"/><text x="110" y="198" class="label">Ready</text><text x="55" y="295" class="small">• Control plane VMs</text><text x="55" y="325" class="small">• Worker node VMs</text><text x="55" y="355" class="small">• Networking</text><text x="55" y="385" class="small">• Storage</text></g>
+  <rect x="120" y="655" width="1520" height="75" rx="22" fill="rgba(15,23,42,.82)" stroke="#334155"/><text x="430" y="703" class="label">Everything is declarative, consistent and platform-governed</text>
+
+</svg>
