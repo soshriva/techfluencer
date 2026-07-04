@@ -1,0 +1,618 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="A practical VCF and VKS core concepts blog explaining vSphere Supervisor, vSphere Namespaces, VKS clusters, Kubernetes namespaces, VKr, Cluster API, ClusterClass, VM Class, Storage Policy, Spherelet, CRX and Supervisor Services."
+    />
+    <title>VCF and VKS Core Concepts | Sourabh Shrivastav</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="../styles.css" />
+    <link rel="stylesheet" href="article.css" />
+    <script src="../app.js" defer></script>
+    <script src="article.js" defer></script>
+    <style>
+      .visual-showcase {
+        background:
+          radial-gradient(circle at 20% 18%, rgba(48, 197, 232, .18), transparent 24%),
+          radial-gradient(circle at 82% 42%, rgba(126, 71, 238, .16), transparent 24%),
+          #070f20;
+        border: 1px solid rgba(132, 174, 225, .24);
+        border-radius: 22px;
+        box-shadow: 0 28px 65px rgba(16, 38, 74, .22);
+        color: #fff;
+        margin: 34px 0;
+        overflow: hidden;
+        padding: 16px;
+      }
+      .visual-showcase img {
+        border-radius: 16px;
+        display: block;
+        height: auto;
+        width: 100%;
+      }
+      .visual-showcase figcaption {
+        border-top: 1px solid rgba(152, 181, 220, .16);
+        color: #b8c7df;
+        font-size: .9rem;
+        line-height: 1.6;
+        margin-top: 14px;
+        padding: 14px 6px 4px;
+      }
+      .quick-map-table {
+        border-collapse: collapse;
+        margin: 26px 0;
+        width: 100%;
+      }
+      .quick-map-table th,
+      .quick-map-table td {
+        border-bottom: 1px solid var(--line);
+        padding: 13px 12px;
+        text-align: left;
+        vertical-align: top;
+      }
+      .quick-map-table th { color: var(--ink); font-size: .78rem; letter-spacing: .08em; text-transform: uppercase; }
+      .quick-map-table td { color: #536174; }
+      .quick-map-table td:first-child,
+      .quick-map-table td:nth-child(2) { color: var(--ink); font-weight: 700; }
+      .concept-strip.compact {
+        grid-template-columns: repeat(5, minmax(0, 1fr));
+      }
+      .knowledge-card {
+        background: #fff;
+        border: 1px solid var(--line);
+        border-radius: 18px;
+        box-shadow: 0 16px 35px rgba(16, 38, 74, .08);
+        margin: 20px 0;
+        padding: 22px;
+      }
+      .knowledge-card h3 { margin-top: 0; }
+      .knowledge-options {
+        display: grid;
+        gap: 10px;
+        margin: 16px 0;
+      }
+      .answer-review {
+        background: #f4f8ff;
+        border-left: 4px solid var(--blue);
+        border-radius: 14px;
+        margin-top: 16px;
+        padding: 16px;
+      }
+      .answer-review strong { color: var(--ink); }
+      .learning-note {
+        background: linear-gradient(135deg, rgba(42, 91, 224, .08), rgba(18, 190, 155, .08));
+        border: 1px solid rgba(42, 91, 224, .16);
+        border-radius: 18px;
+        color: #415066;
+        margin: 22px 0;
+        padding: 18px 20px;
+      }
+      .learning-note strong { color: var(--ink); display: block; margin-bottom: 6px; }
+      .architecture-list {
+        background: #081225;
+        border: 1px solid rgba(132,174,225,.24);
+        border-radius: 20px;
+        color: #dbe8ff;
+        margin: 30px 0;
+        padding: 24px;
+      }
+      .architecture-list ol { margin: 18px 0 0; padding-left: 1.2rem; }
+      .architecture-list li { margin: 10px 0; }
+      .architecture-list strong { color: #fff; }
+      @media (max-width: 900px) {
+        .concept-strip.compact { grid-template-columns: 1fr; }
+        .quick-map-table { font-size: .88rem; }
+      }
+    </style>
+  </head>
+  <body class="article-page">
+    <header class="site-header article-header">
+      <a class="brand" href="../index.html" aria-label="Sourabh Shrivastav home">
+        <span class="brand-mark">S</span>
+        <span class="brand-copy">
+          <strong>Sourabh Shrivastav</strong>
+          <small>Platform Fieldnotes</small>
+        </span>
+      </a>
+      <nav aria-label="Article navigation">
+        <a class="nav-link" href="../index.html">Basecamp</a>
+        <a class="nav-link active" href="../index.html#loops">Learning Loops</a>
+        <a class="nav-link" href="../index.html#about">About</a>
+      </nav>
+      <a class="button button-small button-outline" href="#knowledge">Knowledge check</a>
+    </header>
+
+    <main>
+      <article>
+        <header class="article-hero">
+          <div class="article-hero-copy">
+            <a class="back-link" href="../index.html#loops">← Learning Loops</a>
+            <div class="article-kicker">
+              <span>VKS Learning Loop</span>
+              <span>Module 03</span>
+            </div>
+            <h1>VCF and VKS Core Concepts</h1>
+            <p class="article-deck">
+              How VKS works on VCF through Supervisor, vSphere Namespaces, VKS clusters, Kubernetes namespaces, VKr, Cluster API, VM Classes, Storage Policies, Spherelet, CRX and Supervisor Services.
+            </p>
+            <div class="article-meta">
+              <span><strong>Author</strong> Sourabh Shrivastav</span>
+              <span><strong>18 min</strong> read</span>
+              <span><strong>Audience</strong> Platform engineers and infrastructure architects</span>
+              <span><strong>Validated</strong> July 4, 2026</span>
+            </div>
+          </div>
+
+          <figure class="hero-bridge-infographic visual-showcase" aria-labelledby="hero-flow-title">
+            <img
+              src="../assets/blogs/vcf-vks-core-concepts/vcf-supervisor-namespace-vks-flow.svg"
+              alt="Neon architecture flow showing VCF infrastructure to vSphere Supervisor to vSphere Namespace to VKS Cluster to Kubernetes Namespaces."
+            />
+            <figcaption id="hero-flow-title">
+              The clean hierarchy: VCF provides the foundation, Supervisor exposes platform services, vSphere Namespaces define boundaries, VKS clusters run workloads, and Kubernetes namespaces organize work inside the cluster.
+            </figcaption>
+          </figure>
+        </header>
+
+        <div class="article-shell">
+          <aside class="article-toc">
+            <span>In this blog</span>
+            <a href="#why">Why this blog exists</a>
+            <a href="#mental-model">Corporate office model</a>
+            <a href="#mapping">Core mapping</a>
+            <a href="#supervisor">Supervisor</a>
+            <a href="#namespace">vSphere Namespace</a>
+            <a href="#vks-cluster">VKS Cluster</a>
+            <a href="#constructs">Core constructs</a>
+            <a href="#technical-view">Technical view</a>
+            <a href="#knowledge">Knowledge check</a>
+          </aside>
+
+          <div class="article-content">
+            <section class="article-section lead-section" id="why">
+              <p class="section-number">01 · Why this blog exists</p>
+              <h2>VKS is Kubernetes delivered through a governed private cloud platform.</h2>
+              <p class="section-lead">
+                Blog 001 explained what VKS is. Blog 002 explained the Kubernetes foundations you need before learning VKS. Now we need to connect both worlds.
+              </p>
+              <p>
+                VKS is not simply “Kubernetes installed on vSphere.” It is Kubernetes delivered through a private cloud platform where vSphere, vCenter, ESX, networking, storage, namespaces, cluster lifecycle and services work together.
+              </p>
+              <p>To understand VKS properly, you need to understand a few core platform concepts:</p>
+              <div class="concept-strip compact">
+                <div><span>01</span><strong>Supervisor</strong><small>The platform control layer.</small></div>
+                <div><span>02</span><strong>vSphere Namespace</strong><small>The governed boundary.</small></div>
+                <div><span>03</span><strong>VKS Cluster</strong><small>The Kubernetes runtime.</small></div>
+                <div><span>04</span><strong>VKr</strong><small>The approved Kubernetes release.</small></div>
+                <div><span>05</span><strong>Spherelet &amp; CRX</strong><small>Supervisor-native runtime constructs.</small></div>
+              </div>
+            </section>
+
+            <section class="article-section" id="mental-model">
+              <p class="section-number">02 · The mental model</p>
+              <h2>Think of a corporate office building.</h2>
+              <p>
+                Imagine a large corporate office building. The building already has floors, wings, work areas, power, network cabling, security access, shared services, a facilities team, storage areas and operating rules. That is similar to your <strong>VCF infrastructure</strong>.
+              </p>
+              <p>
+                Now imagine one floor in this office building has been enabled for modern self-service workspaces. Teams do not manually arrange power, network, access cards, meeting rooms and shared services every time they start a new project. Instead, the facilities team provides governed spaces with approved services. This is similar to <strong>vSphere Supervisor</strong>.
+              </p>
+              <p>
+                The floor is divided into wings: North Wing and South Wing. Each wing has its own access rules, resource limits, approved meeting rooms, approved workstation sizes and available shared services. That is similar to a <strong>vSphere Namespace</strong>.
+              </p>
+              <p>
+                Inside the North Wing, Central IT creates a dedicated project area for running cloud-native applications. That project area is the <strong>VKS cluster</strong>. Inside that project area, Central IT may create separate work zones such as cloud services, database services, monitoring and operations. Those work zones are like <strong>Kubernetes namespaces</strong> inside the VKS cluster.
+              </p>
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/vcf-vks-core-concepts/corporate-office-analogy-map.svg"
+                  alt="Corporate office analogy map showing office building, supervisor-enabled floor, department wings, VKS project area, and work zones."
+                />
+                <figcaption>
+                  The analogy keeps the boundaries clear: building → enabled floor → department wing → project area → work zones.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="mapping">
+              <p class="section-number">03 · Core mapping</p>
+              <h2>Use one clean hierarchy and avoid mixing technical layers.</h2>
+              <table class="quick-map-table">
+                <thead>
+                  <tr><th>VCF / VKS concept</th><th>Corporate office analogy</th><th>Simple meaning</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>VCF infrastructure</td><td>Corporate office building</td><td>Compute, network, storage and management foundation.</td></tr>
+                  <tr><td>vSphere Supervisor</td><td>Supervisor-enabled floor</td><td>Platform layer that exposes declarative services.</td></tr>
+                  <tr><td>vSphere Namespace</td><td>North Wing / South Wing</td><td>Governed platform boundary for a team or tenant.</td></tr>
+                  <tr><td>VKS Cluster</td><td>Project area inside a wing</td><td>Kubernetes runtime where application workloads run.</td></tr>
+                  <tr><td>Kubernetes namespace</td><td>Work zone inside the project area</td><td>Logical separation inside the Kubernetes cluster.</td></tr>
+                  <tr><td>VKr</td><td>Approved operating standard</td><td>Supported Kubernetes release package.</td></tr>
+                  <tr><td>ClusterClass</td><td>Approved project-area blueprint</td><td>Standard cluster creation template.</td></tr>
+                  <tr><td>VM Class</td><td>Approved workstation size</td><td>CPU and memory shape for nodes or VMs.</td></tr>
+                  <tr><td>Storage Policy</td><td>Approved storage room type</td><td>Storage capability exposed to workloads.</td></tr>
+                  <tr><td>Supervisor Services</td><td>Shared office services</td><td>VKS, VM Service, Velero, Harbor, Contour and others.</td></tr>
+                </tbody>
+              </table>
+              <div class="callout">
+                <strong>The key point</strong>
+                <p>A vSphere Namespace gives a team a governed platform boundary. A VKS cluster gives that team a Kubernetes runtime inside that boundary.</p>
+              </div>
+            </section>
+
+            <section class="article-section dark-section" id="supervisor">
+              <p class="section-number">04 · vSphere Supervisor</p>
+              <h2>The enabled floor exposes vSphere as a Kubernetes-style platform.</h2>
+              <p class="dark-intro">
+                A vSphere Supervisor is a vSphere environment enabled for Kubernetes-style workload management. It allows platform teams and consumers to request infrastructure through declarative APIs.
+              </p>
+              <p>
+                Instead of manually asking someone to create VMs, attach storage, configure networking and install Kubernetes, a user or automation system can declare the desired state: a Kubernetes cluster, a version, a size, a storage policy and a namespace boundary.
+              </p>
+              <p>
+                The Supervisor uses dedicated control plane VMs. These control plane VMs provide the Kubernetes API endpoint and run core infrastructure services for the Supervisor. They coordinate requests such as creating namespaces, creating VKS clusters, creating VMs, applying storage policy, exposing services and scaling clusters.
+              </p>
+              <div class="learning-note">
+                <strong>Corporate office translation</strong>
+                The Supervisor control plane VMs are like the floor operations control room. The control room coordinates facilities systems, access rules and shared services. It does not host every department’s application; it controls how approved resources are assigned and operated.
+              </div>
+            </section>
+
+            <section class="article-section" id="namespace">
+              <p class="section-number">05 · vSphere Namespace</p>
+              <h2>A vSphere Namespace is a department wing, not a Kubernetes namespace.</h2>
+              <p>
+                A vSphere Namespace is one of the most important VKS concepts. It is a platform-level boundary where VKS clusters, VM Service workloads, vSphere Pods and Supervisor Services can run.
+              </p>
+              <p>It can define who has access, how much CPU and memory can be used, which storage policies are available, which VM classes are available, which content libraries are available, and which services are allowed.</p>
+              <p>In the corporate office analogy, Central IT does not get unlimited access to the entire office building. It receives a controlled wing with rules:</p>
+              <div class="architecture-list">
+                <ol>
+                  <li>These users can enter.</li>
+                  <li>These workstation sizes are approved.</li>
+                  <li>These meeting rooms are available.</li>
+                  <li>These storage policies are available.</li>
+                  <li>These shared services are enabled.</li>
+                  <li>This is your capacity limit, meaning only this number of users can work in the wing.</li>
+                </ol>
+              </div>
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/vcf-vks-core-concepts/vsphere-namespace-governed-wing.svg"
+                  alt="Neon diagram showing vSphere Namespace as a governed department wing controlled by platform team policies."
+                />
+                <figcaption>
+                  A vSphere Namespace is a governed platform boundary. Kubernetes namespaces live later, inside the VKS cluster.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="namespace-vs-k8s">
+              <p class="section-number">06 · Namespace vs namespace</p>
+              <h2>One namespace exists around the cluster. The other exists inside the cluster.</h2>
+              <table class="quick-map-table">
+                <thead><tr><th>Concept</th><th>Meaning</th></tr></thead>
+                <tbody>
+                  <tr><td>vSphere Namespace</td><td>Platform-level boundary on Supervisor.</td></tr>
+                  <tr><td>Kubernetes namespace</td><td>Logical separation inside a Kubernetes cluster.</td></tr>
+                </tbody>
+              </table>
+              <div class="architecture-list">
+                <strong>Example hierarchy</strong>
+                <ol>
+                  <li><strong>vSphere Namespace:</strong> central-it-prod</li>
+                  <li><strong>VKS Cluster:</strong> central-it-vks-prod</li>
+                  <li><strong>Kubernetes namespaces:</strong> cloud-services, database-services, monitoring, operations</li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="article-section" id="zones">
+              <p class="section-number">07 · vSphere Zones</p>
+              <h2>Zones are office blocks and failure domains.</h2>
+              <p>
+                A vSphere Zone is a logical grouping of vSphere clusters. It helps with availability and failure isolation. In a simple design, you may have one zone. In a more resilient design, you may have three zones.
+              </p>
+              <p>
+                Think of vSphere Zones as separate office blocks or building sections: Block A, Block B and Block C. If Block A has a problem, the goal is that workloads designed across Blocks B and C can continue running, depending on the application and platform design.
+              </p>
+              <p>
+                For platform architects, zones matter because they influence control plane placement, workload placement, storage policy design, failure-domain planning, namespace resource distribution and high availability strategy.
+              </p>
+            </section>
+
+            <section class="article-section" id="vks-cluster">
+              <p class="section-number">08 · VKS Cluster</p>
+              <h2>The VKS cluster is the project area inside the wing.</h2>
+              <p>
+                A VKS cluster is the Kubernetes environment created for an application team inside a vSphere Namespace. The vSphere Namespace is the department wing. The VKS cluster is the project area inside that wing.
+              </p>
+              <p>
+                Inside the VKS cluster, the application team deploys normal Kubernetes objects: Pods, Deployments, Services, ConfigMaps, Secrets, Ingress, PersistentVolumeClaims and NetworkPolicies.
+              </p>
+              <p>
+                The platform team still controls which wing the project area belongs to, which Kubernetes releases are allowed, which cluster blueprints are approved, which workstation sizes are available, which storage policies are exposed, which network paths are available and who can enter the wing. But inside the VKS cluster, the application team organizes and runs its Kubernetes workloads.
+              </p>
+            </section>
+
+            <section class="article-section" id="constructs">
+              <p class="section-number">09 · Core constructs</p>
+              <h2>VKr, Cluster API, ClusterClass, VM Class and Storage Policy make the platform controlled.</h2>
+              <h3>VKr: the approved Kubernetes release package</h3>
+              <p>
+                VKr means VMware vSphere Kubernetes release. In simple terms, VKr represents the approved Kubernetes release package available for VKS clusters. A Kubernetes version is the software version; VKr is the approved software release package.
+              </p>
+              <h3>Cluster API: the project-area request system</h3>
+              <p>
+                VKS uses Cluster API, commonly called CAPI, for declarative lifecycle management. Instead of manually creating every VM and installing Kubernetes step by step, the platform works from a desired cluster definition.
+              </p>
+              <h3>ClusterClass: the approved project-area blueprint</h3>
+              <p>
+                A ClusterClass is a reusable cluster blueprint. It helps platform teams standardize how VKS clusters are created so every team does not invent its own control plane size, worker node size, network pattern and lifecycle behavior.
+              </p>
+              <h3>VM Class: the approved workstation size</h3>
+              <p>
+                A VM Class defines the compute shape of a VM. In VKS, VM Classes matter because VKS cluster nodes are virtual machines. This lets the platform team control approved control plane and worker node sizes.
+              </p>
+              <h3>Storage Policy: the approved storage room type</h3>
+              <p>
+                A Storage Policy defines what storage capability is available to workloads. The application team asks for storage through Kubernetes, while the platform decides which physical storage capability backs that request.
+              </p>
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/vcf-vks-core-concepts/vks-cluster-creation-flow.svg"
+                  alt="Neon diagram showing VKS cluster creation flow from user request through ClusterClass, VKr, Cluster API and deployed VKS cluster."
+                />
+                <figcaption>
+                  ClusterClass standardizes the shape, VKr controls the Kubernetes release, and Cluster API turns the desired state into a running VKS cluster.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="services">
+              <p class="section-number">10 · Supervisor Services, VM Service and Velero</p>
+              <h2>Supervisor Services are shared office services.</h2>
+              <p>
+                Supervisor Services are services made available through the Supervisor. Examples include VKS, VM Service, Velero, Harbor, Contour, MinIO, Argo CD and cert-manager. Not every environment will enable every service. A platform team should enable only what the operating model needs.
+              </p>
+              <div class="architecture-list">
+                <strong>Corporate office translation</strong>
+                <ol>
+                  <li>Security desk</li>
+                  <li>Mailing room</li>
+                  <li>Backup office</li>
+                  <li>Pantry area</li>
+                  <li>Relaxation room</li>
+                </ol>
+              </div>
+              <h3>VKS Service</h3>
+              <p>
+                The VKS Service is what allows teams to deploy Kubernetes clusters through the Supervisor platform. VKS provides conformant Kubernetes clusters and integrates cluster lifecycle with the vSphere and VCF platform.
+              </p>
+              <h3>VM Service</h3>
+              <p>
+                The VM Service allows teams to define and manage virtual machines using a declarative Kubernetes-style API. This is useful when a platform must support both modern Kubernetes workloads and traditional virtual machine workloads.
+              </p>
+              <div class="architecture-list">
+                <strong>Corporate office translation</strong>
+                <ol>
+                  <li>I need a private work area.</li>
+                  <li>I need capacity for this many users.</li>
+                  <li>I need this approved workstation size.</li>
+                  <li>I need access to approved meeting rooms.</li>
+                  <li>I need the area ready for use.</li>
+                </ol>
+              </div>
+              <h3>Velero</h3>
+              <p>
+                Velero provides backup and restore capabilities for Kubernetes workloads. In a VKS context, Velero can help protect application workloads and support recovery scenarios.
+              </p>
+            </section>
+
+            <section class="article-section dark-section" id="runtime">
+              <p class="section-number">11 · vSphere Pods, Spherelet and CRX</p>
+              <h2>Supervisor-native runtime constructs are not the same as Pods inside a VKS cluster.</h2>
+              <p class="dark-intro">
+                A vSphere Pod is not the same as a Pod running inside a VKS workload cluster. A vSphere Pod runs directly on Supervisor using a lightweight VM-like construct. A normal application Pod usually runs inside a VKS cluster.
+              </p>
+              <h3>vSphere Pod</h3>
+              <p>A vSphere Pod is a lightweight VM designed to run one or more Linux containers. It provides stronger isolation than a traditional shared-kernel container model because each vSphere Pod has its own Linux kernel.</p>
+              <h3>Spherelet</h3>
+              <p>Spherelet is a VMware implementation of kubelet that runs natively on ESX hosts. It allows the Supervisor control plane to communicate with ESX hosts and manage vSphere Pods.</p>
+              <h3>CRX</h3>
+              <p>CRX stands for Container Runtime Executive. It is the runtime used by vSphere Pods. CRX uses hardware virtualization to run containers inside a lightweight VM-like construct.</p>
+              <table class="quick-map-table">
+                <thead><tr><th>Area</th><th>vSphere Pod</th><th>Pod inside VKS Cluster</th></tr></thead>
+                <tbody>
+                  <tr><td>Runs where?</td><td>Directly on Supervisor.</td><td>Inside a VKS workload cluster.</td></tr>
+                  <tr><td>Managed by</td><td>Supervisor control plane.</td><td>VKS cluster control plane.</td></tr>
+                  <tr><td>Runtime model</td><td>CRX lightweight VM-like runtime.</td><td>Standard Kubernetes runtime inside cluster nodes.</td></tr>
+                  <tr><td>Main use</td><td>Supervisor-level pod capability.</td><td>Normal application workloads.</td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="article-section" id="technical-view">
+              <p class="section-number">12 · Technical architecture overview</p>
+              <h2>All key constructs in one view.</h2>
+              <p>
+                The technical view below removes the office analogy and shows the actual architecture layers: users and tools, vCenter and Supervisor APIs, Supervisor control plane VMs, Supervisor Services, vSphere Namespaces, VKS clusters, Kubernetes namespaces, vSphere Zones and the shared compute, storage and network foundation.
+              </p>
+              <figure class="visual-showcase">
+                <img
+                  src="../assets/blogs/vcf-vks-core-concepts/vks-on-vcf-key-constructs.svg"
+                  alt="Technical architecture diagram showing VCF 9.1 with VKS key constructs including Supervisor, namespaces, VKS clusters, zones, Spherelet, CRX and shared compute storage network infrastructure."
+                />
+                <figcaption>
+                  This is the architecture view to remember: Supervisor governs the platform, namespaces define boundaries, VKS clusters run workloads, and zones provide resilience across shared compute, storage and network infrastructure.
+                </figcaption>
+              </figure>
+            </section>
+
+            <section class="article-section" id="flow">
+              <p class="section-number">13 · End-to-end VKS flow</p>
+              <h2>From platform boundary to running Kubernetes cluster.</h2>
+              <div class="architecture-list">
+                <ol>
+                  <li>Platform team enables Supervisor.</li>
+                  <li>Platform team creates vSphere Namespaces.</li>
+                  <li>Platform team assigns quotas, permissions, VM Classes and Storage Policies.</li>
+                  <li>VKS Service is available through Supervisor.</li>
+                  <li>A user requests a VKS cluster.</li>
+                  <li>Cluster API represents the desired cluster state.</li>
+                  <li>vSphere creates the required control plane and worker node VMs.</li>
+                  <li>The VKS cluster becomes available.</li>
+                  <li>Application teams deploy Kubernetes workloads into the VKS cluster.</li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="article-section" id="yaml">
+              <p class="section-number">14 · Read the architecture in YAML</p>
+              <h2>The YAML is illustrative, not copy-paste universal.</h2>
+              <p>Exact API versions, ClusterClass names, VM Classes, image names and supported Kubernetes versions depend on your VCF and VKS environment.</p>
+<pre><code>apiVersion: cluster.x-k8s.io/v1beta1
+kind: Cluster
+metadata:
+  name: payment-vks-cluster
+  namespace: central-it-prod
+spec:
+  topology:
+    class: &lt;approved-cluster-class&gt;
+    version: &lt;supported-vkr-version&gt;
+    controlPlane:
+      replicas: 3
+    workers:
+      machineDeployments:
+      - name: payment-api-workers
+        replicas: 4
+---
+apiVersion: vmoperator.vmware.com/v1alpha2
+kind: VirtualMachine
+metadata:
+  name: reporting-db-vm
+  namespace: central-it-prod
+spec:
+  className: &lt;approved-vm-class&gt;
+  imageName: &lt;approved-content-library-image&gt;
+  powerState: PoweredOn</code></pre>
+            </section>
+
+            <section class="article-section" id="comparison">
+              <p class="section-number">15 · VKS compared with other Kubernetes models</p>
+              <h2>VKS brings Kubernetes into the VCF operating model.</h2>
+              <table class="quick-map-table">
+                <thead>
+                  <tr><th>Area</th><th>VKS on VCF</th><th>Upstream Kubernetes</th><th>OpenShift</th><th>EKS / AKS / GKE</th></tr>
+                </thead>
+                <tbody>
+                  <tr><td>Cluster lifecycle</td><td>Managed through Supervisor, VKS and CAPI.</td><td>User/operator-managed.</td><td>OpenShift lifecycle tooling.</td><td>Cloud provider managed.</td></tr>
+                  <tr><td>Infrastructure boundary</td><td>vSphere Namespace.</td><td>Usually external to Kubernetes.</td><td>Project/namespace plus platform constructs.</td><td>Account, subscription or project boundary.</td></tr>
+                  <tr><td>Node infrastructure</td><td>vSphere VMs.</td><td>Any supported infrastructure.</td><td>Platform-managed nodes.</td><td>Cloud instances.</td></tr>
+                  <tr><td>Kubernetes version control</td><td>VKr / supported VKS releases.</td><td>User-selected.</td><td>Vendor-supported releases.</td><td>Cloud-supported versions.</td></tr>
+                  <tr><td>Storage integration</td><td>vSphere storage policies and CSI.</td><td>CSI-dependent.</td><td>OpenShift storage integrations.</td><td>Cloud storage classes.</td></tr>
+                  <tr><td>VM and Kubernetes together</td><td>VM Service + VKS on Supervisor.</td><td>Separate tooling usually required.</td><td>OpenShift Virtualization optional.</td><td>Usually separate services.</td></tr>
+                </tbody>
+              </table>
+            </section>
+
+            <section class="article-section" id="misunderstandings">
+              <p class="section-number">16 · Common misunderstandings</p>
+              <h2>Most confusion comes from mixing boundaries.</h2>
+              <h3>“Supervisor is just another Kubernetes cluster.”</h3>
+              <p>Not exactly. Supervisor exposes Kubernetes-style APIs, but its role is to connect vSphere infrastructure with platform services such as VKS, VM Service, namespaces and lifecycle operations.</p>
+              <h3>“A vSphere Namespace is the same as a Kubernetes namespace.”</h3>
+              <p>No. A Kubernetes namespace separates objects inside a Kubernetes cluster. A vSphere Namespace defines a platform boundary around services, clusters, VMs, storage policies, quotas and permissions.</p>
+              <h3>“A VKS cluster is the team itself.”</h3>
+              <p>No. The team is the owner or consumer. The VKS cluster is the Kubernetes runtime created for that team inside a vSphere Namespace.</p>
+              <h3>“Application teams should deploy directly to vSphere Pods.”</h3>
+              <p>Usually no. For most application teams, the preferred target is a VKS workload cluster.</p>
+              <h3>“VKr is just a Kubernetes version number.”</h3>
+              <p>Not quite. VKr is better understood as an approved Kubernetes release package for the VKS environment.</p>
+            </section>
+
+            <section class="article-section" id="knowledge">
+              <p class="section-number">17 · Knowledge reinforcement</p>
+              <h2>Check the concepts before moving on.</h2>
+              <div class="knowledge-card">
+                <h3>Question 1</h3>
+                <p>A team wants to create a Kubernetes cluster on VCF using VKS. Where should the platform team first define resource boundaries, storage access and permissions?</p>
+                <div class="knowledge-options"><p>A. Inside the application Deployment</p><p>B. Inside a vSphere Namespace</p><p>C. Inside a container image</p><p>D. Inside a Kubernetes Service</p></div>
+                <div class="answer-review"><strong>Correct answer: B.</strong> A vSphere Namespace is the platform-level boundary where quotas, storage policies, permissions and services are made available.</div>
+              </div>
+              <div class="knowledge-card">
+                <h3>Question 2</h3>
+                <p>What is the best description of a VKS cluster?</p>
+                <div class="knowledge-options"><p>A. A vCenter plug-in</p><p>B. A Supervisor control plane VM</p><p>C. A conformant Kubernetes cluster created through VKS for application workloads</p><p>D. A storage policy</p></div>
+                <div class="answer-review"><strong>Correct answer: C.</strong> A VKS cluster is the Kubernetes cluster where application teams deploy workloads.</div>
+              </div>
+              <div class="knowledge-card">
+                <h3>Question 3</h3>
+                <p>What does VKr control?</p>
+                <div class="knowledge-options"><p>A. Which Kubernetes releases are available and supported for VKS clusters</p><p>B. Which vCenter folder a VM appears in</p><p>C. Which Service Engine is used by the load balancer</p><p>D. Which DNS server the cluster uses</p></div>
+                <div class="answer-review"><strong>Correct answer: A.</strong> VKr represents approved Kubernetes release packages available for VKS cluster lifecycle.</div>
+              </div>
+              <div class="knowledge-card">
+                <h3>Question 4</h3>
+                <p>Why is Cluster API important in VKS?</p>
+                <div class="knowledge-options"><p>A. It replaces vCenter</p><p>B. It provides declarative lifecycle management for Kubernetes clusters</p><p>C. It stores container images</p><p>D. It is used only for backups</p></div>
+                <div class="answer-review"><strong>Correct answer: B.</strong> Cluster API lets the platform represent clusters, machines and lifecycle operations as declarative resources.</div>
+              </div>
+              <div class="knowledge-card">
+                <h3>Question 5</h3>
+                <p>A vSphere Pod is running directly on Supervisor. An ESX host must enter maintenance mode. Which statement is most accurate?</p>
+                <div class="knowledge-options"><p>A. The vSphere Pod live-migrates using vMotion</p><p>B. vSphere Pods do not support vMotion, so they require different operational handling</p><p>C. The vSphere Pod becomes a VKS worker node</p><p>D. The vSphere Pod is converted into a VM Service VM</p></div>
+                <div class="answer-review"><strong>Correct answer: B.</strong> vSphere Pods are not compatible with vMotion. They should not be treated like normal vMotion-capable VMs.</div>
+              </div>
+            </section>
+
+            <section class="article-section" id="challenge">
+              <p class="section-number">18 · Architecture challenge</p>
+              <h2>Design a VKS platform for financial services teams.</h2>
+              <p>A financial services organization wants a private Kubernetes platform for three groups: Payments, Risk Analytics and Customer Reporting.</p>
+              <p>They need separate resource boundaries, controlled Kubernetes versions, approved storage tiers, optional VM-based database workloads, high availability across infrastructure zones and a future backup and restore model.</p>
+              <div class="architecture-list">
+                <strong>Suggested design direction</strong>
+                <ol>
+                  <li>Create one vSphere Namespace per major team or operating boundary.</li>
+                  <li>Expose only approved VM Classes and Storage Policies.</li>
+                  <li>Use VKS clusters for normal Kubernetes workloads.</li>
+                  <li>Use VKr to control available Kubernetes versions.</li>
+                  <li>Use ClusterClass to standardize cluster patterns.</li>
+                  <li>Use VM Service only where VM-based workloads are justified.</li>
+                  <li>Use Velero planning for backup and restore.</li>
+                  <li>Avoid direct vSphere Pod usage unless there is a specific platform-level use case.</li>
+                </ol>
+              </div>
+            </section>
+
+            <section class="article-section" id="takeaways">
+              <p class="section-number">19 · Key takeaways</p>
+              <h2>The strongest VKS designs separate boundaries, lifecycle and workload ownership.</h2>
+              <ol>
+                <li><strong>Supervisor</strong> makes vSphere consumable through Kubernetes-style APIs.</li>
+                <li><strong>vSphere Namespace</strong> is a real platform boundary, not just a Kubernetes label.</li>
+                <li><strong>VKS cluster</strong> is the Kubernetes runtime created inside a vSphere Namespace.</li>
+                <li><strong>Kubernetes namespaces</strong> live inside the VKS cluster.</li>
+                <li><strong>VKr</strong> controls the supported Kubernetes release choices for VKS clusters.</li>
+                <li><strong>Cluster API</strong> gives VKS its declarative cluster lifecycle model.</li>
+                <li><strong>ClusterClass</strong> standardizes how VKS clusters are created.</li>
+                <li><strong>VM Class</strong> controls node and VM sizing choices.</li>
+                <li><strong>Storage Policy</strong> controls what storage capabilities are available to workloads.</li>
+                <li><strong>Spherelet and CRX</strong> are Supervisor capabilities and should not be confused with normal Pods inside VKS clusters.</li>
+              </ol>
+            </section>
+          </div>
+        </div>
+      </article>
+    </main>
+  </body>
+</html>
