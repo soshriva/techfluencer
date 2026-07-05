@@ -9,8 +9,8 @@ if (showModulesButton && additionalModules) {
     showModulesButton.setAttribute("aria-expanded", String(!isExpanded));
     additionalModules.hidden = isExpanded;
     showModulesButton.textContent = isExpanded
-      ? "Preview the curriculum"
-      : "Close curriculum";
+      ? "View published module"
+      : "Close module list";
   });
 }
 
