@@ -68,6 +68,19 @@ if (location.pathname.endsWith("001-what-is-vks.html")) {
       object-fit: contain !important;
     }
 
+    .article-content .article-image {
+      max-width: 980px !important;
+      width: 100% !important;
+      margin: 30px auto !important;
+    }
+
+    .article-content .article-image img {
+      aspect-ratio: 16 / 9 !important;
+      max-height: 560px !important;
+      object-fit: contain !important;
+      width: 100% !important;
+    }
+
     @media (max-width: 1100px) {
       .article-hero {
         grid-template-columns: 1fr !important;
@@ -78,7 +91,8 @@ if (location.pathname.endsWith("001-what-is-vks.html")) {
         margin: 24px auto 0 !important;
       }
 
-      .article-hero .article-image img {
+      .article-hero .article-image img,
+      .article-content .article-image img {
         max-height: none !important;
       }
     }
