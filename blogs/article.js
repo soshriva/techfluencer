@@ -75,8 +75,10 @@ if (location.pathname.endsWith("001-what-is-vks.html")) {
     }
 
     .article-content .article-image img {
-      aspect-ratio: 16 / 9 !important;
-      max-height: 560px !important;
+      aspect-ratio: auto !important;
+      display: block !important;
+      height: auto !important;
+      max-height: none !important;
       object-fit: contain !important;
       width: 100% !important;
     }
@@ -89,11 +91,6 @@ if (location.pathname.endsWith("001-what-is-vks.html")) {
       .article-hero .article-image {
         max-width: 860px !important;
         margin: 24px auto 0 !important;
-      }
-
-      .article-hero .article-image img,
-      .article-content .article-image img {
-        max-height: none !important;
       }
     }
   `;
