@@ -5,9 +5,7 @@
 - Module:
 - Audience:
 - Author:
-- Version-validation date:
 - Last-reviewed date:
-- Sources reviewed:
 
 ## 1. Concept
 
@@ -46,13 +44,118 @@
 
 ## 6. Knowledge Check
 
+Knowledge checks must be interactive and follow the same standard used in Blog 001 and Blog 002.
+
+For every question:
+
+- Show four visible answer options.
+- Let the reader select one option.
+- Do not show the explanation before selection.
+- After selection, reveal the answer review.
+- Clearly identify the correct answer.
+- Explain why the correct option is correct.
+- Explain why each wrong option is wrong.
+- Treat the knowledge check as learning reinforcement, not grading.
+
 ### Question 1
+
+Question text:
+
+Options:
+
+- A.
+- B.
+- C.
+- D.
+
+Answer review after selection:
+
+- Correct answer:
+- Why the correct answer is correct:
+- Why A is wrong:
+- Why B is wrong:
+- Why C is wrong:
+- Why D is wrong:
+
 ### Question 2
+
+Question text:
+
+Options:
+
+- A.
+- B.
+- C.
+- D.
+
+Answer review after selection:
+
+- Correct answer:
+- Why the correct answer is correct:
+- Why A is wrong:
+- Why B is wrong:
+- Why C is wrong:
+- Why D is wrong:
+
 ### Question 3
+
+Question text:
+
+Options:
+
+- A.
+- B.
+- C.
+- D.
+
+Answer review after selection:
+
+- Correct answer:
+- Why the correct answer is correct:
+- Why A is wrong:
+- Why B is wrong:
+- Why C is wrong:
+- Why D is wrong:
+
 ### Question 4
+
+Question text:
+
+Options:
+
+- A.
+- B.
+- C.
+- D.
+
+Answer review after selection:
+
+- Correct answer:
+- Why the correct answer is correct:
+- Why A is wrong:
+- Why B is wrong:
+- Why C is wrong:
+- Why D is wrong:
+
 ### Question 5
 
-### Answers and Explanations
+Question text:
+
+Options:
+
+- A.
+- B.
+- C.
+- D.
+
+Answer review after selection:
+
+- Correct answer:
+- Why the correct answer is correct:
+- Why A is wrong:
+- Why B is wrong:
+- Why C is wrong:
+- Why D is wrong:
 
 ## 7. Architecture Challenge
 
@@ -67,7 +170,3 @@
 3.
 4.
 5.
-
-## 9. Sources
-
-## Version Validation
