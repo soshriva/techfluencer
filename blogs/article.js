@@ -1,21 +1,139 @@
-document.querySelectorAll(".knowledge-card").forEach((card) => {
-  const options = card.querySelectorAll(".knowledge-options button");
-  const review = card.querySelector(".answer-review");
-
-  options.forEach((option) => {
-    option.addEventListener("click", () => {
-      options.forEach((item) => item.classList.remove("selected"));
-      option.classList.add("selected");
-      review.hidden = false;
-    });
-  });
-});
-
 document.querySelectorAll(".article-meta span").forEach((item) => {
   if (item.textContent.trim().toLowerCase().startsWith("validated")) {
     item.remove();
   }
 });
+
+if (location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")) {
+  const knowledge = document.querySelector("#knowledge");
+
+  if (knowledge) {
+    knowledge.innerHTML = `
+      <p class="section-number">17 · Knowledge reinforcement</p>
+      <h2>Check the concepts before moving on.</h2>
+      <p>
+        Select an answer to reveal the review. This is not graded. The goal is to understand why the correct option works and why the other options do not.
+      </p>
+
+      <div class="knowledge-card" data-question="q1">
+        <h3>Question 1</h3>
+        <p>A team wants to create a Kubernetes cluster on VCF using VKS. Where should the platform team first define resource boundaries, storage access and permissions?</p>
+        <div class="knowledge-options">
+          <button type="button" data-answer="a">A. Inside the application Deployment</button>
+          <button type="button" data-answer="b">B. Inside a vSphere Namespace</button>
+          <button type="button" data-answer="c">C. Inside a container image</button>
+          <button type="button" data-answer="d">D. Inside a Kubernetes Service</button>
+        </div>
+        <div class="answer-review" hidden>
+          <strong>Correct answer: B.</strong>
+          <ul>
+            <li><strong>Why B is correct:</strong> A vSphere Namespace is the platform-level boundary where permissions, quotas, storage policies, VM classes and services are made available.</li>
+            <li><strong>Why A is wrong:</strong> A Deployment describes application workload state inside a Kubernetes cluster; it does not define the platform boundary around cluster creation.</li>
+            <li><strong>Why C is wrong:</strong> A container image contains application packaging, not infrastructure governance.</li>
+            <li><strong>Why D is wrong:</strong> A Service gives stable network access to Pods. It does not define cluster-level capacity, storage access or permissions.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="knowledge-card" data-question="q2">
+        <h3>Question 2</h3>
+        <p>What is the best description of a VKS cluster?</p>
+        <div class="knowledge-options">
+          <button type="button" data-answer="a">A. A vCenter plug-in</button>
+          <button type="button" data-answer="b">B. A Supervisor control plane VM</button>
+          <button type="button" data-answer="c">C. A conformant Kubernetes cluster created through VKS for application workloads</button>
+          <button type="button" data-answer="d">D. A storage policy</button>
+        </div>
+        <div class="answer-review" hidden>
+          <strong>Correct answer: C.</strong>
+          <ul>
+            <li><strong>Why C is correct:</strong> A VKS cluster is the Kubernetes workload cluster where application teams deploy standard Kubernetes objects such as Pods, Deployments and Services.</li>
+            <li><strong>Why A is wrong:</strong> VKS is not just a vCenter plug-in. It is a Kubernetes cluster service delivered through Supervisor and the VCF operating model.</li>
+            <li><strong>Why B is wrong:</strong> Supervisor control plane VMs run the Supervisor platform control plane; they are not the same thing as a VKS workload cluster.</li>
+            <li><strong>Why D is wrong:</strong> A storage policy defines storage capability. It may be consumed by workloads, but it is not the Kubernetes cluster itself.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="knowledge-card" data-question="q3">
+        <h3>Question 3</h3>
+        <p>What does VKr control?</p>
+        <div class="knowledge-options">
+          <button type="button" data-answer="a">A. Which Kubernetes releases are available and supported for VKS clusters</button>
+          <button type="button" data-answer="b">B. Which vCenter folder a VM appears in</button>
+          <button type="button" data-answer="c">C. Which Service Engine is used by the load balancer</button>
+          <button type="button" data-answer="d">D. Which DNS server the cluster uses</button>
+        </div>
+        <div class="answer-review" hidden>
+          <strong>Correct answer: A.</strong>
+          <ul>
+            <li><strong>Why A is correct:</strong> VKr represents approved Kubernetes release packages available for VKS cluster lifecycle.</li>
+            <li><strong>Why B is wrong:</strong> vCenter folder placement is an inventory and organization concern, not the role of VKr.</li>
+            <li><strong>Why C is wrong:</strong> Load-balancer service engines relate to networking and load-balancing implementation, not Kubernetes release selection.</li>
+            <li><strong>Why D is wrong:</strong> DNS is part of cluster and network configuration. VKr is about the supported Kubernetes release package.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="knowledge-card" data-question="q4">
+        <h3>Question 4</h3>
+        <p>Why is Cluster API important in VKS?</p>
+        <div class="knowledge-options">
+          <button type="button" data-answer="a">A. It replaces vCenter</button>
+          <button type="button" data-answer="b">B. It provides declarative lifecycle management for Kubernetes clusters</button>
+          <button type="button" data-answer="c">C. It stores container images</button>
+          <button type="button" data-answer="d">D. It is used only for backups</button>
+        </div>
+        <div class="answer-review" hidden>
+          <strong>Correct answer: B.</strong>
+          <ul>
+            <li><strong>Why B is correct:</strong> Cluster API lets the platform represent clusters, machines and lifecycle operations as declarative resources.</li>
+            <li><strong>Why A is wrong:</strong> VKS still relies on vSphere and vCenter as part of the infrastructure platform. Cluster API does not replace them.</li>
+            <li><strong>Why C is wrong:</strong> Container images are stored in registries such as Harbor or other registry services.</li>
+            <li><strong>Why D is wrong:</strong> Backup is a separate operational capability. Cluster API is about cluster lifecycle, not only backup.</li>
+          </ul>
+        </div>
+      </div>
+
+      <div class="knowledge-card" data-question="q5">
+        <h3>Question 5</h3>
+        <p>A vSphere Pod is running directly on Supervisor. An ESX host must enter maintenance mode. Which statement is most accurate?</p>
+        <div class="knowledge-options">
+          <button type="button" data-answer="a">A. The vSphere Pod live-migrates using vMotion</button>
+          <button type="button" data-answer="b">B. vSphere Pods do not support vMotion, so they require different operational handling</button>
+          <button type="button" data-answer="c">C. The vSphere Pod becomes a VKS worker node</button>
+          <button type="button" data-answer="d">D. The vSphere Pod is converted into a VM Service VM</button>
+        </div>
+        <div class="answer-review" hidden>
+          <strong>Correct answer: B.</strong>
+          <ul>
+            <li><strong>Why B is correct:</strong> vSphere Pods are not compatible with vMotion and should not be treated like normal vMotion-capable VMs.</li>
+            <li><strong>Why A is wrong:</strong> vMotion applies to supported virtual-machine mobility scenarios, not to vSphere Pods in this context.</li>
+            <li><strong>Why C is wrong:</strong> A vSphere Pod does not become a VKS worker node. VKS worker nodes are part of a VKS workload cluster.</li>
+            <li><strong>Why D is wrong:</strong> VM Service VMs and vSphere Pods are different constructs. One is not automatically converted into the other.</li>
+          </ul>
+        </div>
+      </div>
+    `;
+  }
+}
+
+function initKnowledgeCards() {
+  document.querySelectorAll(".knowledge-card").forEach((card) => {
+    const options = card.querySelectorAll(".knowledge-options button");
+    const review = card.querySelector(".answer-review");
+
+    options.forEach((option) => {
+      option.addEventListener("click", () => {
+        options.forEach((item) => item.classList.remove("selected"));
+        option.classList.add("selected");
+        if (review) review.hidden = false;
+      });
+    });
+  });
+}
+
+initKnowledgeCards();
 
 if (location.pathname.endsWith("001-what-is-vks.html")) {
   const fitImage = document.querySelector("#fit .article-image img");
