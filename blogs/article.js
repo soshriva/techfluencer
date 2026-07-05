@@ -18,6 +18,18 @@ document.querySelectorAll(".article-meta span").forEach((item) => {
 });
 
 if (location.pathname.endsWith("001-what-is-vks.html")) {
+  const fitImage = document.querySelector("#fit .article-image img");
+  const fitCaption = document.querySelector("#fit .article-image figcaption");
+
+  if (fitImage) {
+    fitImage.src = "../assets/blogs/what-is-vks/vmware_cloud_foundation_and_services_infographic.png";
+    fitImage.alt = "VMware Cloud Foundation as the operating foundation for VKS, VM services, Private AI, and modern applications";
+  }
+
+  if (fitCaption) {
+    fitCaption.textContent = "VCF is the operating foundation. VKS is one strategic service delivered from that foundation, alongside VM services, Private AI, and modern application services.";
+  }
+
   const style = document.createElement("style");
   style.textContent = `
     .article-hero {
