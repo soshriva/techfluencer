@@ -1,8 +1,119 @@
+document.querySelectorAll(".article-header .brand-copy small").forEach((item) => {
+  item.textContent = "Learning Loops & Blogs";
+});
+
 document.querySelectorAll(".article-meta span").forEach((item) => {
   if (item.textContent.trim().toLowerCase().startsWith("validated")) {
     item.remove();
   }
 });
+
+document.querySelectorAll(".article-content table").forEach((table) => {
+  if (table.parentElement && table.parentElement.classList.contains("table-scroll")) return;
+
+  const wrapper = document.createElement("div");
+  wrapper.className = "table-scroll";
+  table.parentNode.insertBefore(wrapper, table);
+  wrapper.appendChild(table);
+
+  const hint = document.createElement("div");
+  hint.className = "table-scroll-hint";
+  hint.textContent = "Swipe table sideways →";
+  wrapper.parentNode.insertBefore(hint, wrapper);
+});
+
+const mobileArticleStyle = document.createElement("style");
+mobileArticleStyle.textContent = `
+  .table-scroll-hint {
+    color: #6b7b91;
+    display: none;
+    font-size: .78rem;
+    font-weight: 800;
+    letter-spacing: .04em;
+    margin: 10px 0 8px;
+    text-transform: uppercase;
+  }
+
+  .table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .table-scroll table {
+    margin-top: 0 !important;
+  }
+
+  @media (max-width: 700px) {
+    .article-header .brand-copy small {
+      font-size: .58rem !important;
+      letter-spacing: .08em !important;
+    }
+
+    .article-hero {
+      padding-top: 54px !important;
+      padding-bottom: 58px !important;
+    }
+
+    .article-hero h1 {
+      font-size: clamp(2.45rem, 10.2vw, 3.35rem) !important;
+      line-height: 1.06 !important;
+      margin-bottom: 24px !important;
+    }
+
+    .article-deck,
+    .article-section p,
+    .article-section li {
+      font-size: 1rem;
+      line-height: 1.72;
+    }
+
+    .article-meta {
+      display: grid !important;
+      gap: 10px !important;
+      grid-template-columns: 1fr !important;
+    }
+
+    .table-scroll-hint {
+      display: block;
+    }
+
+    .table-scroll {
+      border: 1px solid var(--line);
+      border-radius: 14px;
+      margin: 14px 0 28px;
+      overflow-x: auto;
+      position: relative;
+      width: 100%;
+    }
+
+    .table-scroll table {
+      border-radius: 0 !important;
+      margin: 0 !important;
+      min-width: 720px;
+    }
+
+    .table-scroll::after {
+      background: linear-gradient(90deg, transparent, rgba(255,255,255,.92));
+      bottom: 0;
+      content: "";
+      pointer-events: none;
+      position: absolute;
+      right: 0;
+      top: 0;
+      width: 34px;
+    }
+
+    .visual-showcase,
+    .hero-bridge-infographic,
+    .article-image {
+      border-radius: 18px !important;
+      margin-left: auto !important;
+      margin-right: auto !important;
+    }
+  }
+`;
+document.head.appendChild(mobileArticleStyle);
 
 if (location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")) {
   const knowledge = document.querySelector("#knowledge");
