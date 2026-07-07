@@ -17,12 +17,13 @@
       .published-modules strong { color: var(--ink); font-size: .9rem; }
       .published-modules small { color: var(--muted); font-size: .74rem; font-weight: 500; line-height: 1.45; }
       .clarity-strip, .follow-grid { display: grid; gap: 18px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 26px; }
+      .follow-grid.two-card-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
       .clarity-strip div, .follow-card { background: #fff; border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 16px 35px rgba(16, 38, 74, .06); padding: 20px; }
       .clarity-strip strong, .follow-card strong { color: var(--ink); display: block; margin-bottom: 6px; }
       .clarity-strip p, .follow-card p { color: var(--muted); margin: 0; }
       .follow-card .button, .follow-card .text-link { margin-top: 18px; }
       .coming-soon-tag { color: var(--blue); display: inline-block; font-size: .75rem; font-weight: 800; letter-spacing: .08em; margin-top: 16px; text-transform: uppercase; }
-      @media (max-width: 900px) { .clarity-strip, .follow-grid { grid-template-columns: 1fr; } }
+      @media (max-width: 900px) { .clarity-strip, .follow-grid, .follow-grid.two-card-grid { grid-template-columns: 1fr; } }
     </style>
     <script src="app.js" defer></script>
   </head>
@@ -133,13 +134,12 @@
 
       <section class="section" id="follow">
         <div class="section-heading">
-          <div><p class="eyebrow">Follow & subscribe</p><h2>Follow the next useful explanation.</h2></div>
-          <p>Follow along for practical explanations, diagrams, and architecture notes written in simple language.</p>
+          <div><p class="eyebrow">Follow</p><h2>Follow the next useful explanation.</h2></div>
+          <p>Follow new Learning Loops, diagrams, and architecture explanations through LinkedIn, or bookmark the site as a reference library.</p>
         </div>
-        <div class="follow-grid">
-          <article class="follow-card"><strong>Follow on LinkedIn</strong><p>Best place to follow new posts, diagrams, and short platform explanations.</p><a class="button" href="https://www.linkedin.com/in/sourabh-shrivastav2009/" target="_blank" rel="noopener">Open LinkedIn</a></article>
-          <article class="follow-card"><strong>Email subscription</strong><p>A lightweight email option will be added later.</p><span class="coming-soon-tag">Coming soon</span></article>
-          <article class="follow-card"><strong>Bookmark the site</strong><p>Return for practical explanations that make platform architecture easier to reason about.</p><a class="text-link" href="#loops">Start learning <span>→</span></a></article>
+        <div class="follow-grid two-card-grid">
+          <article class="follow-card"><strong>Follow on LinkedIn</strong><p>Follow new posts, diagrams, and short platform explanations.</p><a class="button" href="https://www.linkedin.com/in/sourabh-shrivastav2009/" target="_blank" rel="noopener">Open LinkedIn</a></article>
+          <article class="follow-card"><strong>Bookmark the site</strong><p>Use this as your reference library for Learning Loops, mental models, and architecture notes.</p><a class="text-link" href="#loops">Start learning <span>→</span></a></article>
         </div>
       </section>
 
