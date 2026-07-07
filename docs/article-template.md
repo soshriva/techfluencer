@@ -1,5 +1,24 @@
 # Article Title
 
+## Writing Style Rules
+
+Use normal human English while writing blogs.
+
+Avoid wording patterns that make the article look AI-generated. In particular:
+
+- Do not overuse em dashes.
+- Prefer commas, periods, or shorter sentences where they sound more natural.
+- Avoid inflated or overly polished phrasing.
+- Avoid generic transitions that sound automated.
+- Keep the tone clear, practical, and conversational.
+- Write like an experienced practitioner explaining the concept to another practitioner.
+- Use simple words where possible, but keep technical terms when they are needed.
+
+Example:
+
+- Avoid: My career spans BMC Software, VMware, Credit Suisse, and Broadcom — giving me a practical view of enterprise platforms.
+- Prefer: My career spans BMC Software, VMware, Credit Suisse, and Broadcom, giving me a practical view of enterprise platforms.
+
 ## Metadata
 
 - Module:
