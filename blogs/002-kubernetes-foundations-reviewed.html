@@ -1,0 +1,167 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="A reviewed Kubernetes foundations article using a shopping mall mental model, aligned with official Kubernetes concepts for clusters, nodes, namespaces, Pods, Deployments, Services, storage, networking, probes, requests and limits." />
+  <title>Kubernetes Foundations Through a Shopping Mall Mental Model — Reviewed | Sourabh Shrivastav</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Manrope:wght@600;700;800&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="../styles.css" />
+  <link rel="stylesheet" href="article.css" />
+  <script src="../app.js" defer></script>
+  <script src="article.js" defer></script>
+  <style>
+    .review-note,.analogy-note{border-radius:16px;padding:18px 20px;margin:24px 0}.review-note{background:#eef7ff;border:1px solid #b8d8fb}.analogy-note{background:#fff8e8;border:1px solid #efd28b}.visual-showcase{background:#071225;border:1px solid rgba(132,174,225,.24);border-radius:22px;box-shadow:0 28px 65px rgba(16,38,74,.22);margin:34px 0;overflow:hidden;padding:16px}.visual-showcase img{border-radius:16px;display:block;height:auto;width:100%}.visual-showcase figcaption{border-top:1px solid rgba(152,181,220,.16);color:#b8c7df;font-size:.92rem;line-height:1.6;margin-top:14px;padding:14px 6px 4px}.quick-map-table{border-collapse:collapse;margin:26px 0;width:100%}.quick-map-table th,.quick-map-table td{border-bottom:1px solid var(--line);padding:13px 12px;text-align:left;vertical-align:top}.quick-map-table th{color:var(--ink);font-size:.78rem;letter-spacing:.08em;text-transform:uppercase}.quick-map-table td{color:#536174}.quick-map-table td:first-child{color:var(--ink);font-weight:700}.story-flow{background:#081225;border:1px solid rgba(132,174,225,.24);border-radius:20px;color:#dbe8ff;margin:30px 0;padding:24px}.story-flow li{margin:12px 0}.story-flow strong{color:#fff}.source-list li{margin:10px 0}
+  </style>
+</head>
+<body class="article-page">
+<header class="site-header article-header">
+  <a class="brand" href="../index.html" aria-label="Sourabh Shrivastav home"><span class="brand-mark">S</span><span class="brand-copy"><strong>Sourabh Shrivastav</strong><small>Platform Fieldnotes</small></span></a>
+  <nav aria-label="Article navigation"><a class="nav-link" href="../index.html">Basecamp</a><a class="nav-link active" href="../index.html#loops">Learning Loops</a><a class="nav-link" href="../index.html#about">About</a></nav>
+</header>
+<main><article>
+<header class="article-hero">
+  <div class="article-hero-copy">
+    <a class="back-link" href="../index.html#notes">← Field Notes</a>
+    <div class="article-kicker"><span>VKS Learning Loop</span><span>Module 02 · Reviewed draft</span></div>
+    <h1>Kubernetes Foundations Through a Shopping Mall Mental Model</h1>
+    <p class="article-deck">A memorable way to connect Kubernetes architecture, workload, networking, storage and governance concepts—while clearly separating the analogy from the technical definition.</p>
+    <div class="article-meta"><span><strong>Author</strong> Sourabh Shrivastav</span><span><strong>Audience</strong> Infrastructure and platform practitioners</span><span><strong>Validated</strong> July 2026 against official Kubernetes documentation</span></div>
+  </div>
+  <figure class="visual-showcase"><img src="../assets/blogs/kubernetes-foundations-reviewed/kubernetes-as-smart-mall-reviewed.svg" alt="Reviewed shopping mall mental model mapping Kubernetes cluster, control plane, worker nodes, Namespaces, Pods, containers, Services, storage and policy." /><figcaption>The analogy is a memory aid. The Kubernetes definitions remain the source of truth for design and implementation.</figcaption></figure>
+</header>
+<div class="article-shell">
+<aside class="article-toc"><span>In this field note</span><a href="#mental-model">Mental model</a><a href="#architecture">Architecture</a><a href="#node-namespace">Node vs Namespace</a><a href="#workloads">Pods and Deployments</a><a href="#traffic">Services and traffic</a><a href="#storage">Storage</a><a href="#networking">NetworkPolicy</a><a href="#resources">Requests and limits</a><a href="#config-health">Config and probes</a><a href="#example">YAML story</a><a href="#takeaways">Takeaways</a></aside>
+<div class="article-content">
+<section class="article-section lead-section" id="mental-model">
+<p class="section-number">01 · Why this mental model</p><h2>Use the mall to remember relationships—not to replace Kubernetes definitions.</h2>
+<p>Kubernetes has many objects that are individually understandable but difficult to connect: control plane, worker node, Namespace, Pod, Deployment, ReplicaSet, Service, StorageClass, PersistentVolumeClaim, PersistentVolume, NetworkPolicy, ConfigMap, Secret, probes, requests and limits.</p>
+<p>The shopping mall mental model connects those objects into one operating story. The cluster is the mall ecosystem. The control plane is the management office. Worker nodes are floors or wings. Namespaces are logical brand, team or application scopes. Pods are outlets or counters. Containers are packaged application processes running inside those Pods.</p>
+<div class="analogy-note"><strong>Important boundary</strong><p>A Kubernetes Namespace does not inherently prove business ownership or provide strong tenant isolation. Organisations commonly align Namespaces with teams, applications, environments or tenants, then apply RBAC, quotas, NetworkPolicy and security controls around them.</p></div>
+<table class="quick-map-table"><thead><tr><th>Kubernetes concept</th><th>Mall memory hook</th><th>Technically precise interpretation</th></tr></thead><tbody>
+<tr><td>Cluster</td><td>Entire mall ecosystem</td><td>The control plane and worker nodes that together run and manage workloads.</td></tr>
+<tr><td>Control plane</td><td>Management office</td><td>Accepts desired state, stores API data, schedules Pods and runs reconciliation loops.</td></tr>
+<tr><td>Worker node</td><td>Floor or wing</td><td>The compute location where Pods actually run.</td></tr>
+<tr><td>Namespace</td><td>Brand, team or application scope</td><td>A logical scope for grouping and naming namespaced resources.</td></tr>
+<tr><td>Pod</td><td>Outlet or counter</td><td>The smallest deployable unit; it contains one or more tightly coupled containers.</td></tr>
+<tr><td>Container</td><td>Packaged application process</td><td>An isolated runtime for application code and its dependencies inside a Pod.</td></tr>
+</tbody></table>
+</section>
+<section class="article-section" id="architecture">
+<p class="section-number">02 · Kubernetes architecture</p><h2>The cluster is the mall ecosystem. The control plane operates it.</h2>
+<p>A Kubernetes cluster consists of a control plane and worker nodes. Users and automation submit desired state through the Kubernetes API. The control plane records that state, selects suitable nodes for unscheduled Pods and runs controllers that continuously reconcile actual state toward desired state.</p>
+<ul><li><strong>API server = management reception desk:</strong> all Kubernetes API requests and administrative instructions enter through it. Application traffic does not.</li><li><strong>etcd = official records:</strong> the consistent key-value store used for Kubernetes API data.</li><li><strong>Scheduler = space-allocation team:</strong> assigns unscheduled Pods to suitable worker nodes.</li><li><strong>Controller manager = operations supervisors:</strong> runs control loops that reconcile observed and desired state.</li></ul>
+<p>The control plane does not invent business intent. The desired number of replicas, Pod template and policy are declared by users or higher-level automation; Kubernetes works to realise that declaration.</p>
+</section>
+<section class="article-section dark-section" id="node-namespace">
+<p class="section-number">03 · Worker node vs Namespace</p><h2>Worker node is where it runs. Namespace is the logical scope in which it is organised.</h2>
+<figure class="visual-showcase"><img src="../assets/blogs/kubernetes-foundations-reviewed/node-vs-namespace-reviewed.svg" alt="Reviewed diagram explaining that worker nodes are runtime locations while Namespaces are logical scopes that can span multiple nodes." /><figcaption>A Namespace can span multiple worker nodes, and a worker node can host Pods from multiple Namespaces.</figcaption></figure>
+<p>Suppose a company has Payments, Risk and Reporting teams. Their resources may be grouped into separate Namespaces. The Pods from each Namespace can run on many nodes, and a single node can host Pods from several Namespaces.</p>
+<p><strong>Memory hook:</strong> worker node equals runtime location; Namespace equals logical resource scope. Ownership, access and isolation come from the way the platform applies RBAC, quotas, policies and security controls.</p>
+</section>
+<section class="article-section" id="workloads">
+<p class="section-number">04 · Pods, containers, Deployments and ReplicaSets</p><h2>The counter is the Pod. The packaged application process is the container.</h2>
+<p>A Pod is the smallest deployable unit that Kubernetes can create and manage. Most application Pods contain one main container, but a Pod can contain multiple tightly coupled containers that share networking and storage context.</p>
+<p>A Deployment declares the desired state and rollout strategy for a set of application Pods. It manages ReplicaSets, and each ReplicaSet continuously works to maintain its requested Pod replica count.</p>
+<p>If a Deployment specifies <code>replicas: 3</code>, the desired state is three Pod replicas. That does not guarantee that exactly three are ready at every instant: startup, failure and rolling-update conditions can temporarily produce different desired, current, ready and available counts.</p>
+<div class="story-flow"><strong>Read the workload story</strong><ol><li><strong>Deployment</strong> = desired-state and rollout plan.</li><li><strong>ReplicaSet</strong> = controller working to maintain the requested number of Pods.</li><li><strong>Pod</strong> = deployable counter.</li><li><strong>Container</strong> = packaged application process running inside the counter.</li></ol></div>
+</section>
+<section class="article-section" id="traffic">
+<p class="section-number">05 · Services, Ingress and Gateway</p><h2>Use a stable directory entry, not a temporary Pod address.</h2>
+<p>Pods can be replaced and their IP addresses can change. A Service provides a stable network identity for a logical set of backends, commonly selected Pods.</p>
+<figure class="visual-showcase"><img src="../assets/blogs/kubernetes-foundations-reviewed/traffic-flow-reviewed.svg" alt="Reviewed Kubernetes traffic flow from a user through edge infrastructure to an Ingress controller or Gateway, Service, Pod and containerised application." /><figcaption>An Ingress resource contains routing configuration; an Ingress controller implements it. Gateway API is the newer extensible model for many north-south traffic use cases.</figcaption></figure>
+<p>A request typically reaches edge infrastructure, then an Ingress controller or Gateway implementation. Routing configuration selects a Service, and the Service directs traffic toward one of its current backend Pods. The application process inside the selected Pod handles the request.</p>
+<div class="review-note"><strong>Ingress precision</strong><p>Ingress itself is an API resource and does not process traffic without an Ingress controller. Kubernetes considers the Ingress API stable but frozen; Gateway API is where newer extensible routing capabilities are being developed.</p></div>
+</section>
+<section class="article-section" id="storage">
+<p class="section-number">06 · Storage fundamentals</p><h2>StorageClass is the fulfilment blueprint. PVC is the request. PV is the Kubernetes representation.</h2>
+<figure class="visual-showcase"><img src="../assets/blogs/kubernetes-foundations-reviewed/storage-model-reviewed.svg" alt="Reviewed storage diagram mapping StorageClass to a provisioning blueprint, PVC to a request, PV to a Kubernetes representation and the backing volume to the actual storage asset." /><figcaption>A PersistentVolume represents storage available to the cluster. The actual backing asset may be a cloud disk, SAN volume, file share or another storage-system resource.</figcaption></figure>
+<p>A PersistentVolumeClaim expresses the workload's storage request, such as required capacity and access mode. A StorageClass can describe how a class of storage should be dynamically provisioned and managed. A PersistentVolume is the Kubernetes object representing the resulting storage capacity.</p>
+<p>With dynamic provisioning, a PVC can trigger a provisioner, guided by a StorageClass, to create a backing volume and corresponding PV. Static provisioning remains possible when storage and PV objects are prepared in advance.</p>
+</section>
+<section class="article-section" id="networking">
+<p class="section-number">07 · NetworkPolicy</p><h2>NetworkPolicy is the mall's network-level access-control plan.</h2>
+<p>NetworkPolicy objects describe permitted ingress and egress traffic for selected Pods at IP and port level. For example, a policy can permit frontend Pods to reach backend Pods while preventing direct frontend access to database Pods.</p>
+<p>The cluster networking implementation must support and enforce NetworkPolicy. Creating a NetworkPolicy object in a cluster whose network plugin does not enforce it does not create effective isolation.</p>
+</section>
+<section class="article-section" id="resources">
+<p class="section-number">08 · Resource requests and limits</p><h2>Requests influence scheduling. Limits constrain runtime consumption.</h2>
+<figure class="visual-showcase"><img src="../assets/blogs/kubernetes-foundations-reviewed/requests-limits-reviewed.svg" alt="Reviewed requests and limits infographic explaining scheduling, CPU throttling and possible memory OOM termination." /><figcaption>Container requests contribute to the Pod's effective scheduling requirement. CPU and memory limits have different enforcement behaviour.</figcaption></figure>
+<p>In the example, a container requests <strong>1 CPU and 2 GiB of memory</strong>. Kubernetes uses the Pod's effective resource request when selecting a node with sufficient allocatable capacity. One Kubernetes CPU unit may map to a virtual core, physical core or hardware thread depending on the node.</p>
+<p>CPU use above a limit can be throttled. Memory enforcement is reactive: if a container exceeds its memory limit and the operating system encounters memory pressure, the container may be terminated and reported as <code>OOMKilled</code>. Restart behaviour follows the Pod's restart policy.</p>
+</section>
+<section class="article-section" id="config-health">
+<p class="section-number">09 · Configuration, Secrets and probes</p><h2>Not everything belongs inside the image.</h2>
+<p>ConfigMaps hold non-confidential configuration such as endpoints, feature flags and environment-specific settings. Secrets are intended for confidential values, but creating a Secret does not automatically guarantee strong protection. Security depends on RBAC, encryption at rest, access controls and operational configuration.</p>
+<p>A readiness probe asks whether the application can serve traffic now. A failed readiness probe removes the Pod from matching Service endpoints without necessarily restarting the container. A liveness probe detects a stuck or unhealthy process; repeated liveness failure causes the kubelet to restart the affected container. A startup probe can protect slow-starting applications during initialisation.</p>
+</section>
+<section class="article-section" id="example">
+<p class="section-number">10 · Hands-on example</p><h2>Read the YAML like a mall operating plan.</h2>
+<pre><code>apiVersion: v1
+kind: Namespace
+metadata:
+  name: payments
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: payment-api
+  namespace: payments
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app.kubernetes.io/name: payment-api
+  template:
+    metadata:
+      labels:
+        app.kubernetes.io/name: payment-api
+        app.kubernetes.io/part-of: payments
+    spec:
+      containers:
+      - name: payment-api-demo
+        image: nginx:1.27-alpine
+        ports:
+        - containerPort: 80
+        resources:
+          requests:
+            cpu: "1"
+            memory: "2Gi"
+          limits:
+            cpu: "2"
+            memory: "4Gi"
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: payment-api-service
+  namespace: payments
+spec:
+  type: ClusterIP
+  selector:
+    app.kubernetes.io/name: payment-api
+  ports:
+  - port: 80
+    targetPort: 80</code></pre>
+<p>This uses a pinned NGINX image as a placeholder web application. The <code>containerPort</code> documents the application port; it does not independently expose the workload.</p>
+<div class="story-flow"><strong>Read it like this</strong><ol><li><strong>Namespace <code>payments</code></strong> = the logical scope used to organise and govern Payments resources.</li><li><strong>Deployment <code>payment-api</code></strong> = the desired-state and rollout plan for the application Pods.</li><li><strong><code>replicas: 3</code></strong> = request a desired state of three Pod replicas.</li><li><strong>ReplicaSet</strong> = the behind-the-scenes controller that works to maintain the requested Pod count.</li><li><strong>Container <code>payment-api-demo</code></strong> = the packaged demo application process inside each Pod.</li><li><strong>Service <code>payment-api-service</code></strong> = the stable ClusterIP and DNS identity that directs traffic to selected Pods.</li></ol></div>
+</section>
+<section class="article-section dark-section" id="challenge">
+<p class="section-number">11 · Architecture challenge</p><h2>Design the mall for Payments, Risk and Reporting.</h2>
+<ol><li>Would separate Namespaces improve organisation and policy application?</li><li>Which stateless applications should use Deployments?</li><li>Which applications require Services or external routing?</li><li>Which workloads need persistent storage and PVCs?</li><li>Which NetworkPolicies should control east-west traffic?</li><li>What requests and limits should be based on observed usage?</li><li>Which responsibilities belong to the platform team and which to application teams?</li></ol>
+</section>
+<section class="article-section" id="takeaways">
+<p class="section-number">12 · Key takeaways</p><h2>The mental model is memorable when its boundaries are explicit.</h2>
+<ul><li>A cluster combines a control plane and worker nodes.</li><li>The control plane reconciles declared desired state; it does not invent business intent.</li><li>Worker nodes are runtime locations. Namespaces are logical scopes for grouping and naming resources.</li><li>A Pod is the smallest deployable unit and can contain one or more tightly coupled containers.</li><li>A Deployment manages ReplicaSets; ReplicaSets work to maintain requested Pod replicas.</li><li>A Service provides stable access to changing backend Pods.</li><li>Ingress resources require an Ingress controller; Gateway API is the newer extensible traffic model.</li><li>PVCs request storage, PVs represent storage and StorageClasses can guide dynamic provisioning.</li><li>NetworkPolicy requires an enforcing network implementation.</li><li>CPU limits can throttle; memory-limit violations may result in OOM termination.</li><li>Secrets require proper encryption, RBAC and operational controls.</li></ul>
+<div class="callout"><strong>Why this matters before VKS</strong><p>VKS builds on Kubernetes concepts rather than replacing them. Supervisor, VCF Namespaces, workload clusters, VKr, storage policies and NSX or VDS networking should be understood by mapping them back to the upstream Kubernetes foundations.</p></div>
+</section>
+<section class="article-section" id="sources">
+<p class="section-number">13 · Validation sources</p><h2>Official Kubernetes documentation used for review</h2>
+<ul class="source-list"><li>Kubernetes Components and Cluster Architecture</li><li>Namespaces</li><li>Pods, Deployments and ReplicaSets</li><li>Services, Ingress and Gateway API</li><li>Persistent Volumes, PersistentVolumeClaims and StorageClasses</li><li>Network Policies</li><li>Resource Management for Pods and Containers</li><li>ConfigMaps, Secrets and Probes</li></ul>
+<p>Validation date: July 2026. Revalidate behaviour and feature status against the Kubernetes version used by your target platform.</p>
+</section>
+</div></div>
+</article></main>
+</body></html>
