@@ -1,0 +1,43 @@
+name: Cleanup Blog 002 metadata
+
+on:
+  push:
+    branches:
+      - blog/002-kubernetes-foundations
+    paths:
+      - .github/workflows/cleanup-blog2-meta.yml
+
+permissions:
+  contents: write
+
+jobs:
+  cleanup:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: blog/002-kubernetes-foundations
+          fetch-depth: 0
+
+      - name: Remove author and audience metadata
+        run: |
+          python - <<'PY'
+          from pathlib import Path
+
+          path = Path('blogs/002-kubernetes-foundations-reviewed.html')
+          text = path.read_text(encoding='utf-8')
+          old = '<div class="article-meta"><span><strong>Author</strong> Sourabh Shrivastav</span><span><strong>Audience</strong> Infrastructure and platform practitioners</span><span><strong>Validated</strong> July 2026 against official Kubernetes documentation</span></div>'
+          new = '<div class="article-meta"><span><strong>Validated</strong> July 2026 against official Kubernetes documentation</span></div>'
+          if old not in text:
+              raise SystemExit('Expected metadata block was not found')
+          path.write_text(text.replace(old, new, 1), encoding='utf-8')
+          PY
+
+      - name: Remove one-time workflow and commit
+        run: |
+          rm .github/workflows/cleanup-blog2-meta.yml
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add blogs/002-kubernetes-foundations-reviewed.html .github/workflows/cleanup-blog2-meta.yml
+          git commit -m "Remove author and audience from Blog 002 header"
+          git push origin HEAD:blog/002-kubernetes-foundations
