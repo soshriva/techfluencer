@@ -73,7 +73,6 @@
 <p>A Pod is the smallest deployable unit that Kubernetes can create and manage. In the mall analogy, each Pod is an individual store instance. Most application Pods contain one main container, but a Pod can contain multiple tightly coupled containers that share networking and storage context.</p>
 <p>A container is the packaged application process running inside the Pod, together with its runtime dependencies.</p>
 <div class="story-flow"><strong>Read the workload story</strong><ol><li><strong>Deployment</strong> = store operating plan.</li><li><strong>ReplicaSet</strong> = mall operations team maintaining the required store count.</li><li><strong>Pod</strong> = individual store instance.</li><li><strong>Container</strong> = packaged application process running inside the store.</li></ol></div>
-<div class="review-note"><strong>Where the analogy differs</strong><p>A physical store usually stays in one place. A Pod does not. Kubernetes can replace a failed Pod and run its replacement on another worker node while the Deployment and ReplicaSet restore the requested number of replicas.</p></div>
 </section>
 <section class="article-section" id="traffic">
 <p class="section-number">05 · Services, Ingress and Gateway</p><h2>Use a stable directory entry, not a temporary Pod address.</h2>
