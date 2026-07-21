@@ -93,15 +93,9 @@ mobileArticleStyle.textContent = `
       min-width: 720px;
     }
 
-    .table-scroll::after {
-      background: linear-gradient(90deg, transparent, rgba(255,255,255,.92));
-      bottom: 0;
-      content: "";
-      pointer-events: none;
-      position: absolute;
-      right: 0;
-      top: 0;
-      width: 34px;
+    .table-scroll th,
+    .table-scroll td {
+      opacity: 1 !important;
     }
 
     .visual-showcase,
