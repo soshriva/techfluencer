@@ -52,3 +52,26 @@ if (quiz && quizResult) {
       "You previously completed this knowledge check. Your progress is stored only in this browser.";
   }
 }
+
+if (location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")) {
+  document.title =
+    "Kubernetes Foundations Through a Shopping Mall Mental Model | Sourabh Shrivastav";
+
+  const backLink = document.querySelector(".article-hero .back-link");
+  if (backLink) {
+    backLink.href = "../index.html#loops";
+    backLink.textContent = "← Learning Loops";
+  }
+
+  const moduleBadge = document.querySelector(
+    ".article-hero .article-kicker span:nth-child(2)"
+  );
+  if (moduleBadge) {
+    moduleBadge.textContent = "Module 02";
+  }
+
+  const tocLabel = document.querySelector(".article-toc > span");
+  if (tocLabel) {
+    tocLabel.textContent = "In this blog";
+  }
+}
