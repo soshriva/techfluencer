@@ -11,13 +11,34 @@ if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
 
   const toc=document.querySelector(".article-toc");
   if(toc){
+    const tocLabels={
+      why:"Overview",
+      "mental-model":"Analogy",
+      mapping:"Mapping",
+      supervisor:"Supervisor",
+      namespace:"Namespace",
+      "namespace-vs-k8s":"Namespace Types",
+      zones:"Zones",
+      "vks-cluster":"VKS Cluster",
+      constructs:"Constructs",
+      services:"Services",
+      runtime:"Runtime",
+      "technical-view":"Architecture",
+      flow:"Flow",
+      yaml:"YAML",
+      comparison:"Comparison",
+      misunderstandings:"Misunderstandings",
+      knowledge:"Knowledge Check",
+      challenge:"Architecture Challenge",
+      takeaways:"Takeaways"
+    };
     toc.innerHTML="<span>In this blog</span>";
     document.querySelectorAll(".article-content > section[id]").forEach(section=>{
-      const heading=section.querySelector("h2");
-      if(!heading)return;
+      const label=tocLabels[section.id];
+      if(!label)return;
       const link=document.createElement("a");
       link.href=`#${section.id}`;
-      link.textContent=heading.textContent.trim();
+      link.textContent=label;
       toc.appendChild(link);
     });
   }
