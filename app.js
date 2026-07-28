@@ -89,4 +89,47 @@ if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
     @media(max-width:768px){.solution-grid{grid-template-columns:1fr}.challenge-brief{padding:18px}}
   `;
   document.head.appendChild(style);
+  window.addEventListener("DOMContentLoaded",()=>{
+    const serviceCell=Array.from(document.querySelectorAll("#mapping .quick-map-table tbody tr")).find(row=>row.cells[0]?.textContent.trim()==="Supervisor Services")?.cells[2];
+    if(serviceCell)serviceCell.textContent="VKS, Velero, Harbor, Contour, Argo CD and other enabled services.";
+
+    const zones=document.querySelector("#zones");
+    if(zones){
+      const paragraphs=zones.querySelectorAll("p:not(.section-number)");
+      if(paragraphs[0])paragraphs[0].textContent="A vSphere Zone represents an infrastructure failure domain. A Supervisor may use one zone or a supported three-zone topology to improve control-plane and workload resilience.";
+      if(paragraphs[1])paragraphs[1].textContent="Think of vSphere Zones as separate office blocks or building sections: Block A, Block B and Block C. If one block has a problem, workloads designed across the remaining failure domains can continue, depending on application placement, storage policy and platform design.";
+    }
+
+    const constructs=document.querySelector("#constructs");
+    if(constructs){
+      const headings=Array.from(constructs.querySelectorAll("h3"));
+      const releaseHeading=headings.find(item=>item.textContent.trim().startsWith("VKr:"));
+      if(releaseHeading){
+        releaseHeading.textContent="KubernetesRelease: the supported Kubernetes release";
+        const releaseParagraph=releaseHeading.nextElementSibling;
+        if(releaseParagraph)releaseParagraph.textContent="KubernetesRelease represents a Kubernetes release made available through the installed VKS service. The compatible ClusterClass and VKS service version determine which releases a cluster can consume. Older TKR or VKr terminology may still appear in legacy material, but KubernetesRelease is the clearer current term for VCF 9.1-aligned guidance.";
+      }
+    }
+
+    document.querySelectorAll("#mapping .quick-map-table tbody tr").forEach(row=>{
+      if(row.cells[0]?.textContent.trim()==="VKr"){
+        row.cells[0].textContent="KubernetesRelease";
+        row.cells[1].textContent="Approved operating standard";
+        row.cells[2].textContent="Supported Kubernetes release made available through VKS.";
+      }
+    });
+
+    const q3=document.querySelector('#knowledge .knowledge-card[data-question="q3"]');
+    if(q3){
+      const question=q3.querySelector("p");
+      const options=q3.querySelectorAll(".knowledge-options button");
+      const review=q3.querySelector(".answer-review");
+      if(question)question.textContent="What is the purpose of a KubernetesRelease in VKS?";
+      if(options[0])options[0].textContent="A. It represents a Kubernetes release made available by Kubernetes Service for compatible VKS clusters";
+      if(options[1])options[1].textContent="B. It selects the vCenter inventory folder for cluster nodes";
+      if(options[2])options[2].textContent="C. It chooses the load-balancer Service Engine";
+      if(options[3])options[3].textContent="D. It configures the cluster DNS server";
+      if(review)review.innerHTML='<strong>Correct answer: A.</strong><ul><li><strong>Why A is correct:</strong> KubernetesRelease represents a Kubernetes release made available through the installed VKS service. ClusterClass and VKS compatibility determine whether a cluster can consume it.</li><li><strong>Why B is wrong:</strong> Inventory placement is a vSphere organisation concern, not the role of KubernetesRelease.</li><li><strong>Why C is wrong:</strong> Load-balancer implementation is a networking concern, not Kubernetes release selection.</li><li><strong>Why D is wrong:</strong> DNS is cluster and network configuration; KubernetesRelease represents the supported Kubernetes software release.</li></ul>';
+    }
+  });
 }
