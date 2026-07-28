@@ -75,3 +75,11 @@ if (location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")) {
     tocLabel.textContent = "In this blog";
   }
 }
+
+if (location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")) {
+  const servicesParagraph = document.querySelector("#services > p:not(.section-number)");
+  if (servicesParagraph) {
+    servicesParagraph.textContent =
+      "Supervisor Services are services made available through the Supervisor. Examples include VKS, Velero, Harbor, Contour and Argo CD. Not every environment will enable every service. A platform team should enable only what the operating model needs.";
+  }
+}
