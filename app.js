@@ -8,6 +8,20 @@ if(location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")){docum
 if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
   const articleMeta=document.querySelector(".article-hero .article-meta");
   if(articleMeta)articleMeta.remove();
+
+  const toc=document.querySelector(".article-toc");
+  if(toc){
+    toc.innerHTML="<span>In this blog</span>";
+    document.querySelectorAll(".article-content > section[id]").forEach(section=>{
+      const heading=section.querySelector("h2");
+      if(!heading)return;
+      const link=document.createElement("a");
+      link.href=`#${section.id}`;
+      link.textContent=heading.textContent.trim();
+      toc.appendChild(link);
+    });
+  }
+
   const servicesParagraph=document.querySelector("#services > p:not(.section-number)");
   if(servicesParagraph)servicesParagraph.textContent="Supervisor Services are services made available through the Supervisor. Examples include VKS, Velero, Harbor, Contour and Argo CD. Not every environment will enable every service. A platform team should enable only what the operating model needs.";
   const runtimeComparisonTable=document.querySelector("#runtime .quick-map-table");
