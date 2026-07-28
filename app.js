@@ -82,4 +82,26 @@ if (location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")) {
     servicesParagraph.textContent =
       "Supervisor Services are services made available through the Supervisor. Examples include VKS, Velero, Harbor, Contour and Argo CD. Not every environment will enable every service. A platform team should enable only what the operating model needs.";
   }
+
+  const style = document.createElement("style");
+  style.textContent = `
+    .dark-section p,
+    .dark-section .dark-intro,
+    .dark-section .learning-note,
+    .dark-section .quick-map-table th,
+    .dark-section .quick-map-table td {
+      color: #b8c7df !important;
+      opacity: 1 !important;
+    }
+
+    .dark-section h3,
+    .dark-section .learning-note strong,
+    .dark-section .quick-map-table th:first-child,
+    .dark-section .quick-map-table td:first-child,
+    .dark-section .quick-map-table td:nth-child(2) {
+      color: #ffffff !important;
+      opacity: 1 !important;
+    }
+  `;
+  document.head.appendChild(style);
 }
