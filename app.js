@@ -1,77 +1,118 @@
-const showModulesButton = document.querySelector(".show-modules");
-const additionalModules = document.querySelector(".curriculum-drawer");
+const showModulesButton=document.querySelector(".show-modules");
+const additionalModules=document.querySelector(".curriculum-drawer");
+if(showModulesButton&&additionalModules){showModulesButton.addEventListener("click",()=>{const expanded=showModulesButton.getAttribute("aria-expanded")==="true";showModulesButton.setAttribute("aria-expanded",String(!expanded));additionalModules.hidden=expanded;showModulesButton.textContent=expanded?"View published module":"Close module list";});}
 
-if (showModulesButton && additionalModules) {
-  showModulesButton.addEventListener("click", () => {
-    const isExpanded =
-      showModulesButton.getAttribute("aria-expanded") === "true";
+const quiz=document.querySelector("#sample-quiz");
+const quizResult=document.querySelector("#quiz-result");
+if(quiz&&quizResult){quiz.addEventListener("submit",event=>{event.preventDefault();const answer=new FormData(quiz).get("answer");quizResult.hidden=false;quizResult.classList.remove("correct","incorrect");if(!answer){quizResult.classList.add("incorrect");quizResult.textContent="Choose an answer before checking your reasoning.";return;}if(answer==="b"){quizResult.classList.add("correct");quizResult.innerHTML="<strong>Correct.</strong> VKS preserves the Kubernetes API and workload model while integrating lifecycle, policy, networking, and infrastructure services with VCF.";localStorage.setItem("vks-field-guide-sample-quiz","complete");return;}quizResult.classList.add("incorrect");quizResult.innerHTML="<strong>Not quite.</strong> Start from what remains familiar: Kubernetes APIs and workloads. Then explain the lifecycle and infrastructure responsibilities integrated through VCF.";});if(localStorage.getItem("vks-field-guide-sample-quiz")==="complete"){quizResult.hidden=false;quizResult.classList.add("correct");quizResult.textContent="You previously completed this knowledge check. Your progress is stored only in this browser.";}}
 
-    showModulesButton.setAttribute("aria-expanded", String(!isExpanded));
-    additionalModules.hidden = isExpanded;
-    showModulesButton.textContent = isExpanded
-      ? "View published module"
-      : "Close module list";
+if(location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")){document.title="Kubernetes Foundations Through a Shopping Mall Mental Model | Sourabh Shrivastav";const backLink=document.querySelector(".article-hero .back-link");if(backLink){backLink.href="../index.html#loops";backLink.textContent="← Learning Loops";}const moduleBadge=document.querySelector(".article-hero .article-kicker span:nth-child(2)");if(moduleBadge)moduleBadge.textContent="Module 02";const tocLabel=document.querySelector(".article-toc > span");if(tocLabel)tocLabel.textContent="In this blog";}
+
+if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
+  const articleMeta=document.querySelector(".article-hero .article-meta");
+  if(articleMeta)articleMeta.remove();
+
+  const namespaceHeading=document.querySelector("#namespace h2");
+  if(namespaceHeading)namespaceHeading.textContent="A vSphere Namespace is the infrastructure and governance boundary.";
+
+  const toc=document.querySelector(".article-toc");
+  if(toc){
+    const labels={why:"Overview","mental-model":"Analogy",mapping:"Mapping",supervisor:"Supervisor",namespace:"Namespace","namespace-vs-k8s":"Namespace Types",zones:"Zones","vks-cluster":"VKS Cluster",constructs:"Constructs",services:"Services",runtime:"Runtime","technical-view":"Architecture",flow:"Flow",yaml:"YAML",comparison:"Comparison",misunderstandings:"Misunderstandings",knowledge:"Knowledge Check",challenge:"Architecture Challenge",takeaways:"Takeaways"};
+    toc.innerHTML="<span>In this blog</span>";
+    document.querySelectorAll(".article-content > section[id]").forEach(section=>{const label=labels[section.id];if(!label)return;const link=document.createElement("a");link.href=`#${section.id}`;link.textContent=label;toc.appendChild(link);});
+  }
+
+  const servicesParagraph=document.querySelector("#services > p:not(.section-number)");
+  if(servicesParagraph)servicesParagraph.textContent="Supervisor Services are services made available through the Supervisor. Examples include VKS, Velero, Harbor, Contour and Argo CD. Not every environment will enable every service. A platform team should enable only what the operating model needs.";
+
+  const runtime=document.querySelector("#runtime");
+  if(runtime){runtime.innerHTML=`
+    <p class="section-number">11 · vSphere Pods, Spherelet and CRX</p>
+    <h2>Supervisor-native Pods are different from Pods inside a VKS cluster.</h2>
+    <p class="dark-intro">A <strong>vSphere Pod</strong> runs directly on Supervisor-backed ESX infrastructure using a lightweight, VM-isolated runtime. A Kubernetes application Pod normally runs inside a VKS workload cluster on its worker nodes.</p>
+    <p>In VCF 9.1, vSphere Pods also underpin <strong>Container Service</strong>, which allows individual container applications to run without requiring users to deploy and operate a complete VKS cluster.</p>
+    <h3>vSphere Pod</h3>
+    <p>A vSphere Pod is a Kubernetes Pod implemented through a lightweight VM-based construct. It can run one or more Linux containers while providing a separate kernel boundary through hardware virtualization. This offers stronger workload isolation than the conventional shared-host-kernel container model.</p>
+    <h3>Spherelet</h3>
+    <p>Spherelet is the ESX-resident agent that performs a kubelet-like role for Supervisor. It allows the Supervisor control plane to communicate with participating ESX hosts, represent them as Kubernetes nodes and manage vSphere Pod workloads scheduled on those hosts.</p>
+    <h3>CRX</h3>
+    <p>CRX stands for <strong>Container Runtime Executive</strong>. It is the lightweight runtime technology used by vSphere Pods. CRX uses hardware virtualization to run containers within a fast-starting, VM-isolated execution environment.</p>`;}
+
+  const flow=document.querySelector("#flow");
+  if(flow){flow.innerHTML=`
+    <p class="section-number">13 · End-to-end VKS flow</p>
+    <h2>From governed platform boundary to a ready Kubernetes cluster.</h2>
+    <div class="architecture-list"><ol>
+      <li>The platform team enables and configures <strong>Supervisor</strong>.</li>
+      <li>The platform team enables <strong>VKS on Supervisor</strong>.</li>
+      <li>The platform team creates <strong>vSphere Namespaces</strong>.</li>
+      <li>The platform team assigns permissions, quotas, approved VM Classes, Storage Policies and other namespace capabilities.</li>
+      <li>An authorised user submits a declarative <strong>VKS cluster request</strong> inside a vSphere Namespace.</li>
+      <li>The request references an approved <strong>ClusterClass</strong> and defines the desired Kubernetes release, control-plane topology, worker node pools, networking and storage configuration.</li>
+      <li><strong>VKS and Cluster API controllers</strong> reconcile the declared state.</li>
+      <li>The vSphere infrastructure provider provisions the required control-plane and worker-node virtual machines.</li>
+      <li>Kubernetes is bootstrapped, worker nodes join, and the required networking, storage and platform integrations become ready.</li>
+      <li>The VKS cluster reports ready and becomes accessible to authorised users.</li>
+      <li>Application teams deploy standard Kubernetes workloads into the cluster.</li>
+    </ol></div>`;}
+
+  const takeaways=document.querySelector("#takeaways");
+  if(takeaways){takeaways.innerHTML=`
+    <p class="section-number">19 · Key takeaways</p>
+    <h2>The strongest VKS designs separate infrastructure boundaries, cluster lifecycle and workload ownership.</h2>
+    <ol>
+      <li><strong>Supervisor</strong> exposes vSphere infrastructure and platform services through Kubernetes-style APIs.</li>
+      <li><strong>A vSphere Namespace</strong> is an infrastructure and governance boundary, not a Kubernetes namespace.</li>
+      <li><strong>A VKS cluster</strong> is a conformant Kubernetes runtime created inside a vSphere Namespace.</li>
+      <li><strong>Kubernetes namespaces</strong> organise workloads inside the VKS cluster.</li>
+      <li><strong>KubernetesRelease</strong> represents the supported Kubernetes releases available to compatible VKS clusters.</li>
+      <li><strong>Cluster API</strong> provides the declarative lifecycle model used to provision, scale and upgrade VKS clusters.</li>
+      <li><strong>ClusterClass</strong> standardises approved VKS cluster topology and configuration.</li>
+      <li><strong>VM Class</strong> defines approved CPU and memory configurations for cluster nodes and virtual machines.</li>
+      <li><strong>Storage Policies</strong> expose approved storage capabilities that Kubernetes workloads consume through StorageClasses.</li>
+      <li><strong>Spherelet and CRX</strong> support Supervisor-native vSphere Pods and are separate from the Kubernetes runtime inside VKS worker nodes.</li>
+    </ol>`;}
+
+  const challenge=document.querySelector("#challenge");
+  if(challenge){challenge.classList.add("dark-section");challenge.innerHTML=`
+    <p class="section-number">18 · Architecture challenge</p>
+    <h2>Design a VKS platform for financial services teams.</h2>
+    <p>You are helping a financial services organisation design a governed private Kubernetes platform for three groups: Payments, Risk Analytics and Customer Reporting.</p>
+    <div class="challenge-brief"><h3>The platform scope</h3><ul><li><strong>Payments</strong> runs customer-facing APIs that require strong availability and controlled network exposure.</li><li><strong>Risk Analytics</strong> runs compute-intensive workloads with different scaling and storage requirements.</li><li><strong>Customer Reporting</strong> runs internal reporting services and may require selected VM-based database workloads.</li></ul><h3>Requirements</h3><ul><li>Each group needs a clear resource, access and policy boundary.</li><li>Only approved Kubernetes releases, VM Classes and Storage Policies may be consumed.</li><li>Cluster designs must be repeatable rather than created differently by every team.</li><li>Platform resilience must account for infrastructure failure domains.</li><li>VM-based workloads may be used only where Kubernetes is not the appropriate runtime.</li><li>Backup and restore responsibilities must be defined before production onboarding.</li><li>Platform-team and application-team responsibilities must remain explicit.</li></ul></div>
+    <div class="traffic-path">VCF infrastructure → Supervisor → vSphere Namespace → VKS cluster → Kubernetes namespaces → application workloads</div>
+    <p><strong>Try it yourself first.</strong> Sketch the platform and answer these questions before opening the reference design.</p>
+    <ol class="challenge-questions"><li>Would you create one vSphere Namespace per team, environment or regulatory boundary?</li><li>How many VKS clusters would you deploy, and which workloads could safely share a cluster?</li><li>Which VM Classes and Storage Policies should be exposed to each team?</li><li>How would ClusterClass be used to standardise approved cluster patterns?</li><li>How would supported Kubernetes releases be governed for creation and upgrades?</li><li>Which workloads, if any, justify VM Service rather than VKS?</li><li>How would you design for infrastructure-zone failure?</li><li>What backup and restore scope should Velero cover?</li><li>Which responsibilities belong to the platform team and which belong to application teams?</li><li>What evidence would you require before approving the design for production?</li></ol>
+    <details class="solution-reveal"><summary>Reveal one reasonable design</summary><div class="solution-content"><p><strong>This is not the only valid architecture.</strong> The objective is to answer each design question with a defensible production pattern and clear trade-offs.</p><div class="solution-grid"><div class="solution-card"><strong>1. Namespace model</strong>Create separate vSphere Namespaces by team and environment: payments-prod, payments-nonprod, risk-prod, risk-nonprod, reporting-prod and reporting-nonprod. Add a separate regulatory boundary only when compliance, access or data-residency requirements materially differ.</div><div class="solution-card"><strong>2. VKS cluster model</strong>Use one dedicated production VKS cluster for each team. Payments must remain isolated for availability, network control and independent upgrades. Risk Analytics should remain separate to avoid noisy-neighbour pressure. Customer Reporting can use a smaller dedicated production cluster. Non-production may be shared only when governance and blast-radius requirements align.</div><div class="solution-card"><strong>3. VM Classes and Storage Policies</strong>Payments receives medium and large node classes plus resilient production storage. Risk receives large, extra-large or high-memory classes plus high-throughput storage. Reporting receives small and medium classes plus standard production storage and a VM-oriented storage policy only for an approved VM Service database.</div><div class="solution-card"><strong>4. ClusterClass patterns</strong>Publish three approved patterns: Payments, Analytics and Reporting. Each pattern defines a three-node control plane, approved worker topology, VM Classes, storage, networking and required add-ons. Teams select an approved pattern and supply only permitted variables rather than authoring unrestricted ClusterClass definitions.</div><div class="solution-card"><strong>5. Kubernetes release governance</strong>Maintain an approved release catalogue based on installed VKS support, ClusterClass compatibility, CNI, CSI and add-on validation, security approval and non-production testing. Production may use only the current approved release or the immediately previous approved release. Payments upgrades require an explicit maintenance and rollback plan.</div><div class="solution-card"><strong>6. VM Service use</strong>Use VM Service only for a legacy reporting database when vendor support, guest-OS operations or technical constraints make Kubernetes unsuitable. Payments APIs, Risk jobs and reporting application services should remain on VKS.</div><div class="solution-card"><strong>7. Zone-failure design</strong>Use a supported three-zone architecture where available. Distribute Supervisor and VKS control-plane placement, worker nodes and application replicas across failure domains. Apply topology spread or anti-affinity and use storage policies that meet the required availability model. Three zones do not create application HA unless the workload is also distributed.</div><div class="solution-card"><strong>8. Backup and restore</strong>Use Velero for Kubernetes resources and supported persistent data, combined with storage snapshots, database-native backup for transactional databases, VM backup for VM Service workloads and off-platform retention. Every team must complete a restore test before production approval.</div><div class="solution-card"><strong>9. Responsibility model</strong>The platform team owns Supervisor, VKS lifecycle, approved releases, ClusterClass, vSphere Namespaces, VM Classes, Storage Policies, infrastructure networking, load-balancer integration, platform observability and capacity. Application teams own workload manifests, Kubernetes namespaces, Services, ingress, probes, requests and limits, secrets, NetworkPolicies, scaling and application recovery validation.</div><div class="solution-card"><strong>10. Production evidence</strong>Require an approved architecture diagram, boundary justification, ClusterClass and release selection, capacity model, storage mapping, zone-failure test, replica-distribution evidence, NetworkPolicy validation, security review, backup configuration, successful restore test, non-production upgrade test, monitoring coverage, documented RTO and RPO, named owners and rollback procedures.</div></div><div class="story-flow"><strong>Recommended production hierarchy</strong><ol><li><strong>VCF infrastructure</strong> provides compute, network and storage.</li><li><strong>Three-zone Supervisor</strong> provides the governed platform layer.</li><li><strong>Separate vSphere Namespaces</strong> isolate teams and environments.</li><li><strong>Dedicated production VKS clusters</strong> provide lifecycle and failure isolation.</li><li><strong>Approved ClusterClass and Kubernetes releases</strong> standardise cluster creation and upgrades.</li><li><strong>Team-specific VM Classes and Storage Policies</strong> expose only approved consumption choices.</li><li><strong>Kubernetes namespaces and workloads</strong> remain under application-team ownership.</li></ol></div><p><strong>Customer Reporting exception:</strong> an approved legacy database may run through VM Service in the reporting vSphere Namespace, while its application services continue to run on VKS.</p><p><strong>Design principle:</strong> use separate boundaries wherever security, lifecycle, failure isolation, capacity or compliance requirements differ.</p></div></details>`;}
+
+  const style=document.createElement("style");
+  style.textContent=`
+    .article-hero{align-items:center;display:grid;gap:64px;grid-template-columns:minmax(0,1fr) minmax(520px,680px);padding:72px max(5vw,28px)}
+    .article-hero-copy{max-width:760px}
+    .visual-showcase{box-sizing:border-box;margin:34px auto;max-width:680px;width:100%}
+    .article-hero .visual-showcase{justify-self:end;margin:0;max-width:680px}
+    .visual-showcase img{display:block;height:auto;max-height:560px;max-width:100%;object-fit:contain;width:100%}
+    .dark-section p,.dark-section .dark-intro,.dark-section .learning-note,.dark-section .quick-map-table th,.dark-section .quick-map-table td{color:#b8c7df!important;opacity:1!important}
+    .dark-section h3,.dark-section .learning-note strong,.dark-section .quick-map-table th:first-child,.dark-section .quick-map-table td:first-child,.dark-section .quick-map-table td:nth-child(2){color:#fff!important;opacity:1!important}
+    .challenge-brief{background:#0c1a31;border:1px solid rgba(132,174,225,.3);border-radius:20px;margin:26px 0;padding:24px}
+    .challenge-brief h3{color:#fff;margin:0 0 12px}.challenge-brief h3+ul{margin-top:0}.challenge-brief p,.challenge-brief li{color:#dbe8ff!important}
+    .traffic-path{background:rgba(72,124,255,.12);border:1px solid rgba(112,157,255,.35);border-radius:14px;color:#fff;font-weight:700;line-height:1.7;margin:20px 0;padding:16px;text-align:center}
+    .challenge-questions{counter-reset:challenge;margin:26px 0;padding:0}.challenge-questions li{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.12);border-radius:14px;color:#dbe8ff!important;list-style:none;margin:10px 0;padding:14px 16px 14px 52px;position:relative}.challenge-questions li::before{align-items:center;background:#2f6fed;border-radius:50%;color:#fff;content:counter(challenge);counter-increment:challenge;display:flex;font-size:.8rem;font-weight:800;height:28px;justify-content:center;left:14px;position:absolute;top:13px;width:28px}
+    .solution-reveal{background:#fff;border:1px solid #cddbf1;border-radius:18px;color:#25344b;margin-top:28px;overflow:hidden}.solution-reveal summary{align-items:center;background:#eef4ff;color:#10213a;cursor:pointer;display:flex;font-weight:800;justify-content:space-between;list-style:none;padding:18px 20px}.solution-reveal summary::-webkit-details-marker{display:none}.solution-reveal summary::after{content:"+";font-size:1.5rem;line-height:1}.solution-reveal[open] summary::after{content:"−"}.solution-content{padding:20px}.solution-content p,.solution-content li{color:#344256!important}.solution-grid{display:grid;gap:12px;grid-template-columns:repeat(2,minmax(0,1fr));margin:18px 0}.solution-card{background:#f7f9fd;border:1px solid #dce5f2;border-radius:14px;color:#344256;padding:16px}.solution-card strong{color:#10213a;display:block;margin-bottom:6px}.story-flow{background:#081225;border:1px solid rgba(132,174,225,.24);border-radius:20px;color:#dbe8ff;margin:30px 0;padding:24px}.story-flow li{color:#dbe8ff!important;margin:12px 0}.story-flow strong{color:#fff}
+    @media(max-width:1100px){.article-hero{gap:36px;grid-template-columns:minmax(0,1fr) minmax(420px,560px)}.article-hero .visual-showcase{max-width:560px}}
+    @media(max-width:900px){.article-hero{display:block;padding:58px max(6vw,24px)}.article-hero-copy{max-width:820px}.article-hero .visual-showcase{margin:34px auto 0;max-width:680px}}
+    @media(max-width:768px){.article-hero{padding:48px 20px 54px}.visual-showcase{border-radius:16px;margin:22px auto;max-width:100%;padding:10px}.visual-showcase img{border-radius:12px;max-height:none}.solution-grid{grid-template-columns:1fr}.challenge-brief{padding:18px}}
+  `;
+  document.head.appendChild(style);
+
+  window.addEventListener("DOMContentLoaded",()=>{
+    const serviceCell=Array.from(document.querySelectorAll("#mapping .quick-map-table tbody tr")).find(row=>row.cells[0]?.textContent.trim()==="Supervisor Services")?.cells[2];
+    if(serviceCell)serviceCell.textContent="VKS, Velero, Harbor, Contour, Argo CD and other enabled services.";
+    const zones=document.querySelector("#zones");
+    if(zones){const paragraphs=zones.querySelectorAll("p:not(.section-number)");if(paragraphs[0])paragraphs[0].textContent="A vSphere Zone represents an infrastructure failure domain. A Supervisor may use one zone or a supported three-zone topology to improve control-plane and workload resilience.";if(paragraphs[1])paragraphs[1].textContent="Think of vSphere Zones as separate office blocks or building sections: Block A, Block B and Block C. If one block has a problem, workloads designed across the remaining failure domains can continue, depending on application placement, storage policy and platform design.";}
+    const constructs=document.querySelector("#constructs");
+    if(constructs){const headings=Array.from(constructs.querySelectorAll("h3"));const releaseHeading=headings.find(item=>item.textContent.trim().startsWith("VKr:"));if(releaseHeading){releaseHeading.textContent="KubernetesRelease: the supported Kubernetes release";const releaseParagraph=releaseHeading.nextElementSibling;if(releaseParagraph)releaseParagraph.textContent="KubernetesRelease represents a Kubernetes release made available through the installed VKS service. The compatible ClusterClass and VKS service version determine which releases a cluster can consume. Older TKR or VKr terminology may still appear in legacy material, but KubernetesRelease is the clearer current term for VCF 9.1-aligned guidance.";}}
+    document.querySelectorAll("#mapping .quick-map-table tbody tr").forEach(row=>{if(row.cells[0]?.textContent.trim()==="VKr"){row.cells[0].textContent="KubernetesRelease";row.cells[1].textContent="Approved operating standard";row.cells[2].textContent="Supported Kubernetes release made available through VKS.";}});
+    const q3=document.querySelector('#knowledge .knowledge-card[data-question="q3"]');
+    if(q3){const question=q3.querySelector("p");const options=q3.querySelectorAll(".knowledge-options button");const review=q3.querySelector(".answer-review");if(question)question.textContent="What is the purpose of a KubernetesRelease in VKS?";if(options[0])options[0].textContent="A. It represents a Kubernetes release made available by Kubernetes Service for compatible VKS clusters";if(options[1])options[1].textContent="B. It selects the vCenter inventory folder for cluster nodes";if(options[2])options[2].textContent="C. It chooses the load-balancer Service Engine";if(options[3])options[3].textContent="D. It configures the cluster DNS server";if(review)review.innerHTML='<strong>Correct answer: A.</strong><ul><li><strong>Why A is correct:</strong> KubernetesRelease represents a Kubernetes release made available through the installed VKS service. ClusterClass and VKS compatibility determine whether a cluster can consume it.</li><li><strong>Why B is wrong:</strong> Inventory placement is a vSphere organisation concern, not the role of KubernetesRelease.</li><li><strong>Why C is wrong:</strong> Load-balancer implementation is a networking concern, not Kubernetes release selection.</li><li><strong>Why D is wrong:</strong> DNS is cluster and network configuration; KubernetesRelease represents the supported Kubernetes software release.</li></ul>';}
   });
-}
-
-const quiz = document.querySelector("#sample-quiz");
-const quizResult = document.querySelector("#quiz-result");
-
-if (quiz && quizResult) {
-  quiz.addEventListener("submit", (event) => {
-    event.preventDefault();
-    const answer = new FormData(quiz).get("answer");
-
-    quizResult.hidden = false;
-    quizResult.classList.remove("correct", "incorrect");
-
-    if (!answer) {
-      quizResult.classList.add("incorrect");
-      quizResult.textContent =
-        "Choose an answer before checking your reasoning.";
-      return;
-    }
-
-    if (answer === "b") {
-      quizResult.classList.add("correct");
-      quizResult.innerHTML =
-        "<strong>Correct.</strong> VKS preserves the Kubernetes API and workload model while integrating lifecycle, policy, networking, and infrastructure services with VCF.";
-      localStorage.setItem("vks-field-guide-sample-quiz", "complete");
-      return;
-    }
-
-    quizResult.classList.add("incorrect");
-    quizResult.innerHTML =
-      "<strong>Not quite.</strong> Start from what remains familiar: Kubernetes APIs and workloads. Then explain the lifecycle and infrastructure responsibilities integrated through VCF.";
-  });
-
-  if (localStorage.getItem("vks-field-guide-sample-quiz") === "complete") {
-    quizResult.hidden = false;
-    quizResult.classList.add("correct");
-    quizResult.textContent =
-      "You previously completed this knowledge check. Your progress is stored only in this browser.";
-  }
-}
-
-if (location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")) {
-  document.title =
-    "Kubernetes Foundations Through a Shopping Mall Mental Model | Sourabh Shrivastav";
-
-  const backLink = document.querySelector(".article-hero .back-link");
-  if (backLink) {
-    backLink.href = "../index.html#loops";
-    backLink.textContent = "← Learning Loops";
-  }
-
-  const moduleBadge = document.querySelector(
-    ".article-hero .article-kicker span:nth-child(2)"
-  );
-  if (moduleBadge) {
-    moduleBadge.textContent = "Module 02";
-  }
-
-  const tocLabel = document.querySelector(".article-toc > span");
-  if (tocLabel) {
-    tocLabel.textContent = "In this blog";
-  }
 }
