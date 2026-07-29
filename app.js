@@ -1,40 +1,62 @@
 const showModulesButton=document.querySelector(".show-modules");
 const additionalModules=document.querySelector(".curriculum-drawer");
 if(showModulesButton&&additionalModules){showModulesButton.addEventListener("click",()=>{const isExpanded=showModulesButton.getAttribute("aria-expanded")==="true";showModulesButton.setAttribute("aria-expanded",String(!isExpanded));additionalModules.hidden=isExpanded;showModulesButton.textContent=isExpanded?"View published module":"Close module list";});}
+
 const quiz=document.querySelector("#sample-quiz");
 const quizResult=document.querySelector("#quiz-result");
 if(quiz&&quizResult){quiz.addEventListener("submit",event=>{event.preventDefault();const answer=new FormData(quiz).get("answer");quizResult.hidden=false;quizResult.classList.remove("correct","incorrect");if(!answer){quizResult.classList.add("incorrect");quizResult.textContent="Choose an answer before checking your reasoning.";return;}if(answer==="b"){quizResult.classList.add("correct");quizResult.innerHTML="<strong>Correct.</strong> VKS preserves the Kubernetes API and workload model while integrating lifecycle, policy, networking, and infrastructure services with VCF.";localStorage.setItem("vks-field-guide-sample-quiz","complete");return;}quizResult.classList.add("incorrect");quizResult.innerHTML="<strong>Not quite.</strong> Start from what remains familiar: Kubernetes APIs and workloads. Then explain the lifecycle and infrastructure responsibilities integrated through VCF.";});if(localStorage.getItem("vks-field-guide-sample-quiz")==="complete"){quizResult.hidden=false;quizResult.classList.add("correct");quizResult.textContent="You previously completed this knowledge check. Your progress is stored only in this browser.";}}
+
 if(location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")){document.title="Kubernetes Foundations Through a Shopping Mall Mental Model | Sourabh Shrivastav";const backLink=document.querySelector(".article-hero .back-link");if(backLink){backLink.href="../index.html#loops";backLink.textContent="← Learning Loops";}const moduleBadge=document.querySelector(".article-hero .article-kicker span:nth-child(2)");if(moduleBadge)moduleBadge.textContent="Module 02";const tocLabel=document.querySelector(".article-toc > span");if(tocLabel)tocLabel.textContent="In this blog";}
+
 if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
   const articleMeta=document.querySelector(".article-hero .article-meta");
   if(articleMeta)articleMeta.remove();
+
   const namespaceHeading=document.querySelector("#namespace h2");
   if(namespaceHeading)namespaceHeading.textContent="A vSphere Namespace is the infrastructure and governance boundary.";
 
   const toc=document.querySelector(".article-toc");
   if(toc){
-    const tocLabels={why:"Overview","mental-model":"Analogy",mapping:"Mapping",supervisor:"Supervisor",namespace:"Namespace","namespace-vs-k8s":"Namespace Types",zones:"Zones","vks-cluster":"VKS Cluster",constructs:"Constructs",services:"Services",runtime:"Runtime","technical-view":"Architecture",flow:"Flow",yaml:"YAML",comparison:"Comparison",misunderstandings:"Misunderstandings",knowledge:"Knowledge Check",challenge:"Architecture Challenge",takeaways:"Takeaways"};
+    const labels={why:"Overview","mental-model":"Analogy",mapping:"Mapping",supervisor:"Supervisor",namespace:"Namespace","namespace-vs-k8s":"Namespace Types",zones:"Zones","vks-cluster":"VKS Cluster",constructs:"Constructs",services:"Services",runtime:"Runtime","technical-view":"Architecture",flow:"Flow",yaml:"YAML",comparison:"Comparison",misunderstandings:"Misunderstandings",knowledge:"Knowledge Check",challenge:"Architecture Challenge",takeaways:"Takeaways"};
     toc.innerHTML="<span>In this blog</span>";
-    document.querySelectorAll(".article-content > section[id]").forEach(section=>{const label=tocLabels[section.id];if(!label)return;const link=document.createElement("a");link.href=`#${section.id}`;link.textContent=label;toc.appendChild(link);});
+    document.querySelectorAll(".article-content > section[id]").forEach(section=>{const label=labels[section.id];if(!label)return;const link=document.createElement("a");link.href=`#${section.id}`;link.textContent=label;toc.appendChild(link);});
   }
 
   const servicesParagraph=document.querySelector("#services > p:not(.section-number)");
   if(servicesParagraph)servicesParagraph.textContent="Supervisor Services are services made available through the Supervisor. Examples include VKS, Velero, Harbor, Contour and Argo CD. Not every environment will enable every service. A platform team should enable only what the operating model needs.";
 
   const runtime=document.querySelector("#runtime");
-  if(runtime){
-    runtime.innerHTML=`
-      <p class="section-number">11 · vSphere Pods, Spherelet and CRX</p>
-      <h2>Supervisor-native Pods are different from Pods inside a VKS cluster.</h2>
-      <p class="dark-intro">A <strong>vSphere Pod</strong> runs directly on Supervisor-backed ESX infrastructure using a lightweight, VM-isolated runtime. A Kubernetes application Pod normally runs inside a VKS workload cluster on its worker nodes.</p>
-      <p>In VCF 9.1, vSphere Pods also underpin <strong>Container Service</strong>, which allows individual container applications to run without requiring users to deploy and operate a complete VKS cluster.</p>
-      <h3>vSphere Pod</h3>
-      <p>A vSphere Pod is a Kubernetes Pod implemented through a lightweight VM-based construct. It can run one or more Linux containers while providing a separate kernel boundary through hardware virtualization. This offers stronger workload isolation than the conventional shared-host-kernel container model.</p>
-      <h3>Spherelet</h3>
-      <p>Spherelet is the ESX-resident agent that performs a kubelet-like role for Supervisor. It allows the Supervisor control plane to communicate with participating ESX hosts, represent them as Kubernetes nodes and manage vSphere Pod workloads scheduled on those hosts.</p>
-      <h3>CRX</h3>
-      <p>CRX stands for <strong>Container Runtime Executive</strong>. It is the lightweight runtime technology used by vSphere Pods. CRX uses hardware virtualization to run containers within a fast-starting, VM-isolated execution environment.</p>`;
-  }
+  if(runtime){runtime.innerHTML=`
+    <p class="section-number">11 · vSphere Pods, Spherelet and CRX</p>
+    <h2>Supervisor-native Pods are different from Pods inside a VKS cluster.</h2>
+    <p class="dark-intro">A <strong>vSphere Pod</strong> runs directly on Supervisor-backed ESX infrastructure using a lightweight, VM-isolated runtime. A Kubernetes application Pod normally runs inside a VKS workload cluster on its worker nodes.</p>
+    <p>In VCF 9.1, vSphere Pods also underpin <strong>Container Service</strong>, which allows individual container applications to run without requiring users to deploy and operate a complete VKS cluster.</p>
+    <h3>vSphere Pod</h3>
+    <p>A vSphere Pod is a Kubernetes Pod implemented through a lightweight VM-based construct. It can run one or more Linux containers while providing a separate kernel boundary through hardware virtualization. This offers stronger workload isolation than the conventional shared-host-kernel container model.</p>
+    <h3>Spherelet</h3>
+    <p>Spherelet is the ESX-resident agent that performs a kubelet-like role for Supervisor. It allows the Supervisor control plane to communicate with participating ESX hosts, represent them as Kubernetes nodes and manage vSphere Pod workloads scheduled on those hosts.</p>
+    <h3>CRX</h3>
+    <p>CRX stands for <strong>Container Runtime Executive</strong>. It is the lightweight runtime technology used by vSphere Pods. CRX uses hardware virtualization to run containers within a fast-starting, VM-isolated execution environment.</p>`;}
+
+  const flow=document.querySelector("#flow");
+  if(flow){flow.innerHTML=`
+    <p class="section-number">13 · End-to-end VKS flow</p>
+    <h2>From governed platform boundary to a ready Kubernetes cluster.</h2>
+    <div class="architecture-list">
+      <ol>
+        <li>The platform team enables and configures <strong>Supervisor</strong>.</li>
+        <li>The platform team enables <strong>VKS on Supervisor</strong>.</li>
+        <li>The platform team creates <strong>vSphere Namespaces</strong>.</li>
+        <li>The platform team assigns permissions, quotas, approved VM Classes, Storage Policies and other namespace capabilities.</li>
+        <li>An authorised user submits a declarative <strong>VKS cluster request</strong> inside a vSphere Namespace.</li>
+        <li>The request references an approved <strong>ClusterClass</strong> and defines the desired Kubernetes release, control-plane topology, worker node pools, networking and storage configuration.</li>
+        <li><strong>VKS and Cluster API controllers</strong> reconcile the declared state.</li>
+        <li>The vSphere infrastructure provider provisions the required control-plane and worker-node virtual machines.</li>
+        <li>Kubernetes is bootstrapped, worker nodes join, and the required networking, storage and platform integrations become ready.</li>
+        <li>The VKS cluster reports ready and becomes accessible to authorised users.</li>
+        <li>Application teams deploy standard Kubernetes workloads into the cluster.</li>
+      </ol>
+    </div>`;}
 
   const challenge=document.querySelector("#challenge");
   if(challenge){challenge.classList.add("dark-section");challenge.innerHTML=`
