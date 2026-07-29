@@ -25,7 +25,7 @@
       .coming-soon-tag { color: var(--blue); display: inline-block; font-size: .75rem; font-weight: 800; letter-spacing: .08em; margin-top: 16px; text-transform: uppercase; }
       @media (max-width: 900px) { .clarity-strip, .follow-grid, .follow-grid.two-card-grid { grid-template-columns: 1fr; } }
     </style>
-    <script src="app.js" defer></script>
+    <script src="app.js?v=20260729-1" defer></script>
   </head>
   <body>
     <header class="site-header">
@@ -93,23 +93,24 @@
             <span class="orbit-label label-learn">Learn</span><span class="orbit-label label-test">Test</span><span class="orbit-label label-apply">Apply</span>
           </div>
           <div class="loop-content">
-            <div class="loop-meta"><span class="status-badge">Live modules</span><span>2 published modules</span><span>Beginner → Architect</span></div>
+            <div class="loop-meta"><span class="status-badge">Live modules</span><span>3 published modules</span><span>Beginner → Architect</span></div>
             <p class="eyebrow">Featured Learning Loop</p>
             <h3>VMware vSphere Kubernetes Service (VKS)</h3>
             <p>Learning Loops make complex platform concepts easier to understand through mental models, plain language, and practical architecture context.</p>
             <p>The rhythm is simple: learn the concept, test your understanding without pressure or grading, then repeat by applying the idea like an architect. Each knowledge check explains the options, so the goal is not to pass a test. It is to strengthen your thinking and design better solutions.</p>
             <div class="loop-actions">
               <button class="button show-modules" type="button" aria-expanded="false">View published modules</button>
-              <a class="text-link" href="blogs/002-kubernetes-foundations.html">Read Blog 002 <span>→</span></a>
+              <a class="text-link" href="blogs/003-vcf-and-vks-core-concepts.html">Read Blog 003 <span>→</span></a>
             </div>
           </div>
         </article>
 
         <div class="curriculum-drawer" hidden>
-          <div class="curriculum-heading"><div><p class="eyebrow">VKS Learning Loop</p><h3>Published modules</h3></div><span>Start with where VKS fits, then build the Kubernetes foundation needed for the rest of the series.</span></div>
+          <div class="curriculum-heading"><div><p class="eyebrow">VKS Learning Loop</p><h3>Published modules</h3></div><span>Start with where VKS fits, build the Kubernetes foundation, then connect both worlds through VCF and Supervisor.</span></div>
           <ol class="curriculum-grid published-modules">
             <li><a href="blogs/001-what-is-vks.html"><span>01</span><strong>What Is VKS?</strong><small>Where VMware vSphere Kubernetes Service fits in the Kubernetes landscape and how it closes the enterprise operating gap.</small></a></li>
             <li><a href="blogs/002-kubernetes-foundations.html"><span>02</span><strong>Kubernetes Foundations</strong><small>Understand clusters, nodes, Namespaces, Pods, Services, storage, networking, probes, and resource controls through a shopping-mall mental model.</small></a></li>
+            <li><a href="blogs/003-vcf-and-vks-core-concepts.html"><span>03</span><strong>VCF and VKS Core Concepts</strong><small>Connect Supervisor, vSphere Namespaces, VKS clusters, Cluster API, ClusterClass, VM Classes, Storage Policies and Supervisor-native runtime constructs.</small></a></li>
           </ol>
         </div>
       </section>
@@ -144,9 +145,9 @@
 
       <section class="cta-section">
         <p class="eyebrow">Continue the learning loop</p>
-        <h2>Build the Kubernetes foundation before going deeper into VKS.</h2>
-        <p>Use the shopping-mall mental model to connect the core Kubernetes objects into one operating story.</p>
-        <a class="button button-light" href="blogs/002-kubernetes-foundations.html">Read Blog 002</a>
+        <h2>Connect Kubernetes foundations to VCF and Supervisor.</h2>
+        <p>See how Supervisor, vSphere Namespaces and VKS clusters fit together as one governed platform model.</p>
+        <a class="button button-light" href="blogs/003-vcf-and-vks-core-concepts.html">Read Blog 003</a>
       </section>
     </main>
 
