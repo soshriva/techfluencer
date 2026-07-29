@@ -58,6 +58,23 @@ if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
       </ol>
     </div>`;}
 
+  const takeaways=document.querySelector("#takeaways");
+  if(takeaways){takeaways.innerHTML=`
+    <p class="section-number">19 · Key takeaways</p>
+    <h2>The strongest VKS designs separate infrastructure boundaries, cluster lifecycle and workload ownership.</h2>
+    <ol>
+      <li><strong>Supervisor</strong> exposes vSphere infrastructure and platform services through Kubernetes-style APIs.</li>
+      <li><strong>A vSphere Namespace</strong> is an infrastructure and governance boundary, not a Kubernetes namespace.</li>
+      <li><strong>A VKS cluster</strong> is a conformant Kubernetes runtime created inside a vSphere Namespace.</li>
+      <li><strong>Kubernetes namespaces</strong> organise workloads inside the VKS cluster.</li>
+      <li><strong>KubernetesRelease</strong> represents the supported Kubernetes releases available to compatible VKS clusters.</li>
+      <li><strong>Cluster API</strong> provides the declarative lifecycle model used to provision, scale and upgrade VKS clusters.</li>
+      <li><strong>ClusterClass</strong> standardises approved VKS cluster topology and configuration.</li>
+      <li><strong>VM Class</strong> defines approved CPU and memory configurations for cluster nodes and virtual machines.</li>
+      <li><strong>Storage Policies</strong> expose approved storage capabilities that Kubernetes workloads consume through StorageClasses.</li>
+      <li><strong>Spherelet and CRX</strong> support Supervisor-native vSphere Pods and are separate from the Kubernetes runtime inside VKS worker nodes.</li>
+    </ol>`;}
+
   const challenge=document.querySelector("#challenge");
   if(challenge){challenge.classList.add("dark-section");challenge.innerHTML=`
     <p class="section-number">18 · Architecture challenge</p>
