@@ -8,6 +8,8 @@ if(location.pathname.endsWith("002-kubernetes-foundations-reviewed.html")){docum
 if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
   const articleMeta=document.querySelector(".article-hero .article-meta");
   if(articleMeta)articleMeta.remove();
+  const namespaceHeading=document.querySelector("#namespace h2");
+  if(namespaceHeading)namespaceHeading.textContent="A vSphere Namespace is the infrastructure and governance boundary.";
 
   const toc=document.querySelector(".article-toc");
   if(toc){
