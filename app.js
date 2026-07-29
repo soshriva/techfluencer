@@ -91,6 +91,8 @@ if(location.pathname.endsWith("003-vcf-and-vks-core-concepts.html")){
     .visual-showcase{box-sizing:border-box;margin:34px auto;max-width:680px;width:100%}
     .article-hero .visual-showcase{justify-self:end;margin:0;max-width:680px}
     .visual-showcase img{display:block;height:auto;max-height:560px;max-width:100%;object-fit:contain;width:100%}
+    #technical-view .visual-showcase{max-width:1040px}
+    #technical-view .visual-showcase img{max-height:none}
     .dark-section p,.dark-section .dark-intro,.dark-section .learning-note,.dark-section .quick-map-table th,.dark-section .quick-map-table td{color:#b8c7df!important;opacity:1!important}
     .dark-section h3,.dark-section .learning-note strong,.dark-section .quick-map-table th:first-child,.dark-section .quick-map-table td:first-child,.dark-section .quick-map-table td:nth-child(2){color:#fff!important;opacity:1!important}
     .challenge-brief{background:#0c1a31;border:1px solid rgba(132,174,225,.3);border-radius:20px;margin:26px 0;padding:24px}
