@@ -52,3 +52,65 @@ if (quiz && quizResult) {
       "You previously completed this knowledge check. Your progress is stored only in this browser.";
   }
 }
+
+if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
+  const bridge = document.querySelector("#bridge");
+  if (bridge) {
+    bridge.innerHTML = `
+      <p class="section-number">01 · Bridge from Blog 3</p>
+      <h2>From understanding the hierarchy to designing its boundaries.</h2>
+      <p class="section-lead">In Blog 3, we used a corporate office building to explain the VCF and VKS hierarchy.</p>
+      <p><strong>VCF</strong> was the building foundation, <strong>Supervisor</strong> was the enabled floor, and each <strong>vSphere Namespace</strong> was a governed wing with its own access, limits, approved resources and services. Inside a wing, a <strong>VKS cluster</strong> acted as the dedicated project area, while <strong>Kubernetes namespaces</strong> organised individual work zones within that cluster.</p>
+      <div class="bridge"><strong>This article continues from that model.</strong>We now look more closely at the two concepts that determine how the platform is organised and where workloads may run: <strong>vSphere Namespaces</strong> and <strong>vSphere Zones</strong>.</div>
+      <p>The design question is no longer only “What is a vSphere Namespace?” It is whether Payments, Fraud Analytics and Reporting should share one governed boundary, what each boundary should expose, and which infrastructure failure domains its workloads may use.</p>`;
+  }
+
+  const zoneHeading = document.querySelector("#zones h2");
+  if (zoneHeading) {
+    zoneHeading.textContent =
+      "A vSphere Zone represents an infrastructure placement and failure domain.";
+  }
+
+  const zoneTechnicalMeaning = document.querySelector("#zones .plain-callout");
+  if (zoneTechnicalMeaning) {
+    zoneTechnicalMeaning.innerHTML =
+      "<strong>Technical meaning:</strong> A vSphere Zone is an infrastructure domain used by Supervisor for placement and failure-domain design. In VCF 9.1, a zone is associated with one or more vSphere clusters; do not assume that every zone is permanently limited to exactly one cluster.";
+  }
+
+  const mappingParagraphs = document.querySelectorAll(
+    "#mapping > p:not(.section-number)"
+  );
+  if (mappingParagraphs[0]) {
+    mappingParagraphs[0].textContent =
+      "A vSphere Namespace can be mapped to as many as three vSphere Zones. A namespace mapped to one zone is restricted to that eligible infrastructure domain; mapping it to multiple zones makes those domains available for placement.";
+  }
+
+  const mappingHeading = document.querySelector("#mapping h2");
+  if (mappingHeading) {
+    mappingHeading.textContent =
+      "Zone mapping defines eligible placement; workload design determines resilience.";
+  }
+
+  const mappingSection = document.querySelector("#mapping");
+  if (mappingSection && !mappingSection.querySelector(".zone-validation-note")) {
+    const note = document.createElement("div");
+    note.className = "plain-callout zone-validation-note";
+    note.innerHTML =
+      "<strong>Important:</strong> In a three-zone Supervisor, namespace capacity is represented across the underlying zones. The VKS cluster topology, application replicas, topology-spread or anti-affinity rules, and storage policy must still be designed for failure-domain resilience. Zone mapping alone does not make an application highly available.";
+    const figure = mappingSection.querySelector("figure");
+    mappingSection.insertBefore(note, figure || null);
+  }
+
+  const entitlementIntro = document.querySelector("#entitlement > p:not(.section-number)");
+  if (entitlementIntro) {
+    entitlementIntro.textContent =
+      "A vSphere Namespace is a governed resource boundary where VKS clusters, vSphere Pods, VM Service virtual machines and enabled Supervisor Services can run. When first created, it can consume Supervisor resources without explicit namespace limits until administrators configure quotas and approved capabilities.";
+  }
+
+  const validationStyle = document.createElement("style");
+  validationStyle.textContent = `
+    #bridge .bridge strong { display: inline; margin-right: .3rem; }
+    .zone-validation-note { margin-top: 22px; }
+  `;
+  document.head.appendChild(validationStyle);
+}
