@@ -108,7 +108,6 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
         <defs>
           <linearGradient id="boundary-bg" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#071427"/><stop offset="1" stop-color="#0a1730"/></linearGradient>
           <linearGradient id="boundary-question" x1="0" x2="1"><stop offset="0" stop-color="#123255"/><stop offset="1" stop-color="#18375e"/></linearGradient>
-          <filter id="boundary-glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
         </defs>
         <rect x="15" y="15" width="890" height="470" rx="28" fill="url(#boundary-bg)" stroke="#244b73" stroke-width="1.5"/>
         <text x="55" y="64" fill="#65e7ff" font-size="18" font-weight="800" letter-spacing="1.2">SHOULD THESE WORKLOADS SHARE ONE WING?</text>
@@ -117,15 +116,17 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
         <text x="112" y="153" text-anchor="middle" fill="#65e7ff" font-size="24" font-weight="800">?</text>
         <text x="154" y="132" fill="#fff" font-size="21" font-weight="800"><tspan x="154">Same owners, access, quota, storage, network,</tspan><tspan x="154" dy="28">lifecycle expectations and risk boundary?</tspan></text>
         <text x="154" y="183" fill="#bed0e8" font-size="15">Evaluate the operating model—not only the organisation chart.</text>
-        <path d="M460 198V238" stroke="#65e7ff" stroke-width="4" stroke-linecap="round"/><circle cx="460" cy="238" r="6" fill="#65e7ff" filter="url(#boundary-glow)"/><path d="M460 238L272 285" stroke="#42e3b4" stroke-width="4" stroke-linecap="round"/><path d="M460 238L648 285" stroke="#ffc96b" stroke-width="4" stroke-linecap="round"/>
+        <path d="M460 198V238" stroke="#65e7ff" stroke-width="4" stroke-linecap="round"/><path d="M460 238L272 285" stroke="#42e3b4" stroke-width="4"/><path d="M460 238L648 285" stroke="#ffc96b" stroke-width="4"/>
         <rect x="70" y="284" width="365" height="148" rx="22" fill="#0f2c43" stroke="#42e3b4" stroke-width="2.5"/>
         <circle cx="118" cy="330" r="24" fill="#123b43" stroke="#42e3b4" stroke-width="2"/><path d="M107 330l8 8 15-18" fill="none" stroke="#42e3b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
-        <text x="158" y="318" fill="#42e3b4" font-size="21" font-weight="800">YES</text><text x="158" y="350" fill="#fff" font-size="20" font-weight="800">A shared namespace may work</text>
-        <text x="104" y="386" fill="#c8d8e8" font-size="15"><tspan x="104">Keep common governance, then monitor quota,</tspan><tspan x="104" dy="22">capacity contention and operational blast radius.</tspan></text>
+        <text x="158" y="318" fill="#42e3b4" font-size="19" font-weight="800">YES</text>
+        <text x="158" y="346" fill="#fff" font-size="16" font-weight="800">A shared namespace may work</text>
+        <text x="104" y="382" fill="#c8d8e8" font-size="12.5"><tspan x="104">Keep common governance, then monitor quota,</tspan><tspan x="104" dy="20">capacity contention and operational blast radius.</tspan></text>
         <rect x="485" y="284" width="365" height="148" rx="22" fill="#2a2038" stroke="#ffc96b" stroke-width="2.5"/>
         <circle cx="533" cy="330" r="24" fill="#3a2d3f" stroke="#ffc96b" stroke-width="2"/><path d="M523 320l20 20M543 320l-20 20" fill="none" stroke="#ffc96b" stroke-width="4" stroke-linecap="round"/>
-        <text x="573" y="318" fill="#ffc96b" font-size="21" font-weight="800">NO</text><text x="573" y="350" fill="#fff" font-size="20" font-weight="800">Create separate namespaces</text>
-        <text x="519" y="386" fill="#d6cbe1" font-size="15"><tspan x="519">Separate boundaries make different quotas,</tspan><tspan x="519" dy="22">access, services and lifecycle easier to govern.</tspan></text>
+        <text x="573" y="318" fill="#ffc96b" font-size="19" font-weight="800">NO</text>
+        <text x="573" y="346" fill="#fff" font-size="16" font-weight="800">Create separate namespaces</text>
+        <text x="519" y="382" fill="#d6cbe1" font-size="12.5"><tspan x="519">Separate boundaries make different quotas,</tspan><tspan x="519" dy="20">access, services and lifecycle easier to govern.</tspan></text>
         <rect x="70" y="449" width="780" height="1" fill="#244b73"/><text x="70" y="474" fill="#b8c8df" font-size="15">The namespace boundary should follow meaningful differences in policy, ownership and operations.</text>
       </svg>
       <figcaption>A practical rule: share only when the platform entitlements, ownership model and operational risk are genuinely aligned.</figcaption>`;
@@ -147,79 +148,102 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       </tbody>`;
   }
 
-  const entitlementIntro = entitlement?.querySelector("#entitlement > p:not(.section-number)") || entitlement?.querySelector("p:not(.section-number)");
+  const entitlementIntro = entitlement?.querySelector("p:not(.section-number)");
   if (entitlementIntro) {
     entitlementIntro.textContent = "A vSphere Namespace is a governed resource envelope where VKS clusters, vSphere Pods, VM Service virtual machines and enabled Supervisor Services can run. The platform team defines which capacity, VM Classes, storage policies, networks, services, identities and zones that namespace may consume.";
   }
 
-  if (entitlement && entitlementTable && !entitlement.querySelector(".namespace-inventory-visual")) {
-    const explainer = document.createElement("div");
-    explainer.className = "namespace-structure-intro";
-    explainer.innerHTML = `
-      <p class="micro-label">How it appears in vCenter</p>
-      <h3>The namespace is a governed resource pool across its mapped infrastructure.</h3>
-      <p>A vSphere Namespace does not contain physical ESXi hosts. Instead, vCenter creates a namespace resource pool on every vSphere cluster mapped through the selected zone or zones. The ESXi hosts underneath those clusters provide the actual compute capacity.</p>`;
+  entitlement?.querySelector(".namespace-structure-intro")?.remove();
+  entitlement?.querySelector(".namespace-inventory-visual")?.remove();
 
-    const figure = document.createElement("figure");
-    figure.className = "visual namespace-inventory-visual";
-    figure.innerHTML = `
-      <svg viewBox="0 0 1100 760" role="img" aria-label="vCenter inventory diagram showing a Supervisor, three vSphere Zones, three vSphere clusters with ESXi hosts, and a namespace resource pool created on each mapped cluster">
-        <defs>
-          <linearGradient id="inventory-bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#06101f"/><stop offset="1" stop-color="#0b1931"/></linearGradient>
-          <linearGradient id="inventory-ns" x1="0" x2="1"><stop offset="0" stop-color="#6d5dfc"/><stop offset="1" stop-color="#23c7e6"/></linearGradient>
-        </defs>
-        <rect x="18" y="18" width="1064" height="724" rx="30" fill="url(#inventory-bg)" stroke="#294f78" stroke-width="2"/>
-        <text x="58" y="70" fill="#65e7ff" font-size="20" font-weight="800" letter-spacing="1.2">ACTUAL vCENTER INVENTORY VIEW</text>
-        <text x="58" y="102" fill="#b9c8df" font-size="16">One namespace mapped to three zones creates a resource-pool presence on each underlying cluster.</text>
+  const zones = document.querySelector("#zones");
+  if (zones) {
+    zones.innerHTML = `
+      <p class="section-number">05 · Understand zones</p>
+      <h2>A vSphere Zone is the infrastructure boundary; management and workload describe how Supervisor uses it.</h2>
+      <p class="section-lead">Start with the infrastructure object. A <strong>vSphere Zone</strong> represents a placement and failure domain backed by one or more compatible vSphere clusters. When that zone is bound to Supervisor, it receives a role.</p>
+      <div class="zone-role-grid">
+        <div class="zone-role-card"><span>Management Zone</span><h3>Runs Supervisor control-plane components</h3><p>Supervisor can be deployed across one or three Management Zones. Using three Management Zones distributes the control plane across failure domains.</p></div>
+        <div class="zone-role-card"><span>Workload Zone</span><h3>Provides capacity for workloads</h3><p>Additional zones can be attached for VKS nodes, VM Service VMs, vSphere Pods and other Supervisor workloads. A zone binding defaults to the workload role when no role is specified.</p></div>
+      </div>
+      <div class="plain-callout"><strong>Keep the terms separate:</strong> the vSphere Zone is the infrastructure object. <em>Management</em> and <em>Workload</em> describe the role that the zone plays for a particular Supervisor.</div>
 
-        <rect x="360" y="128" width="380" height="70" rx="18" fill="#102d50" stroke="#65e7ff" stroke-width="2"/>
-        <text x="550" y="158" text-anchor="middle" fill="#65e7ff" font-size="17" font-weight="700">vCENTER SERVER</text>
-        <text x="550" y="184" text-anchor="middle" fill="#fff" font-size="21" font-weight="800">Supervisor: prod-supervisor</text>
+      <div class="zone-flow-heading"><span>Step 1 · Conceptual view</span><h3>First picture one management building versus three management buildings.</h3><p>This comparison is about Supervisor control-plane placement. The green dot represents the mapped vSphere cluster or placement target inside each zone.</p></div>
+      <figure class="visual zone-concept-visual">
+        <svg viewBox="0 0 1000 650" role="img" aria-label="Conceptual comparison of one Management Zone and three Management Zones">
+          <rect x="16" y="16" width="968" height="618" rx="28" fill="#071427" stroke="#2b557e" stroke-width="2"/>
+          <text x="500" y="66" text-anchor="middle" fill="#65e7ff" font-size="26" font-weight="800">ONE MANAGEMENT ZONE VS THREE MANAGEMENT ZONES</text>
+          <rect x="55" y="105" width="405" height="405" rx="24" fill="#0d203a" stroke="#ffc96b" stroke-width="2"/>
+          <text x="88" y="150" fill="#fff" font-size="26" font-weight="800">One Management Zone</text>
+          <rect x="105" y="185" width="305" height="210" rx="18" fill="#17375d" stroke="#ffc96b" stroke-width="2"/>
+          <text x="257" y="225" text-anchor="middle" fill="#fff" font-size="22" font-weight="700">Zone A</text>
+          <rect x="150" y="255" width="215" height="90" rx="14" fill="#102848" stroke="#65e7ff"/>
+          <text x="257" y="292" text-anchor="middle" fill="#fff" font-size="19" font-weight="700">Mapped vSphere cluster</text>
+          <circle cx="257" cy="320" r="14" fill="#42e3b4"/>
+          <text x="88" y="438" fill="#ffc96b" font-size="20" font-weight="800">One control-plane placement domain</text>
+          <text x="88" y="468" fill="#c7d6e9" font-size="16"><tspan x="88">Simpler design, but a zone-level failure</tspan><tspan x="88" dy="23">affects the control plane placed there.</tspan></text>
 
-        <path d="M550 198V232M550 232H190M550 232H910M190 232V260M550 232V260M910 232V260" fill="none" stroke="#65e7ff" stroke-width="3"/>
+          <rect x="540" y="105" width="405" height="405" rx="24" fill="#0d203a" stroke="#42e3b4" stroke-width="2"/>
+          <text x="573" y="150" fill="#fff" font-size="26" font-weight="800">Three Management Zones</text>
+          ${[0,1,2].map((i)=>{const x=575+i*112;const labels=["A","B","C"];const strokes=["#65e7ff","#9b7cff","#42e3b4"];return `<rect x="${x}" y="190" width="92" height="205" rx="16" fill="#17375d" stroke="${strokes[i]}" stroke-width="2"/><text x="${x+46}" y="230" text-anchor="middle" fill="${strokes[i]}" font-size="24" font-weight="800">${labels[i]}</text><rect x="${x+15}" y="260" width="62" height="78" rx="10" fill="#102848" stroke="${strokes[i]}"/><circle cx="${x+46}" cy="360" r="14" fill="#42e3b4"/>`;}).join("")}
+          <text x="573" y="438" fill="#42e3b4" font-size="20" font-weight="800">Three control-plane placement domains</text>
+          <text x="573" y="468" fill="#c7d6e9" font-size="16"><tspan x="573">Supervisor control-plane components can be</tspan><tspan x="573" dy="23">distributed across independent failure domains.</tspan></text>
 
-        ${[0,1,2].map((i)=>{
-          const x=[60,410,760][i];
-          const zone=["ZONE A","ZONE B","ZONE C"][i];
-          const cluster=["Cluster-A","Cluster-B","Cluster-C"][i];
-          return `
-            <rect x="${x}" y="260" width="280" height="410" rx="22" fill="#0d203a" stroke="${["#65e7ff","#9b7cff","#42e3b4"][i]}" stroke-width="2"/>
-            <text x="${x+140}" y="296" text-anchor="middle" fill="${["#65e7ff","#b69cff","#42e3b4"][i]}" font-size="18" font-weight="800">${zone}</text>
-            <rect x="${x+24}" y="320" width="232" height="72" rx="15" fill="#15375b" stroke="#7da9d8"/>
-            <text x="${x+140}" y="348" text-anchor="middle" fill="#fff" font-size="18" font-weight="800">${cluster}</text>
-            <text x="${x+140}" y="374" text-anchor="middle" fill="#bed0e8" font-size="14">vSphere cluster</text>
-            <rect x="${x+24}" y="414" width="232" height="92" rx="15" fill="url(#inventory-ns)" opacity=".92"/>
-            <text x="${x+140}" y="444" text-anchor="middle" fill="#fff" font-size="16" font-weight="800">payments-prod</text>
-            <text x="${x+140}" y="468" text-anchor="middle" fill="#eef7ff" font-size="14">Namespace resource pool</text>
-            <text x="${x+140}" y="491" text-anchor="middle" fill="#dcecff" font-size="13">Quota + workload consumption</text>
-            <text x="${x+28}" y="548" fill="#b9c8df" font-size="14" font-weight="700">ESXi hosts</text>
-            ${[0,1,2].map((h)=>`<rect x="${x+28+h*76}" y="566" width="64" height="66" rx="10" fill="#142a49" stroke="#4e739f"/><rect x="${x+39+h*76}" y="578" width="42" height="7" rx="3" fill="#65e7ff"/><circle cx="${x+44+h*76}" cy="608" r="4" fill="#42e3b4"/><circle cx="${x+56+h*76}" cy="608" r="4" fill="#42e3b4"/><text x="${x+60+h*76}" y="625" text-anchor="middle" fill="#c9d8ea" font-size="11">ESXi ${h+1}</text></rect>`).join("")}
-          `;
-        }).join("")}
+          <rect x="170" y="545" width="660" height="52" rx="15" fill="#102848" stroke="#294f78"/>
+          <circle cx="212" cy="571" r="13" fill="#42e3b4"/>
+          <text x="242" y="578" fill="#d8e6fb" font-size="17">Green dot = mapped vSphere cluster / eligible placement target</text>
+        </svg>
+        <figcaption>This first view explains the control-plane choice. It does not yet show separate Workload Zones.</figcaption>
+      </figure>
 
-        <path d="M550 198V218" stroke="#ffc96b" stroke-width="3"/>
-        <rect x="250" y="690" width="600" height="34" rx="12" fill="#102848" stroke="#294f78"/>
-        <text x="550" y="713" text-anchor="middle" fill="#d8e6fb" font-size="14">Namespace quotas are represented across mapped clusters; physical capacity comes from their ESXi hosts.</text>
-      </svg>
-      <figcaption>Three-zone example: the namespace spans the mapped zones, and vCenter creates a namespace resource pool on each underlying cluster. In a one-zone design, the same relationship exists on only one mapped cluster.</figcaption>`;
+      <div class="zone-flow-heading"><span>Step 2 · vCenter view</span><h3>Now translate the same one-versus-three-zone idea into vCenter inventory.</h3><p>A vSphere Namespace does not contain physical ESXi hosts. For this simplified teaching example, each Management Zone maps to one vSphere cluster. vCenter represents the namespace through a namespace resource pool on every mapped cluster; the ESXi hosts underneath provide the actual compute capacity.</p></div>
+      <figure class="visual zone-vcenter-visual">
+        <svg viewBox="0 0 1200 720" role="img" aria-label="vCenter comparison of one Management Zone and three Management Zones with namespace resource pools and ESXi hosts">
+          <rect x="16" y="16" width="1168" height="688" rx="28" fill="#071427" stroke="#2b557e" stroke-width="2"/>
+          <text x="600" y="62" text-anchor="middle" fill="#65e7ff" font-size="27" font-weight="800">ACTUAL vCENTER VIEW: ONE MANAGEMENT ZONE VS THREE</text>
+          <text x="600" y="92" text-anchor="middle" fill="#b9c8df" font-size="16">How the same vSphere Namespace is represented across the mapped clusters.</text>
 
-    entitlementTable.insertAdjacentElement("afterend", explainer);
-    explainer.insertAdjacentElement("afterend", figure);
+          <rect x="40" y="120" width="470" height="500" rx="24" fill="#0d203a" stroke="#65e7ff" stroke-width="2"/>
+          <text x="275" y="158" text-anchor="middle" fill="#65e7ff" font-size="23" font-weight="800">ONE MANAGEMENT ZONE</text>
+          <rect x="135" y="180" width="280" height="55" rx="13" fill="#15375b" stroke="#65e7ff"/><text x="275" y="214" text-anchor="middle" fill="#fff" font-size="19" font-weight="800">Supervisor: prod-supervisor</text>
+          <path d="M275 235V270" stroke="#65e7ff" stroke-width="3"/>
+          <rect x="100" y="270" width="350" height="300" rx="20" fill="#102848" stroke="#65e7ff"/>
+          <text x="275" y="305" text-anchor="middle" fill="#65e7ff" font-size="20" font-weight="800">Management Zone A</text>
+          <rect x="135" y="330" width="280" height="58" rx="12" fill="#17375d" stroke="#7da9d8"/><text x="275" y="366" text-anchor="middle" fill="#fff" font-size="18" font-weight="800">Cluster-A</text>
+          <rect x="135" y="410" width="280" height="82" rx="14" fill="#5f5af5"/><text x="275" y="440" text-anchor="middle" fill="#fff" font-size="18" font-weight="800">payments-prod</text><text x="275" y="466" text-anchor="middle" fill="#eef7ff" font-size="14">Namespace resource pool</text>
+          ${[0,1,2].map((i)=>{const x=150+i*88;return `<rect x="${x}" y="515" width="68" height="45" rx="9" fill="#142a49" stroke="#4e739f"/><rect x="${x+12}" y="526" width="44" height="6" rx="3" fill="#65e7ff"/><circle cx="${x+22}" cy="545" r="4" fill="#42e3b4"/><circle cx="${x+34}" cy="545" r="4" fill="#42e3b4"/><text x="${x+34}" y="575" text-anchor="middle" fill="#c9d8ea" font-size="11">ESXi ${i+1}</text>`;}).join("")}
+          <text x="275" y="602" text-anchor="middle" fill="#c7d6e9" font-size="14">One mapped zone → one resource-pool presence</text>
+
+          <rect x="540" y="120" width="620" height="500" rx="24" fill="#0d203a" stroke="#42e3b4" stroke-width="2"/>
+          <text x="850" y="158" text-anchor="middle" fill="#42e3b4" font-size="23" font-weight="800">THREE MANAGEMENT ZONES</text>
+          <rect x="710" y="180" width="280" height="55" rx="13" fill="#15375b" stroke="#65e7ff"/><text x="850" y="214" text-anchor="middle" fill="#fff" font-size="19" font-weight="800">Supervisor: prod-supervisor</text>
+          <path d="M850 235V258M850 258H650M850 258H1050M650 258V280M850 258V280M1050 258V280" fill="none" stroke="#65e7ff" stroke-width="3"/>
+          ${[0,1,2].map((i)=>{const x=565+i*190;const labels=["A","B","C"];const strokes=["#65e7ff","#9b7cff","#42e3b4"];return `<rect x="${x}" y="280" width="170" height="280" rx="18" fill="#102848" stroke="${strokes[i]}"/><text x="${x+85}" y="314" text-anchor="middle" fill="${strokes[i]}" font-size="18" font-weight="800">Zone ${labels[i]}</text><rect x="${x+18}" y="335" width="134" height="48" rx="10" fill="#17375d" stroke="#7da9d8"/><text x="${x+85}" y="365" text-anchor="middle" fill="#fff" font-size="15" font-weight="800">Cluster-${labels[i]}</text><rect x="${x+18}" y="402" width="134" height="72" rx="12" fill="#5f5af5"/><text x="${x+85}" y="430" text-anchor="middle" fill="#fff" font-size="14" font-weight="800">payments-prod</text><text x="${x+85}" y="452" text-anchor="middle" fill="#eef7ff" font-size="11.5">Namespace resource pool</text>${[0,1,2].map((h)=>{const hx=x+20+h*45;return `<rect x="${hx}" y="495" width="37" height="38" rx="7" fill="#142a49" stroke="#4e739f"/><rect x="${hx+7}" y="504" width="23" height="5" rx="2" fill="#65e7ff"/><circle cx="${hx+12}" cy="520" r="3" fill="#42e3b4"/><circle cx="${hx+21}" cy="520" r="3" fill="#42e3b4"/>`;}).join("")}</rect>`;}).join("")}
+          <text x="850" y="602" text-anchor="middle" fill="#c7d6e9" font-size="14">Three mapped zones → the namespace resource pool is represented on each mapped cluster</text>
+
+          <rect x="185" y="650" width="830" height="34" rx="12" fill="#102848" stroke="#294f78"/>
+          <text x="600" y="672" text-anchor="middle" fill="#d8e6fb" font-size="14">The namespace is the governed boundary; ESXi hosts supply capacity through their vSphere clusters.</text>
+        </svg>
+        <figcaption>Simplified one-cluster-per-zone example. VCF 9.1 can associate a vSphere Zone with one or more compatible clusters, but the principle remains the same: namespace capacity is represented on the mapped infrastructure.</figcaption>
+      </figure>
+
+      <div class="warning"><strong>Important:</strong> Three Management Zones improve Supervisor control-plane resilience. They do not automatically make an application highly available. Application replicas, VKS cluster topology, topology-spread or anti-affinity rules, storage behaviour and networking must also align with the failure-domain design.</div>`;
   }
 
-  const zoneHeading = document.querySelector("#zones h2");
-  if (zoneHeading) zoneHeading.textContent = "A vSphere Zone represents an infrastructure placement and failure domain.";
-
-  const zoneTechnicalMeaning = document.querySelector("#zones .plain-callout");
-  if (zoneTechnicalMeaning) {
-    zoneTechnicalMeaning.innerHTML = "<strong>Technical meaning:</strong> A vSphere Zone is an infrastructure domain used by Supervisor for placement and failure-domain design. In VCF 9.1, a zone is associated with one or more vSphere clusters; do not assume that every zone is permanently limited to exactly one cluster.";
+  const twoDecisions = document.querySelector("#two-decisions");
+  if (twoDecisions) {
+    twoDecisions.innerHTML = `
+      <p class="section-number">06 · Simplify the zone discussion</p>
+      <h2>After the management-zone choice, decide where workloads should run.</h2>
+      <p>VCF 9.1 separates two related decisions:</p>
+      <div class="decision-grid">
+        <div class="decision-card"><h3>Decision 1 · Supervisor control plane</h3><p>Deploy Supervisor across one Management Zone or three Management Zones.</p><div class="rule">This primarily determines control-plane placement and resilience.</div></div>
+        <div class="decision-card"><h3>Decision 2 · Workload capacity</h3><p>Run workloads in those same zones, or attach separate Workload Zones.</p><div class="rule">This primarily determines management-versus-workload isolation, scaling and hardware choice.</div></div>
+      </div>`;
   }
 
-  const mappingParagraphs = document.querySelectorAll("#mapping > p:not(.section-number)");
-  if (mappingParagraphs[0]) {
-    mappingParagraphs[0].textContent = "A vSphere Namespace can be mapped to as many as three vSphere Zones. A namespace mapped to one zone is restricted to that eligible infrastructure domain; mapping it to multiple zones makes those domains available for placement.";
-  }
-
+  const mappingParagraph = document.querySelector("#mapping > p:not(.section-number)");
+  if (mappingParagraph) mappingParagraph.textContent = "A vSphere Namespace can be mapped to as many as three eligible vSphere Zones. Mapping controls where namespace-backed workloads may be placed; it does not by itself guarantee workload distribution or high availability.";
   const mappingHeading = document.querySelector("#mapping h2");
   if (mappingHeading) mappingHeading.textContent = "Zone mapping defines eligible placement; workload design determines resilience.";
 
@@ -227,22 +251,18 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
   if (mappingSection && !mappingSection.querySelector(".zone-validation-note")) {
     const note = document.createElement("div");
     note.className = "plain-callout zone-validation-note";
-    note.innerHTML = "<strong>Important:</strong> In a three-zone Supervisor, namespace capacity is represented across the underlying zones. The VKS cluster topology, application replicas, topology-spread or anti-affinity rules, and storage policy must still be designed for failure-domain resilience. Zone mapping alone does not make an application highly available.";
+    note.innerHTML = "<strong>Important:</strong> The VKS cluster topology, application replicas, topology-spread or anti-affinity rules, storage policy and network design must still align with the selected failure domains. Zone mapping alone does not make an application highly available.";
     const figure = mappingSection.querySelector("figure");
     mappingSection.insertBefore(note, figure || null);
   }
 
-  const validationStyle = document.createElement("style");
-  validationStyle.textContent = `
-    #bridge .bridge strong { display: inline; margin-right: .3rem; }
-    .bridge-analogy-visual { margin: 30px auto; max-width: 1040px; }
-    .bridge-analogy-visual img { border-radius: 16px; display: block; height: auto; width: 100%; }
-    .boundary-clarity-note { margin-top: 24px; }
-    #boundary figure.visual { margin: 32px auto; max-width: 1080px; }
-    #boundary figure.visual svg text[x="158"][y="350"],
-    #boundary figure.visual svg text[x="573"][y="350"] { font-size:16px !important; }
-    #boundary figure.visual svg text[x="104"][y="386"],
-    #boundary figure.visual svg text[x="519"][y="386"] { font-size:12.5px !important; }
+  const style = document.createElement("style");
+  style.textContent = `
+    #bridge .bridge strong { display:inline; margin-right:.3rem; }
+    .bridge-analogy-visual { margin:30px auto; max-width:1040px; }
+    .bridge-analogy-visual img { border-radius:16px; display:block; height:auto; width:100%; }
+    .boundary-clarity-note { margin-top:24px; }
+    #boundary figure.visual { margin:32px auto; max-width:1080px; }
     #entitlement .simple-table { background:#fff; border:1px solid #dce6f5; border-collapse:separate; border-radius:18px; box-shadow:0 16px 36px rgba(16,38,74,.07); overflow:hidden; }
     #entitlement .simple-table th { background:#f4f7fc; padding:16px 18px; }
     #entitlement .simple-table td { padding:18px; }
@@ -250,20 +270,25 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     #entitlement .simple-table td:first-child { width:24%; }
     #entitlement .simple-table th:last-child,
     #entitlement .simple-table td:last-child { width:76%; }
-    .namespace-structure-intro { margin:42px 0 18px; }
-    .namespace-structure-intro h3 { font-size:clamp(1.45rem,2.2vw,2rem); margin:8px 0 12px; }
-    .namespace-structure-intro p:last-child { max-width:900px; }
-    .micro-label { color:#2a5be0!important; font-size:.78rem!important; font-weight:800; letter-spacing:.1em; margin:0; text-transform:uppercase; }
-    .namespace-inventory-visual { margin:24px auto 34px; max-width:1120px; }
-    .namespace-inventory-visual svg { display:block; height:auto; width:100%; }
+    .zone-role-grid { display:grid; gap:18px; grid-template-columns:repeat(2,minmax(0,1fr)); margin:28px 0; }
+    .zone-role-card { background:#fff; border:1px solid #dce6f5; border-radius:18px; box-shadow:0 16px 34px rgba(16,38,74,.07); padding:22px; }
+    .zone-role-card span,.zone-flow-heading span { color:#2a5be0; font-size:.76rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+    .zone-role-card h3,.zone-flow-heading h3 { margin:8px 0 10px; }
+    .zone-role-card p { margin:0; }
+    .zone-flow-heading { margin:42px 0 18px; }
+    .zone-flow-heading h3 { font-size:clamp(1.5rem,2.4vw,2.15rem); }
+    .zone-flow-heading p { max-width:920px; }
+    .zone-concept-visual,.zone-vcenter-visual { margin:24px auto 38px; max-width:1120px; }
+    .zone-concept-visual svg,.zone-vcenter-visual svg { display:block; height:auto; width:100%; }
     .zone-validation-note { margin-top:22px; }
     @media(max-width:760px){
+      .zone-role-grid { grid-template-columns:1fr; }
       #entitlement .simple-table th:first-child,
       #entitlement .simple-table td:first-child { width:34%; }
       #entitlement .simple-table th:last-child,
       #entitlement .simple-table td:last-child { width:66%; }
-      .namespace-inventory-visual { padding:10px; }
+      .zone-concept-visual,.zone-vcenter-visual { padding:8px; }
     }
   `;
-  document.head.appendChild(validationStyle);
+  document.head.appendChild(style);
 }
