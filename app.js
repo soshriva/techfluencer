@@ -1,10 +1,13 @@
 (() => {
   const loaderScript = document.currentScript;
   const baseUrl = new URL(".", loaderScript?.src || location.href);
+  const version = "20260806-0005";
 
   const loadScript = (file, onload) => {
     const script = document.createElement("script");
-    script.src = new URL(file, baseUrl).href;
+    const url = new URL(file, baseUrl);
+    url.searchParams.set("v", version);
+    script.src = url.href;
     script.defer = true;
     script.onload = onload;
     script.onerror = () => console.error(`Unable to load ${file}`);
