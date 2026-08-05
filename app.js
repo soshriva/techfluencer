@@ -61,6 +61,10 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       <h2>From understanding the hierarchy to designing its boundaries.</h2>
       <p class="section-lead">In Blog 3, we used a corporate office building to explain the VCF and VKS hierarchy.</p>
       <p><strong>VCF</strong> was the building foundation, <strong>Supervisor</strong> was the enabled floor, and each <strong>vSphere Namespace</strong> was a governed wing with its own access, limits, approved resources and services. Inside a wing, a <strong>VKS cluster</strong> acted as the dedicated project area, while <strong>Kubernetes namespaces</strong> organised individual work zones within that cluster.</p>
+      <figure class="visual bridge-analogy-visual">
+        <img src="../assets/blogs/vcf-vks-core-concepts/corporate-office-analogy-map.png" alt="Corporate office analogy map showing VCF infrastructure as the office building, Supervisor as the enabled floor, vSphere Namespaces as department wings, a VKS cluster as the project area, and Kubernetes namespaces as work zones." loading="lazy" />
+        <figcaption>A quick visual refresher from Blog 3: building → enabled floor → department wing → project area → work zones.</figcaption>
+      </figure>
       <div class="bridge"><strong>This article continues from that model.</strong>We now look more closely at the two concepts that determine how the platform is organised and where workloads may run: <strong>vSphere Namespaces</strong> and <strong>vSphere Zones</strong>.</div>
       <p>The design question is no longer only “What is a vSphere Namespace?” It is whether Payments, Fraud Analytics and Reporting should share one governed boundary, what each boundary should expose, and which infrastructure failure domains its workloads may use.</p>`;
   }
@@ -110,6 +114,8 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
   const validationStyle = document.createElement("style");
   validationStyle.textContent = `
     #bridge .bridge strong { display: inline; margin-right: .3rem; }
+    .bridge-analogy-visual { margin: 30px auto; max-width: 1040px; }
+    .bridge-analogy-visual img { border-radius: 16px; display: block; height: auto; width: 100%; }
     .zone-validation-note { margin-top: 22px; }
   `;
   document.head.appendChild(validationStyle);
