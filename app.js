@@ -239,6 +239,10 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     .bridge-analogy-visual img { border-radius: 16px; display: block; height: auto; width: 100%; }
     .boundary-clarity-note { margin-top: 24px; }
     #boundary figure.visual { margin: 32px auto; max-width: 1080px; }
+    #boundary figure.visual svg text[x="158"][y="350"],
+    #boundary figure.visual svg text[x="573"][y="350"] { font-size:16px !important; }
+    #boundary figure.visual svg text[x="104"][y="386"],
+    #boundary figure.visual svg text[x="519"][y="386"] { font-size:12.5px !important; }
     #entitlement .simple-table { background:#fff; border:1px solid #dce6f5; border-collapse:separate; border-radius:18px; box-shadow:0 16px 36px rgba(16,38,74,.07); overflow:hidden; }
     #entitlement .simple-table th { background:#f4f7fc; padding:16px 18px; }
     #entitlement .simple-table td { padding:18px; }
