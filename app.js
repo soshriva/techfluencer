@@ -1,7 +1,7 @@
 (() => {
   const loaderScript = document.currentScript;
   const baseUrl = new URL(".", loaderScript?.src || location.href);
-  const version = "20260806-0037";
+  const version = "20260806-0047";
 
   const loadScript = (file, onload) => {
     const script = document.createElement("script");
@@ -20,7 +20,9 @@
         loadScript("blog4-final-review.js", () =>
           loadScript("blog4-toc.js", () =>
             loadScript("blog4-design-clarity.js", () =>
-              loadScript("blog4-challenge.js", () => loadScript("blog4-mobile-polish.js"))
+              loadScript("blog4-challenge.js", () =>
+                loadScript("blog4-mobile-polish.js", () => loadScript("blog4-contrast-fix.js"))
+              )
             )
           )
         )
