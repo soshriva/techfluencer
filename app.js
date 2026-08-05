@@ -69,6 +69,54 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       <p>The design question is no longer only “What is a vSphere Namespace?” It is whether Payments, Fraud Analytics and Reporting should share one governed boundary, what each boundary should expose, and which infrastructure failure domains its workloads may use.</p>`;
   }
 
+  const boundaryCards = document.querySelectorAll("#boundary .decision-card");
+  const boundaryContent = [
+    {
+      title: "One namespace per application",
+      description:
+        "Useful when one application requires its own capacity, storage, access, network and change-control boundary.",
+      example:
+        "Good fit: a regulated payments platform with dedicated production VKS clusters, separate quota, resilient storage policies and tightly controlled access."
+    },
+    {
+      title: "One namespace per team",
+      description:
+        "Useful when several related applications have the same owners and can safely share platform entitlements and operational controls.",
+      example:
+        "Good fit: a data-platform team running multiple analytics services that use the same VM Classes, storage policies, administrators and lifecycle process."
+    },
+    {
+      title: "One namespace per environment",
+      description:
+        "Useful when development, test and production require different quotas, access, storage, networking or approval controls.",
+      example:
+        "Good fit: separate payments-dev, payments-test and payments-prod namespaces, with smaller classes and lower-cost storage outside production."
+    },
+    {
+      title: "Shared namespace",
+      description:
+        "Useful when multiple low-risk workloads genuinely share the same owners, quota, storage, network and lifecycle expectations.",
+      example:
+        "Good fit: a shared non-production sandbox for short-lived internal services owned by one platform team and governed by the same policies."
+    }
+  ];
+
+  boundaryCards.forEach((card, index) => {
+    const content = boundaryContent[index];
+    if (!content) return;
+    card.innerHTML = `<h3>${content.title}</h3><p>${content.description}</p><div class="rule">${content.example}</div>`;
+  });
+
+  const boundarySection = document.querySelector("#boundary");
+  const boundaryGrid = boundarySection?.querySelector(".decision-grid");
+  if (boundarySection && boundaryGrid && !boundarySection.querySelector(".boundary-clarity-note")) {
+    const note = document.createElement("div");
+    note.className = "plain-callout boundary-clarity-note";
+    note.innerHTML =
+      "<strong>These are design patterns, not exclusive rules.</strong> A production design often combines them—for example, one namespace per application per environment. Choose the boundary based on differences in ownership, access, quota, VM Classes, storage policies, networking, zone eligibility, lifecycle and risk.";
+    boundaryGrid.insertAdjacentElement("afterend", note);
+  }
+
   const zoneHeading = document.querySelector("#zones h2");
   if (zoneHeading) {
     zoneHeading.textContent =
@@ -116,6 +164,7 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     #bridge .bridge strong { display: inline; margin-right: .3rem; }
     .bridge-analogy-visual { margin: 30px auto; max-width: 1040px; }
     .bridge-analogy-visual img { border-radius: 16px; display: block; height: auto; width: 100%; }
+    .boundary-clarity-note { margin-top: 24px; }
     .zone-validation-note { margin-top: 22px; }
   `;
   document.head.appendChild(validationStyle);
