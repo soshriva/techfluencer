@@ -117,6 +117,65 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     boundaryGrid.insertAdjacentElement("afterend", note);
   }
 
+  const boundaryFigure = boundarySection?.querySelector("figure.visual");
+  if (boundaryFigure) {
+    boundaryFigure.innerHTML = `
+      <svg viewBox="0 0 920 500" role="img" aria-label="Decision guide for determining whether workloads should share a vSphere Namespace">
+        <defs>
+          <linearGradient id="boundary-bg" x1="0" x2="1" y1="0" y2="1">
+            <stop offset="0" stop-color="#071427"/>
+            <stop offset="1" stop-color="#0a1730"/>
+          </linearGradient>
+          <linearGradient id="boundary-question" x1="0" x2="1">
+            <stop offset="0" stop-color="#123255"/>
+            <stop offset="1" stop-color="#18375e"/>
+          </linearGradient>
+          <filter id="boundary-glow"><feGaussianBlur stdDeviation="4" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
+        </defs>
+
+        <rect x="15" y="15" width="890" height="470" rx="28" fill="url(#boundary-bg)" stroke="#244b73" stroke-width="1.5"/>
+        <text x="55" y="64" fill="#65e7ff" font-size="18" font-weight="800" letter-spacing="1.2">SHOULD THESE WORKLOADS SHARE ONE WING?</text>
+
+        <rect x="70" y="92" width="780" height="106" rx="20" fill="url(#boundary-question)" stroke="#65e7ff" stroke-width="2"/>
+        <circle cx="112" cy="145" r="24" fill="#0b223d" stroke="#65e7ff" stroke-width="2"/>
+        <text x="112" y="153" text-anchor="middle" fill="#65e7ff" font-size="24" font-weight="800">?</text>
+        <text x="154" y="132" fill="#fff" font-size="21" font-weight="800">
+          <tspan x="154" dy="0">Same owners, access, quota, storage, network,</tspan>
+          <tspan x="154" dy="28">lifecycle expectations and risk boundary?</tspan>
+        </text>
+        <text x="154" y="183" fill="#bed0e8" font-size="15">Evaluate the operating model—not only the organisation chart.</text>
+
+        <path d="M460 198V238" stroke="#65e7ff" stroke-width="4" stroke-linecap="round"/>
+        <circle cx="460" cy="238" r="6" fill="#65e7ff" filter="url(#boundary-glow)"/>
+        <path d="M460 238L272 285" stroke="#42e3b4" stroke-width="4" stroke-linecap="round"/>
+        <path d="M460 238L648 285" stroke="#ffc96b" stroke-width="4" stroke-linecap="round"/>
+
+        <rect x="70" y="284" width="365" height="148" rx="22" fill="#0f2c43" stroke="#42e3b4" stroke-width="2.5"/>
+        <circle cx="118" cy="330" r="24" fill="#123b43" stroke="#42e3b4" stroke-width="2"/>
+        <path d="M107 330l8 8 15-18" fill="none" stroke="#42e3b4" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"/>
+        <text x="158" y="318" fill="#42e3b4" font-size="21" font-weight="800">YES</text>
+        <text x="158" y="350" fill="#fff" font-size="20" font-weight="800">A shared namespace may work</text>
+        <text x="104" y="386" fill="#c8d8e8" font-size="15">
+          <tspan x="104" dy="0">Keep common governance, then monitor quota,</tspan>
+          <tspan x="104" dy="22">capacity contention and operational blast radius.</tspan>
+        </text>
+
+        <rect x="485" y="284" width="365" height="148" rx="22" fill="#2a2038" stroke="#ffc96b" stroke-width="2.5"/>
+        <circle cx="533" cy="330" r="24" fill="#3a2d3f" stroke="#ffc96b" stroke-width="2"/>
+        <path d="M523 320l20 20M543 320l-20 20" fill="none" stroke="#ffc96b" stroke-width="4" stroke-linecap="round"/>
+        <text x="573" y="318" fill="#ffc96b" font-size="21" font-weight="800">NO</text>
+        <text x="573" y="350" fill="#fff" font-size="20" font-weight="800">Create separate namespaces</text>
+        <text x="519" y="386" fill="#d6cbe1" font-size="15">
+          <tspan x="519" dy="0">Separate boundaries make different quotas,</tspan>
+          <tspan x="519" dy="22">access, services and lifecycle easier to govern.</tspan>
+        </text>
+
+        <rect x="70" y="449" width="780" height="1" fill="#244b73"/>
+        <text x="70" y="474" fill="#b8c8df" font-size="15">The namespace boundary should follow meaningful differences in policy, ownership and operations.</text>
+      </svg>
+      <figcaption>A practical rule: share only when the platform entitlements, ownership model and operational risk are genuinely aligned.</figcaption>`;
+  }
+
   const zoneHeading = document.querySelector("#zones h2");
   if (zoneHeading) {
     zoneHeading.textContent =
@@ -165,6 +224,8 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     .bridge-analogy-visual { margin: 30px auto; max-width: 1040px; }
     .bridge-analogy-visual img { border-radius: 16px; display: block; height: auto; width: 100%; }
     .boundary-clarity-note { margin-top: 24px; }
+    #boundary figure.visual { margin: 32px auto; max-width: 1080px; }
+    #boundary figure.visual svg { min-height: 0; }
     .zone-validation-note { margin-top: 22px; }
   `;
   document.head.appendChild(validationStyle);
