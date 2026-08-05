@@ -176,6 +176,21 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       <figcaption>A practical rule: share only when the platform entitlements, ownership model and operational risk are genuinely aligned.</figcaption>`;
   }
 
+  const entitlementTable = document.querySelector("#entitlement .simple-table");
+  if (entitlementTable) {
+    entitlementTable.innerHTML = `
+      <thead><tr><th>Design item</th><th>Technical meaning</th></tr></thead>
+      <tbody>
+        <tr><td>Capacity</td><td>CPU, memory and storage limits available through the vSphere Namespace.</td></tr>
+        <tr><td>VM Classes</td><td>Standardised CPU and memory shapes for VKS nodes and supported VM workloads—similar to choosing T-shirt sizes such as small, medium or large.</td></tr>
+        <tr><td>Storage Policies</td><td>Approved storage capabilities and placement options exposed to workloads.</td></tr>
+        <tr><td>Network choices</td><td>Namespace networking, reachable networks and available platform network services.</td></tr>
+        <tr><td>Services</td><td>Approved Supervisor Services and platform capabilities available inside the namespace.</td></tr>
+        <tr><td>Identity</td><td>Users, groups and platform-level permissions assigned to the namespace.</td></tr>
+        <tr><td>Zones</td><td>Eligible infrastructure placement and failure domains available to workloads in the namespace.</td></tr>
+      </tbody>`;
+  }
+
   const zoneHeading = document.querySelector("#zones h2");
   if (zoneHeading) {
     zoneHeading.textContent =
@@ -226,6 +241,10 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     .boundary-clarity-note { margin-top: 24px; }
     #boundary figure.visual { margin: 32px auto; max-width: 1080px; }
     #boundary figure.visual svg { min-height: 0; }
+    #entitlement .simple-table th:first-child,
+    #entitlement .simple-table td:first-child { width: 24%; }
+    #entitlement .simple-table th:last-child,
+    #entitlement .simple-table td:last-child { width: 76%; }
     .zone-validation-note { margin-top: 22px; }
   `;
   document.head.appendChild(validationStyle);
