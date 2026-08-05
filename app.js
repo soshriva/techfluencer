@@ -12,6 +12,8 @@
   };
 
   loadScript("app-base.js", () =>
-    loadScript("blog4-sections.js", () => loadScript("blog4-knowledge.js"))
+    loadScript("blog4-sections.js", () =>
+      loadScript("blog4-knowledge.js", () => loadScript("blog4-final-review.js"))
+    )
   );
 })();
