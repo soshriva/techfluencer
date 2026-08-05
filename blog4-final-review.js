@@ -23,21 +23,21 @@
   if (toc) {
     toc.innerHTML = `
       <span>In this blog</span>
-      <a href="#bridge">1 · Bridge from Blog 3</a>
-      <a href="#boundary">2 · Choose the boundary</a>
-      <a href="#entitlement">3 · Design the entitlement</a>
-      <a href="#access">4 · Separate access layers</a>
-      <a href="#zones">5 · Understand zones</a>
-      <a href="#two-decisions">6 · Make two zone decisions</a>
-      <a href="#models">7 · Compare four models</a>
-      <a href="#mapping">8 · Map namespaces to zones</a>
-      <a href="#scenario">9 · Walk through a design</a>
-      <a href="#responsibility">10 · Assign responsibilities</a>
-      <a href="#vcf91">11 · VCF 9.1 context</a>
-      <a href="#knowledge">12 · Knowledge check</a>
-      <a href="#challenge">13 · Architecture challenge</a>
-      <a href="#takeaways">14 · Key takeaways</a>
-      <a href="#sources">Sources and validation</a>`;
+      <a href="#bridge"><small>01</small> Bridge from Blog 3</a>
+      <a href="#boundary"><small>02</small> Choose the namespace boundary</a>
+      <a href="#entitlement"><small>03</small> Design the entitlement</a>
+      <a href="#access"><small>04</small> Separate the access layers</a>
+      <a href="#zones"><small>05</small> Understand vSphere Zones</a>
+      <a href="#two-decisions"><small>06</small> Make the two zone decisions</a>
+      <a href="#models"><small>07</small> Compare the four models</a>
+      <a href="#mapping"><small>08</small> Map namespaces to zones</a>
+      <a href="#scenario"><small>09</small> Walk through a design</a>
+      <a href="#responsibility"><small>10</small> Assign responsibilities</a>
+      <a href="#vcf91"><small>11</small> Understand the VCF 9.1 context</a>
+      <a href="#knowledge"><small>12</small> Knowledge check</a>
+      <a href="#challenge"><small>13</small> Architecture challenge</a>
+      <a href="#takeaways"><small>14</small> Key takeaways</a>
+      <a class="toc-source-link" href="#sources"><small>REF</small> Sources and validation</a>`;
   }
 
   const vcf91 = document.querySelector("#vcf91");
@@ -134,6 +134,12 @@
 
   const style = document.createElement("style");
   style.textContent = `
+    .article-toc{max-height:calc(100vh - 130px);overflow-y:auto;padding-right:10px;scrollbar-width:thin}
+    .article-toc>span{display:block;margin-bottom:18px}
+    .article-toc a{align-items:baseline;border-left:2px solid transparent;display:grid;gap:9px;grid-template-columns:28px minmax(0,1fr);padding:7px 8px;text-decoration:none}
+    .article-toc a small{color:#8b98ad;font-size:.67rem;font-weight:800;letter-spacing:.06em}
+    .article-toc a:hover{background:#f4f7fc;border-left-color:#2a5be0;border-radius:0 8px 8px 0;color:#2a5be0}
+    .article-toc .toc-source-link{border-top:1px solid #e2e9f3;margin-top:8px;padding-top:14px}
     .vcf91-grid-simple{grid-template-columns:repeat(2,minmax(0,1fr))}
     .challenge-requirements{display:grid;gap:14px;grid-template-columns:repeat(2,minmax(0,1fr));margin:20px 0}
     .challenge-requirements article{background:rgba(18,42,76,.88);border:1px solid rgba(125,169,216,.28);border-radius:15px;padding:17px}
@@ -146,7 +152,7 @@
     .solution-v2 table{min-width:760px}
     #takeaways ol{display:grid;gap:10px;padding-left:24px}
     #sources{border-top:1px solid #dce6f5;margin-top:56px;padding-top:42px}
-    @media(max-width:820px){.vcf91-grid-simple,.challenge-requirements{grid-template-columns:1fr}}
+    @media(max-width:820px){.vcf91-grid-simple,.challenge-requirements{grid-template-columns:1fr}.article-toc{max-height:none;overflow:visible}}
   `;
   document.head.appendChild(style);
 })();
