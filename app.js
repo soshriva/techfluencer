@@ -11,5 +11,7 @@
     document.head.appendChild(script);
   };
 
-  loadScript("app-base.js", () => loadScript("blog4-sections.js"));
+  loadScript("app-base.js", () =>
+    loadScript("blog4-sections.js", () => loadScript("blog4-knowledge.js"))
+  );
 })();
