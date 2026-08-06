@@ -269,6 +269,19 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
 
   const models = document.querySelector("#models");
   if (models) {
+    const legacyModelsFigure = models.querySelector("figure.visual");
+    if (legacyModelsFigure && !models.querySelector(".zone-model-sequence")) {
+      const sequence = document.createElement("div");
+      sequence.className = "zone-model-sequence";
+      sequence.innerHTML = `
+        <figure class="zone-model-card"><img src="../assets/review/model-1-review-v2.svg" alt="Model 1: one Supervisor Management Zone with shared application capacity." /><figcaption>Model 1 — one Management Zone with shared application capacity.</figcaption></figure>
+        <figure class="zone-model-card"><img src="../assets/review/model-2-review-v2.svg" alt="Model 2: one Supervisor Management Zone with dedicated vSphere Zones for application workloads." /><figcaption>Model 2 — one Management Zone with dedicated vSphere Zones for application workloads.</figcaption></figure>
+        <figure class="zone-model-card"><img src="../assets/review/model-3-review-v2.svg" alt="Model 3: three Supervisor Management Zones with shared application capacity." /><figcaption>Model 3 — three Management Zones with shared application capacity.</figcaption></figure>
+        <figure class="zone-model-card"><img src="../assets/review/model-4-review-v2.svg" alt="Model 4: three Supervisor Management Zones with dedicated vSphere Zones for application workloads." /><figcaption>Model 4 — three Management Zones with dedicated vSphere Zones for application workloads.</figcaption></figure>`;
+      legacyModelsFigure.insertAdjacentElement("beforebegin", sequence);
+      legacyModelsFigure.remove();
+    }
+
     const modelTable = models.querySelector(".simple-table");
     if (modelTable) {
       const headers = modelTable.querySelectorAll("th");
@@ -278,9 +291,9 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
 
       const labels = [
         "1 · One Management Zone, shared workload capacity",
-        "2 · One Management Zone, separate Workload Zones",
+        "2 · One Management Zone, dedicated vSphere Zones",
         "3 · Three Management Zones, shared workload capacity",
-        "4 · Three Management Zones, separate Workload Zones"
+        "4 · Three Management Zones, dedicated vSphere Zones"
       ];
       modelTable.querySelectorAll("tbody tr").forEach((row, index) => {
         const first = row.querySelector("td");
@@ -357,7 +370,7 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       modelsFigure?.insertAdjacentElement("afterend", note);
     }
     note.innerHTML =
-      "<strong>Why there are four models:</strong> Combine the Supervisor control plane choice, one or three Management Zones, with the workload capacity choice, shared Management Zones or separate Workload Zones. These are the four design patterns described in the VKS advanced design guidance.";
+      "<strong>Why there are four models:</strong> Combine the Supervisor control plane choice, one or three Management Zones, with the workload capacity choice: shared Management Zone capacity or dedicated vSphere Zones. These are the four design patterns described in the VKS advanced design guidance.";
   }
 
   const mappingParagraph = document.querySelector("#mapping > p:not(.section-number)");
@@ -407,6 +420,10 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     .zone-validation-note,.models-validation-note{margin-top:22px}
     #models figure.visual{margin:28px auto;max-width:1180px}
     #models figure.visual svg{display:block;height:auto;width:100%}
+    #models .zone-model-sequence{display:grid;gap:28px;margin:30px 0}
+    #models .zone-model-card{background:#fff;border-radius:22px;box-shadow:0 20px 45px rgba(0,0,0,.18);margin:0;overflow:hidden;padding:0}
+    #models .zone-model-card img{display:block;height:auto;width:100%}
+    #models .zone-model-card figcaption{color:#d7e5f8;font-size:.95rem;line-height:1.55;padding:14px 18px 18px}
     #models.dark-section .simple-table{background:rgba(10,24,48,.78);border:1px solid rgba(119,174,242,.28);border-collapse:separate;border-radius:18px;overflow:hidden}
     #models.dark-section .simple-table th{background:rgba(31,57,92,.72);color:#65e7ff!important;font-size:.8rem;letter-spacing:.08em;padding:17px 18px}
     #models.dark-section .simple-table td{border-bottom:1px solid rgba(166,194,228,.26);color:#d7e5f8!important;font-size:1rem;line-height:1.55;padding:19px 18px}
