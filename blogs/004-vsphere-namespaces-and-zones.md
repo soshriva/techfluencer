@@ -257,15 +257,21 @@ A zone is not automatically equivalent to a full geographic disaster-recovery si
 
 Before choosing the zone layout, decide how much availability the Supervisor control plane needs. This is separate from the number of Management Zones.
 
-- **One control-plane VM:** Suitable for evaluation, labs and lower-criticality environments where a control-plane outage can be tolerated.
-- **Three control-plane VMs:** The production HA choice. The three VMs provide redundancy for the Supervisor control plane.
+Think of the Supervisor control plane as the platform's **control tower**. It manages namespaces, policy and cluster lifecycle. This decision protects that control tower; it does not yet decide where application workloads run.
 
-The placement choices are then:
+| Choice | Simple meaning | Best fit |
+|---|---|---|
+| **One control-plane VM** | One Supervisor “brain”. It is simple, but there is no control-plane redundancy. | Lab, demo, evaluation, or lower-criticality environments where a temporary loss of platform management is acceptable. |
+| **Three control-plane VMs** | Three cooperating Supervisor VMs. If one VM or its host fails, the remaining two retain a majority and keep the Supervisor available. | The normal production HA choice. |
 
-- **One Management Zone:** Three control-plane VMs can run in the same zone and be distributed across hosts by DRS and anti-affinity. This protects against host-level failure, but not the loss of the entire zone or cluster.
-- **Three Management Zones:** One control-plane VM runs in each zone. This protects the control plane from the loss of one complete Management Zone.
+### A simple production example
 
-> **Key distinction:** One Management Zone does not automatically mean one control-plane VM. The availability decision and the zone-layout decision are related, but they are not the same decision.
+An organisation chooses three control-plane VMs: `CP-1`, `CP-2` and `CP-3`.
+
+- With **one Management Zone**, all three can run in the same zone/cluster on separate hosts, using DRS and anti-affinity. A single host can fail without stopping the Supervisor, but loss of the entire zone or cluster still affects all three.
+- With **three Management Zones**, place one control-plane VM in each zone. If one complete Management Zone is lost, the two remaining VMs still retain a majority, so the Supervisor remains available.
+
+> **Key distinction:** One Management Zone does not automatically mean one control-plane VM. First decide whether the Supervisor needs one or three VMs; then decide where those VMs should be placed. The availability decision and the zone-layout decision are related, but they are not the same decision.
 
 ---
 
