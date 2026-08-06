@@ -14,23 +14,8 @@
     document.head.appendChild(script);
   };
 
-  // Versioned asset prevents a previously cached Blog 4 renderer from restoring
-  // the obsolete zone-model markup.
-  loadScript("app-base.js?v=blog4-zone-models-20260806", () =>
-    loadScript("blog4-sections.js", () =>
-      loadScript("blog4-knowledge.js", () =>
-        loadScript("blog4-final-review.js", () =>
-          loadScript("blog4-toc.js", () =>
-            loadScript("blog4-design-clarity.js", () =>
-              loadScript("blog4-challenge.js", () =>
-                loadScript("blog4-mobile-polish.js", () =>
-                  loadScript("blog4-contrast-fix.js", () => loadScript("blog4-model-validation.js"))
-                )
-              )
-            )
-          )
-        )
-      )
-    )
-  );
+  // Blog 4 is self-contained, like Blogs 1–3. Do not rebuild it after load.
+  if (!location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
+    loadScript("app-base.js");
+  }
 })();
