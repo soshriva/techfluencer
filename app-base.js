@@ -277,7 +277,7 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
         <figure class="zone-model-card"><img src="../assets/review/model-1-review-v2.svg" alt="Model 1: one Supervisor Management Zone with shared application capacity." /><figcaption>Model 1 — one Management Zone with shared application capacity.</figcaption></figure>
         <figure class="zone-model-card"><img src="../assets/review/model-2-review-v2.svg" alt="Model 2: one Supervisor Management Zone with dedicated vSphere Zones for application workloads." /><figcaption>Model 2 — one Management Zone with dedicated vSphere Zones for application workloads.</figcaption></figure>
         <figure class="zone-model-card"><img src="../assets/review/model-3-review-v2.svg" alt="Model 3: three Supervisor Management Zones with shared application capacity." /><figcaption>Model 3 — three Management Zones with shared application capacity.</figcaption></figure>
-        <figure class="zone-model-card"><img src="../assets/review/model-4-review-v2.svg" alt="Model 4: three Supervisor Management Zones with dedicated vSphere Zones for application workloads." /><figcaption>Model 4 — three Management Zones with dedicated vSphere Zones for application workloads.</figcaption></figure>`;
+        <figure class="zone-model-card"><img src="../assets/review/model-4-review-v2.svg?v=20260806" alt="Model 4: three Supervisor Management Zones with dedicated vSphere Zones for application workloads." /><figcaption>Model 4 — three Management Zones with dedicated vSphere Zones for application workloads.</figcaption></figure>`;
       legacyModelsFigure.insertAdjacentElement("beforebegin", sequence);
       legacyModelsFigure.remove();
     }
