@@ -1,7 +1,7 @@
 (() => {
   const loaderScript = document.currentScript;
   const baseUrl = new URL(".", loaderScript?.src || location.href);
-  const version = "20260806-0112";
+  const version = "20260806-0130";
 
   const loadScript = (file, onload) => {
     const script = document.createElement("script");
@@ -14,7 +14,9 @@
     document.head.appendChild(script);
   };
 
-  loadScript("app-base.js", () =>
+  // Versioned asset prevents a previously cached Blog 4 renderer from restoring
+  // the obsolete zone-model markup.
+  loadScript("app-base.js?v=blog4-zone-models-20260806", () =>
     loadScript("blog4-sections.js", () =>
       loadScript("blog4-knowledge.js", () =>
         loadScript("blog4-final-review.js", () =>
