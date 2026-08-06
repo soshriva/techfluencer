@@ -253,7 +253,23 @@ A zone is not automatically equivalent to a full geographic disaster-recovery si
 
 ---
 
-## 08 · Management Zones and Workload Zones
+## 08 · First choose Supervisor control-plane availability
+
+Before choosing the zone layout, decide how much availability the Supervisor control plane needs. This is separate from the number of Management Zones.
+
+- **One control-plane VM:** Suitable for evaluation, labs and lower-criticality environments where a control-plane outage can be tolerated.
+- **Three control-plane VMs:** The production HA choice. The three VMs provide redundancy for the Supervisor control plane.
+
+The placement choices are then:
+
+- **One Management Zone:** Three control-plane VMs can run in the same zone and be distributed across hosts by DRS and anti-affinity. This protects against host-level failure, but not the loss of the entire zone or cluster.
+- **Three Management Zones:** One control-plane VM runs in each zone. This protects the control plane from the loss of one complete Management Zone.
+
+> **Key distinction:** One Management Zone does not automatically mean one control-plane VM. The availability decision and the zone-layout decision are related, but they are not the same decision.
+
+---
+
+## 09 · Management Zones and Workload Zones
 
 VCF 9 introduces a useful separation between where Supervisor management components run and where tenant workloads run.
 
@@ -261,12 +277,7 @@ VCF 9 introduces a useful separation between where Supervisor management compone
 
 A Management Zone provides infrastructure for the Supervisor control plane.
 
-Depending on the selected availability model, Supervisor may use:
-
-- One Management Zone
-- Three Management Zones
-
-A three-management-zone design allows the Supervisor control-plane VMs to be distributed across separate zones.
+After selecting the control-plane availability mode, choose whether management capacity is provided by one zone or by three zones. Three Management Zones allow one control-plane VM to be placed in each zone.
 
 ### Workload Zone
 
@@ -277,11 +288,11 @@ Workload Zones can be:
 - Combined with Management Zones
 - Isolated from Management Zones
 
-This creates four broad architecture patterns.
+This creates four broad placement patterns. They show where management and workload capacity run; they do not, by themselves, state whether the Supervisor uses one or three control-plane VMs.
 
 ---
 
-## 09 · Four zone design patterns
+## 10 · Four zone design patterns
 
 ### Model 1: Single Management Zone with combined workloads
 
@@ -307,7 +318,7 @@ The Supervisor control plane and workloads use the same zone.
 
 ### Model 2: Single Management Zone with isolated Workload Zones
 
-The Supervisor control plane runs in one Management Zone, while workloads run in separate Workload Zones.
+Management capacity runs in one Management Zone, while workloads run in separate Workload Zones. The Supervisor may still use three control-plane VMs within that one Management Zone.
 
 **Best fit:**
 
@@ -323,12 +334,12 @@ The Supervisor control plane runs in one Management Zone, while workloads run in
 
 **Trade-offs:**
 
-- The Supervisor control plane still depends on one Management Zone
+- Management capacity still depends on one Management Zone
 - More infrastructure and networking complexity
 
 ### Model 3: Three Management Zones with combined workloads
 
-The Supervisor control-plane VMs are distributed across three Management Zones, and those zones also host workloads.
+The three Management Zones also host workloads. When the Supervisor uses three control-plane VMs, one can run in each Management Zone.
 
 **Best fit:**
 
@@ -337,7 +348,7 @@ The Supervisor control-plane VMs are distributed across three Management Zones, 
 
 **Advantages:**
 
-- Higher control-plane availability
+- Can protect the control plane from the loss of one Management Zone when one control-plane VM runs in each zone
 - Workloads can consume multiple zones
 - Fewer dedicated clusters than a fully isolated design
 
@@ -348,7 +359,7 @@ The Supervisor control-plane VMs are distributed across three Management Zones, 
 
 ### Model 4: Three Management Zones with isolated Workload Zones
 
-Three Management Zones host the Supervisor control plane, while separate Workload Zones host application workloads.
+Three Management Zones provide management capacity, while separate Workload Zones host application workloads. When the Supervisor uses three control-plane VMs, one can run in each Management Zone.
 
 **Best fit:**
 
