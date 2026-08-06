@@ -7,7 +7,7 @@
   challenge.innerHTML = `
     <p class="section-number">13 · Architecture challenge</p>
     <h2>Apply the same design method to a different platform scenario.</h2>
-    <p class="section-lead">This challenge is intentionally different from the worked example in Section 9. Decide each workload's <strong>namespace boundary</strong>, <strong>entitlement</strong> and <strong>zone placement</strong>.</p>
+    <p class="section-lead">This challenge is intentionally different from the worked example in Section 9. First choose the <strong>Supervisor availability model</strong>; then decide each workload's <strong>namespace boundary</strong>, <strong>entitlement</strong> and <strong>zone placement</strong>.</p>
 
     <div class="challenge challenge-v3">
       <h3>Scenario</h3>
@@ -35,26 +35,29 @@
       <div class="challenge-task challenge-task-v3">
         <strong>Your task</strong>
         <ol>
+          <li>Choose the Supervisor control-plane availability model: one control-plane VM for evaluation/non-critical use, or three control-plane VMs across three Management Zones for production resilience. State why.</li>
+          <li>Choose the zone model: one or three Management Zones, with shared management-zone capacity or dedicated vSphere Zone(s) for application workloads.</li>
           <li>Decide which workloads require separate vSphere Namespaces.</li>
-          <li>Define the main entitlement for each namespace.</li>
-          <li>Decide whether each workload needs a dedicated Workload Zone, multiple eligible zones or shared general-purpose infrastructure.</li>
+          <li>Define the main entitlement and eligible vSphere Zone(s) for each namespace.</li>
           <li>State what the application teams must still design inside their VKS clusters.</li>
         </ol>
       </div>
 
-      <div class="plain-callout"><strong>Key question:</strong> Does a separate namespace also require a separate Workload Zone? Explain why or why not for each workload.</div>
+      <div class="plain-callout"><strong>Keep the decisions separate:</strong> control-plane availability determines whether Supervisor uses one or three control-plane VMs. The zone model then determines whether application workloads share Management Zone capacity or use dedicated vSphere Zone(s).</div>
     </div>
 
     <details class="solution solution-v3">
       <summary>Reveal one reasonable design</summary>
       <div class="inside">
+        <div class="plain-callout"><strong>Supervisor availability:</strong> Choose the high-availability model: three control-plane VMs across three Management Zones. Online trading production must tolerate a single zone failure, so the platform management layer needs resilient placement before workload-capacity choices are considered.</div>
+
         <div class="challenge-solution-grid">
           <article>
             <span>Online trading production</span>
             <dl>
               <div><dt>Namespace boundary</dt><dd>Separate namespace: <code>trading-prod</code></dd></div>
               <div><dt>Entitlement</dt><dd>Restricted operators, production VM Classes, low-latency networking, resilient storage and production quota</dd></div>
-              <div><dt>Zone placement</dt><dd>Eligible across three production zones; a dedicated Workload Zone is optional unless infrastructure isolation is also required</dd></div>
+              <div><dt>Zone placement</dt><dd>Eligible across three production vSphere Zones; a dedicated vSphere Zone is optional unless infrastructure isolation is also required</dd></div>
             </dl>
           </article>
 
@@ -63,7 +66,7 @@
             <dl>
               <div><dt>Namespace boundary</dt><dd>Separate namespace: <code>quant-research</code></dd></div>
               <div><dt>Entitlement</dt><dd>Accelerator-enabled VM Classes, sensitive-data access, burst quota and approved high-performance storage</dd></div>
-              <div><dt>Zone placement</dt><dd>Dedicated accelerator Workload Zone because the infrastructure capability itself is specialised</dd></div>
+              <div><dt>Zone placement</dt><dd>Dedicated accelerator vSphere Zone because the infrastructure capability itself is specialised</dd></div>
             </dl>
           </article>
 
@@ -72,7 +75,7 @@
             <dl>
               <div><dt>Namespace boundary</dt><dd>Separate namespace: <code>developer-platform</code></dd></div>
               <div><dt>Entitlement</dt><dd>Developer access, standard VM Classes, lower-cost storage and controlled sandbox quota</dd></div>
-              <div><dt>Zone placement</dt><dd>Shared general-purpose Workload Zone; no dedicated zone is required by default</dd></div>
+              <div><dt>Zone placement</dt><dd>Shared general-purpose capacity; no dedicated vSphere Zone is required by default</dd></div>
             </dl>
           </article>
 
@@ -81,12 +84,12 @@
             <dl>
               <div><dt>Namespace boundary</dt><dd>Separate namespace: <code>compliance-archive</code></dd></div>
               <div><dt>Entitlement</dt><dd>Restricted access, archival storage policies, modest compute and retention-aligned quota</dd></div>
-              <div><dt>Zone placement</dt><dd>May share a general-purpose Workload Zone if storage and retention requirements are met; a dedicated zone is not automatically justified</dd></div>
+              <div><dt>Zone placement</dt><dd>May share general-purpose capacity if storage and retention requirements are met; a dedicated vSphere Zone is not automatically justified</dd></div>
             </dl>
           </article>
         </div>
 
-        <div class="plain-callout"><strong>Design lesson:</strong> All four workloads use separate namespaces because their governance and entitlement requirements differ. Only Quantitative Research clearly requires a dedicated Workload Zone. Trading production needs multi-zone eligibility, but that is not the same as requiring a physically separate Workload Zone.</div>
+        <div class="plain-callout"><strong>Design lesson:</strong> All four workloads use separate namespaces because their governance and entitlement requirements differ. Only Quantitative Research clearly requires a dedicated vSphere Zone. Trading production needs multi-zone eligibility, but that is not the same as requiring physically separate workload capacity.</div>
 
         <div class="warning"><strong>Still required inside VKS:</strong> The application teams must design cluster topology, worker placement, replicas, topology spread or anti-affinity, storage behaviour, load-balancer reachability, backup, recovery and failure testing.</div>
       </div>
