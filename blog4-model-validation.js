@@ -14,7 +14,12 @@
       <article><strong>Decision 2</strong><span>Do workloads share those zones or use isolated zones?</span></article>
     </div>
 
-    <div class="validated-model-map" role="img" aria-label="Four supported vSphere Supervisor zone models arranged by one or three Management Zones and combined or isolated Workload Zones">
+    <figure class="model-source-redraw">
+      <img src="../assets/blog/vsphere-supervisor-zone-models-v2.svg" alt="Four vSphere Supervisor Zone models. Models 1 and 2 use one Management Zone, while Models 3 and 4 use three. Models 1 and 3 combine workloads with Management Zones, whereas Models 2 and 4 place workloads in separate Workload Zones. The 1 versus 3 Supervisor control-plane VM choice is a separate availability decision." />
+      <figcaption>Redrawn from the four supported Supervisor zone patterns: the diagram deliberately separates <strong>control-plane VM availability</strong> from <strong>Management Zone placement</strong>.</figcaption>
+    </figure>
+
+    <div class="validated-model-map" hidden aria-hidden="true">
       <div class="map-corner"><strong>vSphere Supervisor Zone Models</strong><span>Two decisions create four patterns</span></div>
       <div class="map-column">Combined Workload Zones<small>Workloads use the same zones as Management</small></div>
       <div class="map-column">Isolated Workload Zones<small>Workloads use one or more additional zones</small></div>
@@ -66,7 +71,7 @@
     .model-decision-strip{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:14px;margin:24px 0}
     .model-decision-strip article{background:#eef4ff;border:1px solid #d6e3f4;border-radius:14px;padding:16px}
     .model-decision-strip strong,.model-decision-strip span{display:block}.model-decision-strip strong{color:#2a5be0;font-size:.75rem;letter-spacing:.07em;margin-bottom:5px;text-transform:uppercase}.model-decision-strip span{color:#172a45;font-weight:700}
-    .validated-model-map{display:grid;grid-template-columns:190px repeat(2,minmax(0,1fr));gap:12px;margin:28px 0;color:#dbe8ff}
+    .model-source-redraw{margin:28px 0}.model-source-redraw img{background:#f5f8fc;border:1px solid #d6e3f4;border-radius:18px;display:block;height:auto;max-width:100%;width:100%}.model-source-redraw figcaption{color:#52657d;font-size:.88rem;line-height:1.5;margin:10px 4px 0}.validated-model-map{display:grid;grid-template-columns:190px repeat(2,minmax(0,1fr));gap:12px;margin:28px 0;color:#dbe8ff}
     .map-corner,.map-column,.map-row,.model-cell{border:1px solid rgba(123,181,239,.28);border-radius:16px;background:#0b1b31}
     .map-corner,.map-column,.map-row{padding:16px}.map-corner strong,.map-corner span,.map-column small,.map-row small{display:block}.map-corner span,.map-column small,.map-row small{color:#aebed5;font-size:.8rem;margin-top:5px}.map-column{color:#fff;font-weight:800;text-align:center}.map-row{align-items:center;display:flex;flex-direction:column;font-weight:800;justify-content:center;text-align:center}
     .model-cell{padding:20px}.model-cell>span{color:#65e7ff;font-size:.72rem;font-weight:800;letter-spacing:.08em;text-transform:uppercase}.model-cell h3{color:#fff!important;font-size:1.02rem;line-height:1.35;margin:8px 0 14px}
