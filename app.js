@@ -1,7 +1,7 @@
 (() => {
   const loaderScript = document.currentScript;
   const baseUrl = new URL(".", loaderScript?.src || location.href);
-  const version = "20260806-0130";
+  const version = "20260806-0200";
 
   const loadScript = (file, onload) => {
     const script = document.createElement("script");
