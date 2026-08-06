@@ -423,7 +423,9 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     #models .zone-model-sequence{display:grid;gap:28px;margin:30px 0}
     #models .zone-model-card{background:#fff;border-radius:22px;box-shadow:0 20px 45px rgba(0,0,0,.18);margin:0;overflow:hidden;padding:0}
     #models .zone-model-card img{display:block;height:auto;width:100%}
-    #models .zone-model-card figcaption{color:#d7e5f8;font-size:.95rem;line-height:1.55;padding:14px 18px 18px}
+    /* These captions sit on a white card footer, so they need ink—not the
+       pale text colour used elsewhere in the dark Models section. */
+    #models .zone-model-card figcaption{background:#fff;color:#263b57!important;font-size:.95rem;font-weight:600;line-height:1.55;padding:14px 18px 18px}
     #models.dark-section .simple-table{background:rgba(10,24,48,.78);border:1px solid rgba(119,174,242,.28);border-collapse:separate;border-radius:18px;overflow:hidden}
     #models.dark-section .simple-table th{background:rgba(31,57,92,.72);color:#65e7ff!important;font-size:.8rem;letter-spacing:.08em;padding:17px 18px}
     #models.dark-section .simple-table td{border-bottom:1px solid rgba(166,194,228,.26);color:#d7e5f8!important;font-size:1rem;line-height:1.55;padding:19px 18px}
@@ -432,6 +434,12 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
     #models.dark-section .table-scroll::after{display:none}
     #models .models-validation-note{background:#f4f7fc!important;border-left:4px solid #2a5be0!important;color:#10213a!important}
     #models .models-validation-note strong{color:#10213a!important}
+    /* Light callout panels inside the dark challenge must not inherit its
+       pale/white text colour. */
+    #challenge .plain-callout{background:#eef4ff!important;border:1px solid #c9d8f4!important;border-left:5px solid #2a5be0!important;color:#172a45!important}
+    #challenge .plain-callout strong{color:#10213a!important}
+    #challenge .warning{color:#5d4219!important}
+    #challenge .warning strong{color:#5d4219!important}
     @media(max-width:760px){
       .zone-role-grid{grid-template-columns:1fr}
       #entitlement .simple-table th:first-child,#entitlement .simple-table td:first-child{width:34%}
