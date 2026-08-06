@@ -267,18 +267,6 @@ if (location.pathname.endsWith("004-vsphere-namespaces-and-zones.html")) {
       <div class="warning"><strong>Important:</strong> Three Management Zones improve Supervisor control plane resilience. They do not automatically make an application highly available. Application replicas, VKS cluster topology, topology spread or anti affinity rules, storage behaviour and networking must also align with the failure domain design.</div>`;
   }
 
-  const twoDecisions = document.querySelector("#two-decisions");
-  if (twoDecisions) {
-    twoDecisions.innerHTML = `
-      <p class="section-number">06 · Simplify the zone discussion</p>
-      <h2>After the Management Zone choice, decide where workloads should run.</h2>
-      <p>VCF 9.1 separates two related decisions:</p>
-      <div class="decision-grid">
-        <div class="decision-card"><h3>Decision 1 · Supervisor control plane</h3><p>Deploy Supervisor across one Management Zone or three Management Zones.</p><div class="rule">This primarily determines control plane placement and resilience.</div></div>
-        <div class="decision-card"><h3>Decision 2 · Workload capacity</h3><p>Run workloads in those same zones, or attach separate Workload Zones.</p><div class="rule">This primarily determines management versus workload isolation, scaling and hardware choice.</div></div>
-      </div>`;
-  }
-
   const models = document.querySelector("#models");
   if (models) {
     const modelTable = models.querySelector(".simple-table");
