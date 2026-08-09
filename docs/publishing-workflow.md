@@ -2,6 +2,40 @@
 
 This repository uses a simple production/draft model.
 
+## Mandatory GitHub-first handoff
+
+Every blog must be safe in GitHub before it is handed over for review. A local
+file or local-only commit is **not** a completed deliverable.
+
+1. Start from an up-to-date `main` branch and create one dedicated branch per
+   blog, for example `blog/005-harbor-in-vks`.
+2. Add only the intended blog files and related documentation/assets to that
+   branch. Do not mix unrelated work into the commit.
+3. Commit with a clear message, then push the branch to `origin`.
+4. Verify that the remote branch and commit are visible on GitHub before saying
+   the work is ready.
+5. In every handoff, provide the GitHub branch link and the exact macOS commands
+   to fetch, switch, verify, and preview the article.
+
+Standard Mac handoff commands (replace the branch and filename as needed):
+
+```bash
+cd ~/Documents/PersonalWebsite
+git fetch origin
+git switch --track origin/blog/005-harbor-in-vks
+git status -sb
+python3 -m http.server 8000
+```
+
+Then open:
+
+```text
+http://localhost:8000/blogs/005-harbor-in-vks.html
+```
+
+`git status -sb` must show that the local branch tracks the matching
+`origin/blog/...` branch. Stop the preview server with `Control-C`.
+
 ## Branches
 
 - `main` is the live production branch. GitHub Pages should publish from `main` and `/` root.
