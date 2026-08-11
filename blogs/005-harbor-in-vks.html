@@ -29,6 +29,11 @@
 .art>article>.section>.lead{font-size:1.15rem}
 @media(max-width:1080px){.art{grid-template-columns:1fr}.art>.toc{display:none}.art>article{max-width:none}}
 @media(max-width:760px){.art{padding:0 22px 56px}.art>article>.section{padding:72px 0}.art>article>.section h2{font-size:2.25rem}}
+html,body,main,.hero,.art,.art>article,.art>article>.section{max-width:100%;overflow-x:hidden}
+.hero,.hero>div,.hero>figure,.art,.art>article,.section,.grid,.flow,.flow-grid,.flow-box,.faq,.faq details,.panel,.card,.quiz,.challenge{min-width:0}
+.table{display:block;max-width:100%;overflow-x:auto;-webkit-overflow-scrolling:touch}
+.table th,.table td{overflow-wrap:anywhere}
+@media(max-width:1180px){.flow-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 /* Retain the existing cyan accent after the responsive hero refinement. */
 .dark{background:radial-gradient(circle at 85% 15%,rgba(101,231,255,.18),transparent 26%),#07172e}
   </style>
